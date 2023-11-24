@@ -1,8 +1,11 @@
 package com.example.projectuasmobile
 
 import android.os.Bundle
+import android.window.SplashScreen
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,9 +16,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,11 +35,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
@@ -53,10 +61,89 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Login()
+                    SplashScreen()
+//                    Login()
                 }
             }
         }
+    }
+}
+@Composable
+fun SplashScreen() {
+    val Primary = Color(0xFFFF5F00)
+    Box(
+        modifier = Modifier
+            .width(430.dp)
+            .height(932.dp)
+            .background(color = Color(0xFFFF5F00))
+    ) {
+//        Image(
+//            modifier =Modifier
+//                .width(33.5444.dp)
+//                .height(49.dp),
+//            painter = painterResource(id = R.drawable.logokecil),
+//            contentDescription = "logo",
+//            contentScale = ContentScale.FillBounds
+//        )
+
+        Row (modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp)) {
+            Image(
+                modifier = Modifier
+                    .width(24.dp)
+                    .height(32.dp),
+                painter = painterResource(id = R.drawable.logokecil),
+                contentDescription = "image description",
+                contentScale = ContentScale.FillBounds
+            )
+            Text(
+                modifier = Modifier
+                    .width(104.dp)
+                    .height(30.dp),
+                text = "SDK-Apps",
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+                    fontWeight = FontWeight(600),
+                    color = Color(0xFFEEEEEE),
+                )
+            )
+
+        }
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                Image(
+                    painter = painterResource(id = R.drawable.splashtext),
+                    contentDescription = "image description",
+                    contentScale = ContentScale.FillBounds
+                )
+            }
+        Column (modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally){
+            Button(
+                onClick = { /*TODO*/ }, Modifier
+                    .width(327.dp)
+                    .height(72.dp)
+                    .padding(start = 10.dp, top = 12.dp, end = 10.dp, bottom = 12.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+            ) {
+                Text(
+                    text = "Mulai Gunakan Aplikasi",
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+                        fontWeight = FontWeight(600),
+                        color = Color(0xFFFF5F00),
+                    )
+                )
+
+            }
+        }
+
     }
 }
 
@@ -115,12 +202,7 @@ fun Login() {
                 modifier = Modifier
                     .align(Alignment.Start)
                     .fillMaxWidth()
-                    .padding(2.dp)
-                    .border(
-                        width = 1.5.dp,
-                        color = Color(0xFF6650a4),
-                        shape = RoundedCornerShape(8.dp)
-                    ),
+                    .padding(2.dp),
                 placeholder = { Text(text = "Contoh: example@test.com") }
             )
             Text(
@@ -144,12 +226,7 @@ fun Login() {
                 modifier = Modifier
                     .align(Alignment.Start)
                     .fillMaxWidth()
-                    .padding(2.dp)
-                    .border(
-                        width = 1.5.dp,
-                        color = Color(0xFF6650a4),
-                        shape = RoundedCornerShape(8.dp)
-                    ),
+                    .padding(2.dp),
                 placeholder = { Text(text = "Masukkan password") },
                 visualTransformation =
                 if (passwordVisible.value)
@@ -212,31 +289,6 @@ fun Login() {
                     .padding(top = 14.dp)
                     .padding(bottom = 28.dp)
             )
-            Row {
-                Text(
-                    text = "Belum punya akun?",
-                    style = TextStyle(
-                        fontSize = 14.sp,
-                        fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                        color = Color(0xFF1E1E1E),
-                        textAlign = TextAlign.Left
-                    ),
-                    modifier = Modifier.padding(top = 48.dp)
-                )
-                Spacer(modifier = Modifier.padding(4.dp))
-                ClickableText(
-                    text = AnnotatedString("Daftar dulu"),
-                    style = TextStyle(
-                        fontSize = 14.sp,
-                        fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                        color = Color(0xFF6650a4),
-                        textAlign = TextAlign.Left
-                    ),
-                    modifier = Modifier.padding(top = 48.dp)
-                ) {
-                    //navController.navigate("register")
-                }
-            }
 
         }
     }
