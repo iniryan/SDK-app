@@ -61,79 +61,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    RolePick()
-//                    SplashScreen()
+                    SplashScreen()
 //                    Login()
                 }
             }
         }
-    }
-}
-
-@Composable
-fun RolePick(){
-    Box(){
-        Column (modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),verticalArrangement = Arrangement.spacedBy(-14.dp, Alignment.Top),
-            horizontalAlignment = Alignment.CenterHorizontally,)
-        {
-            Text(
-                text = "SENTRA",
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                    fontWeight = FontWeight(600),
-                    color = Color(0xCCFF5F00),
-                    textAlign = TextAlign.Center,
-
-                )
-            )
-
-            Text(
-                text = "DIGITAL",
-                style = TextStyle(
-                    fontSize = 36.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                    fontWeight = FontWeight(600),
-                    color = Color(0xFFFF5F00),
-                    textAlign = TextAlign.Center,
-                )
-            )
-            Text(
-                text = "KULINER",
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                    fontWeight = FontWeight(600),
-                    color = Color(0xCCFF5F00),
-                    textAlign = TextAlign.Center,
-                )
-            )
-            Spacer(modifier = Modifier.padding(top = 32.dp))
-            Text(
-                text = "Sebagai Apa Kamu ?",
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFF1E1E1E),
-                    textAlign = TextAlign.Center,
-                )
-            )
-        }
-            Column {
-                Image(
-                    painter = painterResource(id = R.drawable.pembeli),
-                    contentDescription = "image description",
-                    contentScale = ContentScale.Fit
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.penjual),
-                    contentDescription = "image description",
-                    contentScale = ContentScale.Fit
-                )
-            }
     }
 }
 @Composable
@@ -145,6 +77,14 @@ fun SplashScreen() {
             .height(932.dp)
             .background(color = Color(0xFFFF5F00))
     ) {
+//        Image(
+//            modifier =Modifier
+//                .width(33.5444.dp)
+//                .height(49.dp),
+//            painter = painterResource(id = R.drawable.logokecil),
+//            contentDescription = "logo",
+//            contentScale = ContentScale.FillBounds
+//        )
 
         Row (modifier = Modifier
             .fillMaxSize()
