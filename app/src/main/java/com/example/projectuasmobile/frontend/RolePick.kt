@@ -6,9 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,12 +25,12 @@ import com.example.projectuasmobile.R
 
 @Composable
 fun RolePick() {
-    Box() {
+    Box {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(-14.dp, Alignment.Top),
+            verticalArrangement = Arrangement.spacedBy((-14).dp, Alignment.Top),
             horizontalAlignment = Alignment.CenterHorizontally,
         )
         {
