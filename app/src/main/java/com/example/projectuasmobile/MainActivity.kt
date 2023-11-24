@@ -89,12 +89,12 @@ class MainActivity : ComponentActivity() {
 }
 @Composable
 fun SplashScreen() {
-    val Primary = Color(0xFFFF5F00)
+    val primaryColor = Color(0xFFFF5F00)
     Box(
         modifier = Modifier
             .width(430.dp)
             .height(932.dp)
-            .background(color = Color(0xFFFF5F00))
+            .background(color = primaryColor)
     ) {
 //        Image(
 //            modifier =Modifier
@@ -156,7 +156,7 @@ fun SplashScreen() {
                         fontSize = 12.sp,
                         fontFamily = FontFamily(Font(R.font.poppins_semibold)),
                         fontWeight = FontWeight(600),
-                        color = Color(0xFFFF5F00),
+                        color = primaryColor,
                     )
                 )
 
