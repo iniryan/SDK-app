@@ -3,6 +3,7 @@ package com.example.projectuasmobile
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -65,7 +66,7 @@ class MainActivity : ComponentActivity() {
                     val startD: String
                     val jwt = sharedPreferences.getString("jwt", "")
                     startD = if (jwt.equals("")) {
-                        "login"
+                        "rolepick"
                     } else {
                         "homepage"
                     }
@@ -173,7 +174,8 @@ fun SplashScreen() {
 }
 
 @Composable
-fun BottomNavigation() {
+fun BottomNavigation(onItemClick: (String) -> Unit) {
+
     NavigationBar {
         val bottomNavigation = listOf(
             BottomNavItem(
@@ -192,7 +194,7 @@ fun BottomNavigation() {
         bottomNavigation.map {
             NavigationBarItem(
                 selected = it.label == bottomNavigation[0].label,
-                onClick = { /*TODO*/ },
+                onClick = { onItemClick.invoke(it.label) },
                 icon = {
                     Icon(
                         imageVector = it.icon,

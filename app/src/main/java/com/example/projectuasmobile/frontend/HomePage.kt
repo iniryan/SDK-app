@@ -41,16 +41,37 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.projectuasmobile.BottomNavigation
+import com.example.projectuasmobile.PreferencesManager
 import com.example.projectuasmobile.R
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomePage(navController: NavController, context: Context = LocalContext.current) {
+    val preferencesManager = remember { PreferencesManager(context = context) }
     val searchField = remember { mutableStateOf(TextFieldValue("")) }
     Scaffold(
         bottomBar = {
-            BottomNavigation()
+            BottomNavigation { selectedItem ->
+                when (selectedItem) {
+                    "Beranda" -> {
+                        // Handle Beranda click
+                    }
+
+                    "Kios" -> {
+                        // Handle Kios click
+                    }
+
+                    "Transaksi" -> {
+                        // Handle Transaksi click
+                    }
+
+                    "Keluar" -> {
+                        preferencesManager.clearData()
+                        navController.navigate("login")
+                    }
+                }
+            }
         },
 
     ) {
