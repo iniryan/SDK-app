@@ -3,7 +3,6 @@ package com.example.projectuasmobile
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -57,7 +56,8 @@ class MainActivity : ComponentActivity() {
             ProjectUASMobileTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
                 ) {
                     val sharedPreferences: SharedPreferences =
                         LocalContext.current.getSharedPreferences("auth", Context.MODE_PRIVATE)
@@ -87,15 +87,14 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 @Composable
 fun SplashScreen() {
-    val primaryColor = Color(0xFFFF5F00)
+    val Primary = Color(0xFFFF5F00)
     Box(
         modifier = Modifier
             .width(430.dp)
             .height(932.dp)
-            .background(color = primaryColor)
+            .background(color = Color(0xFFFF5F00))
     ) {
 //        Image(
 //            modifier =Modifier
@@ -106,11 +105,9 @@ fun SplashScreen() {
 //            contentScale = ContentScale.FillBounds
 //        )
 
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(24.dp)
-        ) {
+        Row (modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp)) {
             Image(
                 modifier = Modifier
                     .width(24.dp)
@@ -133,37 +130,33 @@ fun SplashScreen() {
             )
 
         }
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
-            Image(
-                painter = painterResource(id = R.drawable.splashtext),
-                contentDescription = "image description",
-                contentScale = ContentScale.FillBounds
-            )
-        }
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Bottom,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+                Image(
+                    painter = painterResource(id = R.drawable.splashtext),
+                    contentDescription = "image description",
+                    contentScale = ContentScale.FillBounds
+                )
+            }
+        Column (modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally){
             Button(
-                onClick = { /*TODO*/ },
-                Modifier
+                onClick = { /*TODO*/ }, Modifier
                     .width(327.dp)
                     .height(72.dp)
                     .padding(start = 10.dp, top = 12.dp, end = 10.dp, bottom = 12.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White)
             ) {
                 Text(
-                    text = "Mulai Gunakan Aplikasi", style = TextStyle(
+                    text = "Mulai Gunakan Aplikasi",
+                    style = TextStyle(
                         fontSize = 12.sp,
                         fontFamily = FontFamily(Font(R.font.poppins_semibold)),
                         fontWeight = FontWeight(600),
-                        color = primaryColor,
+                        color = Color(0xFFFF5F00),
                     )
                 )
 
@@ -174,8 +167,7 @@ fun SplashScreen() {
 }
 
 @Composable
-fun BottomNavigation(onItemClick: (String) -> Unit) {
-
+fun BottomNavigation() {
     NavigationBar {
         val bottomNavigation = listOf(
             BottomNavItem(
@@ -194,7 +186,7 @@ fun BottomNavigation(onItemClick: (String) -> Unit) {
         bottomNavigation.map {
             NavigationBarItem(
                 selected = it.label == bottomNavigation[0].label,
-                onClick = { onItemClick.invoke(it.label) },
+                onClick = { /*TODO*/ },
                 icon = {
                     Icon(
                         imageVector = it.icon,
@@ -207,5 +199,4 @@ fun BottomNavigation(onItemClick: (String) -> Unit) {
         }
     }
 }
-
 data class BottomNavItem(val label: String, val icon: ImageVector)
