@@ -47,6 +47,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.projectuasmobile.frontend.HomePage
 import com.example.projectuasmobile.frontend.Login
+import com.example.projectuasmobile.frontend.RolePick
 import com.example.projectuasmobile.ui.theme.ProjectUASMobileTheme
 
 class MainActivity : ComponentActivity() {
@@ -81,6 +82,10 @@ class MainActivity : ComponentActivity() {
                         composable("homepage") {
                             HomePage(navController)
                         }
+                        composable("rolepick") {
+                            RolePick()
+                        }
+
                     }
                 }
             }
@@ -89,12 +94,12 @@ class MainActivity : ComponentActivity() {
 }
 @Composable
 fun SplashScreen() {
-    val primaryColor = Color(0xFFFF5F00)
+    val Primary = Color(0xFFFF5F00)
     Box(
         modifier = Modifier
             .width(430.dp)
             .height(932.dp)
-            .background(color = primaryColor)
+            .background(color = Color(0xFFFF5F00))
     ) {
 //        Image(
 //            modifier =Modifier
@@ -156,7 +161,7 @@ fun SplashScreen() {
                         fontSize = 12.sp,
                         fontFamily = FontFamily(Font(R.font.poppins_semibold)),
                         fontWeight = FontWeight(600),
-                        color = primaryColor,
+                        color = Color(0xFFFF5F00),
                     )
                 )
 

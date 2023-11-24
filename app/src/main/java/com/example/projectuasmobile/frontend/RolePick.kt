@@ -77,19 +77,32 @@ fun RolePick(){
                 )
             )
         }
-        Column (modifier = Modifier.fillMaxSize().padding(24.dp)){
+        Column (modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally){
+        Spacer(modifier = Modifier.padding(top = 132.dp) )
             Image(
-                modifier = Modifier
-                    .width(600.dp)
-                    .height(400.dp),
                 painter = painterResource(id = R.drawable.pembeli),
                 contentDescription = "image description",
                 contentScale = ContentScale.Fit
             )
+            Spacer(modifier = Modifier.padding(top = 12.dp) )
             Image(
                 painter = painterResource(id = R.drawable.penjual),
                 contentDescription = "image description",
                 contentScale = ContentScale.Fit
+            )
+        }
+        Column (modifier = Modifier.fillMaxSize().padding(24.dp), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = "Ayo pilih role kamu sebelum menggunakan aplikasi. Pilih Pembeli jika kamu ingin memesan makanan. Pilih Penjual jika kamu adalah pemilik booth.",
+                style = TextStyle(
+                    fontSize = 10.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                    fontWeight = FontWeight(400),
+                    color = Color(0xFF1E1E1E),
+                    textAlign = TextAlign.Center,
+                )
             )
         }
     }
