@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -75,8 +77,11 @@ fun RolePick(){
                 )
             )
         }
-        Column {
+        Column (modifier = Modifier.fillMaxSize().padding(24.dp)){
             Image(
+                modifier = Modifier
+                    .width(600.dp)
+                    .height(400.dp),
                 painter = painterResource(id = R.drawable.pembeli),
                 contentDescription = "image description",
                 contentScale = ContentScale.Fit

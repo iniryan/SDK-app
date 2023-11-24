@@ -130,21 +130,21 @@ fun SplashScreen() {
             )
 
         }
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-                Image(
-                    painter = painterResource(id = R.drawable.splashtext),
-                    contentDescription = "image description",
-                    contentScale = ContentScale.FillBounds
-                )
-            }
+            Image(
+                painter = painterResource(id = R.drawable.splashtext),
+                contentDescription = "image description",
+                contentScale = ContentScale.FillBounds
+            )
+        }
         Column (modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally){
             Button(
-                onClick = { /*TODO*/ }, Modifier
+                onClick = {}, Modifier
                     .width(327.dp)
                     .height(72.dp)
                     .padding(start = 10.dp, top = 12.dp, end = 10.dp, bottom = 12.dp),
@@ -186,7 +186,7 @@ fun BottomNavigation() {
         bottomNavigation.map {
             NavigationBarItem(
                 selected = it.label == bottomNavigation[0].label,
-                onClick = { /*TODO*/ },
+                onClick = { },
                 icon = {
                     Icon(
                         imageVector = it.icon,
