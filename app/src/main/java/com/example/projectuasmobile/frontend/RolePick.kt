@@ -26,12 +26,15 @@ import androidx.compose.ui.unit.sp
 import com.example.projectuasmobile.R
 
 @Composable
-fun RolePick(){
-    Box(){
-        Column (modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),verticalArrangement = Arrangement.spacedBy(-14.dp, Alignment.Top),
-            horizontalAlignment = Alignment.CenterHorizontally,)
+fun RolePick() {
+    Box() {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(-14.dp, Alignment.Top),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        )
         {
             Text(
                 text = "SENTRA",
@@ -77,33 +80,103 @@ fun RolePick(){
                 )
             )
         }
-        Column (modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally){
-        Spacer(modifier = Modifier.padding(top = 132.dp) )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.padding(top = 132.dp))
             Image(
                 painter = painterResource(id = R.drawable.pembeli),
                 contentDescription = "image description",
                 contentScale = ContentScale.Fit
             )
-            Spacer(modifier = Modifier.padding(top = 12.dp) )
+            Spacer(modifier = Modifier.padding(top = 12.dp))
             Image(
                 painter = painterResource(id = R.drawable.penjual),
                 contentDescription = "image description",
                 contentScale = ContentScale.Fit
             )
         }
-        Column (modifier = Modifier.fillMaxSize().padding(24.dp), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally) {
+        Box(
+            modifier = Modifier.fillMaxSize()
+                .padding(start = 220.dp, top = 220.dp, end = 0.dp, bottom = 0.dp),
+        ) {
             Text(
-                text = "Ayo pilih role kamu sebelum menggunakan aplikasi. Pilih Pembeli jika kamu ingin memesan makanan. Pilih Penjual jika kamu adalah pemilik booth.",
+                text = "PEMBELI ",
                 style = TextStyle(
-                    fontSize = 10.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFF1E1E1E),
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+                    fontWeight = FontWeight(600),
+                    color = Color(0xFFFF5F00),
                     textAlign = TextAlign.Center,
                 )
             )
+        }
+        Box(
+            modifier = Modifier.fillMaxSize()
+                .padding(start = 140.dp, top = 250.dp, end = 0.dp, bottom = 0.dp),
+        ) {
+            Text(
+                text = "Lakukan Pemesanan Melalui " +
+                        "Handphonemu",
+                style = TextStyle(
+                    fontSize = 13.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                    fontWeight = FontWeight(400),
+                    color = Color(0xE51E1E1E),
+                    textAlign = TextAlign.Center,
+                )
+            )
+        }
+        Box(
+            modifier = Modifier.fillMaxSize()
+                .padding(start = 76.dp, top = 470.dp, end = 0.dp, bottom = 0.dp),
+        ) {
+            Text(
+                text = "PENJUAL ",
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+                    fontWeight = FontWeight(600),
+                    color = Color(0xFFFF5F00),
+                    textAlign = TextAlign.Center,
+                )
+            )
+        }
+        Box(
+            modifier = Modifier.fillMaxSize()
+                .padding(start = 20.dp, top = 500.dp, end = 160.dp, bottom = 0.dp),
+        ) {
+            Text(
+                text = "Terima Pesanan dan Manage Menu dengan Praktis ",
+                style = TextStyle(
+                    fontSize = 13.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                    fontWeight = FontWeight(400),
+                    color = Color(0xE51E1E1E),
+                    textAlign = TextAlign.Center,
+                )
+            )
+        }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(24.dp),
+                verticalArrangement = Arrangement.Bottom,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Ayo pilih role kamu sebelum menggunakan aplikasi. Pilih Pembeli jika kamu ingin memesan makanan. Pilih Penjual jika kamu adalah pemilik booth.",
+                    style = TextStyle(
+                        fontSize = 10.sp,
+                        fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                        fontWeight = FontWeight(400),
+                        color = Color(0xFF1E1E1E),
+                        textAlign = TextAlign.Center,
+                    )
+                )
+
         }
     }
 }
