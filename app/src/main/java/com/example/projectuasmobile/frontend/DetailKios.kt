@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.focus.focusModifier
+import androidx.compose.ui.focus.focusTarget
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -66,7 +66,7 @@ fun DetailKios() {
 
 @Composable
 fun ItemCard() {
-    var quantity by remember { mutableStateOf(1) }
+    var quantity by remember { mutableIntStateOf(1) }
 
     Card(
         modifier = Modifier
@@ -132,7 +132,7 @@ fun ItemCard() {
                     onClick = {
                         // Perform action when the "Add to Cart" button is clicked
                     },
-                    modifier = Modifier.focusModifier(),
+                    modifier = Modifier.focusTarget(),
                 ) {
                     Text("Add to Cart", color = Color.White)
                 }
