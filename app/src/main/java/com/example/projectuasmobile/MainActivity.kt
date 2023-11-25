@@ -67,7 +67,7 @@ class MainActivity : ComponentActivity() {
                     val startD: String
                     val jwt = sharedPreferences.getString("jwt", "")
                     startD = if (jwt.equals("")) {
-                        "rolepick"
+                        "login"
                     } else {
                         "homepage"
                     }
@@ -101,15 +101,6 @@ fun SplashScreen() {
             .height(932.dp)
             .background(color = primaryColorOrg)
     ) {
-//        Image(
-//            modifier =Modifier
-//                .width(33.5444.dp)
-//                .height(49.dp),
-//            painter = painterResource(id = R.drawable.logokecil),
-//            contentDescription = "logo",
-//            contentScale = ContentScale.FillBounds
-//        )
-
         Row (modifier = Modifier
             .fillMaxSize()
             .padding(24.dp)) {
@@ -125,7 +116,7 @@ fun SplashScreen() {
                 modifier = Modifier
                     .width(104.dp)
                     .height(30.dp),
-                text = "SDK-Apps",
+                text = "SDK-App",
                 style = TextStyle(
                     fontSize = 20.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_semibold)),
