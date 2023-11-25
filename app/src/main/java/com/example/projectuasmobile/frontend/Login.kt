@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
@@ -150,6 +152,13 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                     .border(
                         width = 1.5.dp, color = Color(0xFFFF5F00), shape = RoundedCornerShape(24.dp)
                     ),
+                leadingIcon = {
+                    Image(
+                        painter = painterResource(id = R.drawable.profile),
+                        contentDescription = "image description",
+                        contentScale = ContentScale.None
+                    )
+                },
                 placeholder = { Text(
                     text = "Email",
                     style = TextStyle(
@@ -174,6 +183,13 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                     .border(
                         width = 1.5.dp, color = Color(0xFFFF5F00), shape = RoundedCornerShape(24.dp)
                     ),
+                leadingIcon = {
+                    Image(
+                        painter = painterResource(id = R.drawable.password),
+                        contentDescription = "image description",
+                        contentScale = ContentScale.None
+                    )
+                },
                 placeholder = { Text(
                     text = "Password",
                     style = TextStyle(
@@ -192,9 +208,10 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                         modifier = Modifier.padding(end = 10.dp)
                     ) {
                         Icon(
-                            painter = if (passwordVisible.value) painterResource(id = R.drawable.eye_open)
-                            else painterResource(id = R.drawable.eye_close),
-                            contentDescription = "Toggle Password"
+                            painter = if (passwordVisible.value) painterResource(id = R.drawable.eyeopened)
+                            else painterResource(id = R.drawable.eyeclosed),
+                            contentDescription = "Toggle Password",
+                            tint = primaryColorOrg,
                         )
                     }
                 })

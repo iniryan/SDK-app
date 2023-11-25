@@ -47,6 +47,7 @@ import com.example.projectuasmobile.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomePage(navController: NavController, context: Context = LocalContext.current) {
+    val primaryColorOrg = Color(0xFFFF5F00)
     val searchField = remember { mutableStateOf(TextFieldValue("")) }
     Scaffold(
         bottomBar = {
@@ -81,9 +82,10 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                         Icon(
                             Icons.Default.Search,
                             contentDescription = "search",
+                            tint = primaryColorOrg,
                         )
                     },
-                    placeholder = { Text(text = "Pencarian") })
+                    placeholder = { Text(text = "Pencarian", color = primaryColorOrg) })
                 Spacer(modifier = Modifier.padding(top = 14.dp, bottom = 14.dp))
                 Text(
                     text = "Daftar Kios", style = TextStyle(
