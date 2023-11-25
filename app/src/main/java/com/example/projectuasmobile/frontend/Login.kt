@@ -2,6 +2,8 @@ package com.example.projectuasmobile.frontend
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,16 +14,22 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,12 +38,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
@@ -60,7 +70,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 @Composable
 fun Login(navController: NavController, context: Context = LocalContext.current) {
     val preferencesManager = remember { PreferencesManager(context = context) }
-
+    val primaryColorOrg = Color(0xFFFF5F00)
     val usernameField = remember { mutableStateOf(TextFieldValue("")) }
     val passwordField = remember { mutableStateOf(TextFieldValue("")) }
     val passwordVisible = remember { mutableStateOf(false) }
@@ -73,38 +83,61 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
     jwt = preferencesManager.getData("jwt")
 
     Box(modifier = Modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier
+        Image(
+            painter = painterResource(id = R.drawable.background),
+            contentDescription = "",
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.matchParentSize()
+        )
+        Column (verticalArrangement = Arrangement.Top, horizontalAlignment = Alignment.Start,modifier = Modifier.fillMaxSize()
+            .padding(14.dp)){
+            Image(
+                modifier = Modifier
+                    .width(36.dp)
+                    .height(36.dp),
+                painter = painterResource(id = R.drawable.backwhite),
+                contentDescription = "image description",
+                contentScale = ContentScale.None
+            )
+        }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 50.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ) {
+                Text(
+                    text = "SDK-App",
+                    style = TextStyle(
+                        fontSize = 54.sp,
+                        fontFamily = FontFamily(Font(R.font.poppins_bold)),
+                        fontWeight = FontWeight(700),
+                        color = Color(0xFFFFFFFF),
+                        textAlign = TextAlign.Center,
+                    )
+                )
+            }
+            Column (modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 24.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text(
-                text = "SDK-app", style = TextStyle(
-                    fontSize = 48.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                    textAlign = TextAlign.Left
-                ), modifier = Modifier.align(Alignment.Start)
-            )
-            Text(
-                text = "Memudahkan untuk order anda", style = TextStyle(
-                    fontSize = 16.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                    color = Color(0xFF1E1E1E),
-                    textAlign = TextAlign.Left
-                ), modifier = Modifier.align(Alignment.Start)
-            )
-            Text(
-                text = "Email", style = TextStyle(
-                    fontSize = 14.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                    color = Color(0xFF1E1E1E),
-                    textAlign = TextAlign.Center,
-                ), modifier = Modifier
-                    .align(Alignment.Start)
-                    .padding(top = 48.dp)
-            )
+                .padding(top = 126.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+               ){
+                Text(
+                    text = "Login Untuk Masuk",
+                    style = TextStyle(
+                        fontSize = 18.sp,
+                        fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                        fontWeight = FontWeight(400),
+                        color = Color(0xFFFFFFFF),
+                        textAlign = TextAlign.Center,
+                    )
+                )
+
+        }
+        Column (modifier = Modifier
+            .fillMaxSize()
+            .padding(32.dp), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally){
             OutlinedTextField(value = usernameField.value,
                 onValueChange = {
                     usernameField.value = it
@@ -113,21 +146,29 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                 modifier = Modifier
                     .align(Alignment.Start)
                     .fillMaxWidth()
+                    .width(340.dp)
+                    .height(54.dp)
                     .padding(2.dp)
                     .border(
-                        width = 1.5.dp, color = Color(0xFFFF5F00), shape = RoundedCornerShape(8.dp)
+                        width = 1.5.dp, color = Color(0xFFFF5F00), shape = RoundedCornerShape(24.dp)
                     ),
-                placeholder = { Text(text = "Contoh: example@test.com") })
-            Text(
-                text = "Password", style = TextStyle(
-                    fontSize = 14.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                    color = Color(0xFF1E1E1E),
-                    textAlign = TextAlign.Center,
-                ), modifier = Modifier
-                    .align(Alignment.Start)
-                    .padding(top = 28.dp)
-            )
+                leadingIcon = {
+                    Image(
+                        painter = painterResource(id = R.drawable.profile),
+                        contentDescription = "image description",
+                        contentScale = ContentScale.None
+                    )
+                },
+                placeholder = { Text(
+                    text = "Email",
+                    style = TextStyle(
+                        fontSize = 13.sp,
+                        fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                        fontWeight = FontWeight(400),
+                        color = Color(0xFFFF5F00),
+                    )
+                ) })
+            Spacer(modifier = Modifier.height(28.dp))
             OutlinedTextField(value = passwordField.value,
                 onValueChange = {
                     passwordField.value = it
@@ -136,11 +177,28 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                 modifier = Modifier
                     .align(Alignment.Start)
                     .fillMaxWidth()
+                    .width(340.dp)
+                    .height(54.dp)
                     .padding(2.dp)
                     .border(
-                        width = 1.5.dp, color = Color(0xFFFF5F00), shape = RoundedCornerShape(8.dp)
+                        width = 1.5.dp, color = Color(0xFFFF5F00), shape = RoundedCornerShape(24.dp)
                     ),
-                placeholder = { Text(text = "Masukkan password") },
+                leadingIcon = {
+                    Image(
+                        painter = painterResource(id = R.drawable.password),
+                        contentDescription = "image description",
+                        contentScale = ContentScale.None
+                    )
+                },
+                placeholder = { Text(
+                    text = "Password",
+                    style = TextStyle(
+                        fontSize = 13.sp,
+                        fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                        fontWeight = FontWeight(400),
+                        color = Color(0xFFFF5F00),
+                    )
+                ) },
                 visualTransformation = if (passwordVisible.value) VisualTransformation.None
                 else PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -150,101 +208,41 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                         modifier = Modifier.padding(end = 10.dp)
                     ) {
                         Icon(
-                            painter = if (passwordVisible.value) painterResource(id = R.drawable.eye_open)
-                            else painterResource(id = R.drawable.eye_close),
-                            contentDescription = "Toggle Password"
+                            painter = if (passwordVisible.value) painterResource(id = R.drawable.eyeopened)
+                            else painterResource(id = R.drawable.eyeclosed),
+                            contentDescription = "Toggle Password",
+                            tint = primaryColorOrg,
                         )
                     }
                 })
-            Spacer(modifier = Modifier.padding(20.dp))
-            ElevatedButton(modifier = Modifier
-                .align(Alignment.Start)
-                .fillMaxWidth()
-                .padding(2.dp)
-                .height(48.dp), colors = ButtonDefaults.buttonColors(
-                contentColor = Color.White,
-            ), shape = RoundedCornerShape(8.dp), onClick = {
-                val retrofit =
-                    Retrofit.Builder()
-                        .baseUrl(baseUrl)
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build()
-                        .create(LoginService::class.java)
-                val call = retrofit.getData(
-                    LoginData(
-                        usernameField.value.text,
-                        passwordField.value.text
-                    )
-                )
-                call.enqueue(object : Callback<LoginResponse> {
-                    override fun onResponse(
-                        call: Call<LoginResponse>,
-                        response: Response<LoginResponse>
-                    ) {
-                        print(response.code())
-                        if (response.code() == 200) {
-                            jwt = response.body()?.jwt!!
-                            preferencesManager.saveData("jwt", jwt)
-                            navController.navigate("homepage")
-                        } else if (response.code() == 400) {
-                            print("bad request 400")
-                            Toast.makeText(
-                                context,
-                                "Username atau password salah",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = {},modifier = Modifier
+                .width(217.dp)
+                .height(64.dp)
+                .padding(start = 10.dp, top = 12.dp, end = 10.dp, bottom = 12.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = primaryColorOrg)){
+                Text(
 
-                    override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                        print(t.message)
-                    }
-                })
-            }) {
-                Text(
-                    text = "Mulai Berbagi", style = TextStyle(
-                        fontSize = 16.sp,
-                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                        color = Color.White,
-                        textAlign = TextAlign.Center,
-                    )
-                )
-            }
-            Text(
-                text = "atau masuk dengan",
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                    color = Color(0xFF1E1E1E),
-                    textAlign = TextAlign.Center,
-                ),
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(top = 14.dp)
-                    .padding(bottom = 28.dp)
-            )
-            Row {
-                Text(
-                    text = "Belum punya akun?", style = TextStyle(
-                        fontSize = 14.sp,
+                    text = "LOGIN",
+                    style = TextStyle(
+                        fontSize = 12.sp,
                         fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                        color = Color(0xFF1E1E1E),
-                        textAlign = TextAlign.Left
-                    ), modifier = Modifier.padding(top = 48.dp)
+                        fontWeight = FontWeight(600),
+                        color = Color.White,
+                    )
                 )
-                Spacer(modifier = Modifier.padding(4.dp))
-                ClickableText(
-                    text = AnnotatedString("Daftar dulu"), style = TextStyle(
-                        fontSize = 14.sp,
-                        fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                        color = Color(0xFF6650a4),
-                        textAlign = TextAlign.Left
-                    ), modifier = Modifier.padding(top = 48.dp)
-                ) {
-                    //navController.navigate("register")
-                }
             }
-
+            Spacer(modifier = Modifier.height(14.dp))
+            ClickableText(
+                    text = AnnotatedString("Hubungi Admin Untuk Mereset Password"),
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                        fontWeight = FontWeight(400),
+                        color = Color(0xFF262626),
+                        textAlign = TextAlign.Center,
+                ) , onClick ={} )
+            Spacer(modifier = Modifier.height(48.dp))
         }
     }
 }

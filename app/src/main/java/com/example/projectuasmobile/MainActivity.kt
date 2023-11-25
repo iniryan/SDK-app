@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
@@ -67,7 +68,7 @@ class MainActivity : ComponentActivity() {
                     val startD: String
                     val jwt = sharedPreferences.getString("jwt", "")
                     startD = if (jwt.equals("")) {
-                        "rolepick"
+                        "homepage"
                     } else {
                         "homepage"
                     }
@@ -100,15 +101,6 @@ fun SplashScreen() {
             .height(932.dp)
             .background(color = primaryColorOrg)
     ) {
-//        Image(
-//            modifier =Modifier
-//                .width(33.5444.dp)
-//                .height(49.dp),
-//            painter = painterResource(id = R.drawable.logokecil),
-//            contentDescription = "logo",
-//            contentScale = ContentScale.FillBounds
-//        )
-
         Row (modifier = Modifier
             .fillMaxSize()
             .padding(24.dp)) {
@@ -124,7 +116,7 @@ fun SplashScreen() {
                 modifier = Modifier
                     .width(104.dp)
                     .height(30.dp),
-                text = "SDK-Apps",
+                text = "SDK-App",
                 style = TextStyle(
                     fontSize = 20.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_semibold)),
@@ -175,16 +167,16 @@ fun BottomNavigation() {
     NavigationBar {
         val bottomNavigation = listOf(
             BottomNavItem(
-                label = "Beranda", icon = Icons.Default.Home
+                label = "Beranda", iconResId = R.drawable.home
             ),
             BottomNavItem(
-                label = "Kios", icon = Icons.Default.Star
+                label = "Kios", iconResId = R.drawable.booth
             ),
             BottomNavItem(
-                label = "Transaksi", icon = Icons.Default.ShoppingCart
+                label = "Transaksi", iconResId = R.drawable.transaksi
             ),
             BottomNavItem(
-                label = "Keluar", icon = Icons.Default.ExitToApp
+                label = "Keluar", iconResId = R.drawable.keluar
             ),
         )
         bottomNavigation.map {
@@ -192,10 +184,10 @@ fun BottomNavigation() {
                 selected = it.label == bottomNavigation[0].label,
                 onClick = { },
                 icon = {
-                    Icon(
-                        imageVector = it.icon,
+                    Image(
+                        painter = painterResource(id = it.iconResId),
                         contentDescription = it.label,
-                        tint = Color(0xFFFF5F00)
+                        modifier = Modifier.size(24.dp), // Adjust size as needed
                     )
                 },
                 label = { Text(text = it.label, color = Color(0xFFFF5F00)) },
@@ -203,4 +195,5 @@ fun BottomNavigation() {
         }
     }
 }
-data class BottomNavItem(val label: String, val icon: ImageVector)
+
+data class BottomNavItem(val label: String, val iconResId: Int)
