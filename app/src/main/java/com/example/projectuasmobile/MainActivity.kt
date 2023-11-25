@@ -85,7 +85,6 @@ class MainActivity : ComponentActivity() {
                         composable("rolepick") {
                             RolePick()
                         }
-
                     }
                 }
             }
