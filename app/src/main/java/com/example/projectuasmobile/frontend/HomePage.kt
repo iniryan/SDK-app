@@ -20,7 +20,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -44,7 +43,6 @@ import com.example.projectuasmobile.BottomNavigation
 import com.example.projectuasmobile.R
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomePage(navController: NavController, context: Context = LocalContext.current) {
     val primaryColorOrg = Color(0xFFFF5F00)
@@ -121,15 +119,15 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                             text = "Warkop Markaz", style = TextStyle(
                                 fontSize = 16.sp,
                                 lineHeight = 17.64.sp,
-                                fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                                fontFamily = FontFamily(Font(R.font.poppins_semibold)),
                                 color = Color(0xFF1E1E1E),
                             )
                         )
                         Text(
                             text = "Booth No.1", style = TextStyle(
-                                fontSize = 10.sp,
+                                fontSize = 12.sp,
                                 lineHeight = 17.64.sp,
-                                fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                                fontFamily = FontFamily(Font(R.font.poppins_medium)),
                                 color = Color(0x801E1E1E),
                             )
                         )
@@ -142,7 +140,7 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                         Text(
                             text = "Menyediakan berbagai minuman sachet, kopi, dan Rokok Batangan ",
                             style = TextStyle(
-                                fontSize = 10.sp,
+                                fontSize = 12.sp,
                                 lineHeight = 17.64.sp,
                                 fontFamily = FontFamily(Font(R.font.poppins_regular)),
                                 color = Color(0x801E1E1E),
@@ -174,15 +172,15 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                             text = "Warung Nikmat bu Halima", style = TextStyle(
                                 fontSize = 16.sp,
                                 lineHeight = 17.64.sp,
-                                fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                                fontFamily = FontFamily(Font(R.font.poppins_semibold)),
                                 color = Color(0xFF1E1E1E),
                             )
                         )
                         Text(
                             text = "Booth No.2", style = TextStyle(
-                                fontSize = 10.sp,
+                                fontSize = 12.sp,
                                 lineHeight = 17.64.sp,
-                                fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                                fontFamily = FontFamily(Font(R.font.poppins_medium)),
                                 color = Color(0x801E1E1E),
                             )
                         )
@@ -195,7 +193,7 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                         Text(
                             text = "Menyediakan berbagai makanan dan minuman dengan citarasa Madura",
                             style = TextStyle(
-                                fontSize = 10.sp,
+                                fontSize = 12.sp,
                                 lineHeight = 17.64.sp,
                                 fontFamily = FontFamily(Font(R.font.poppins_regular)),
                                 color = Color(0x801E1E1E),

@@ -16,14 +16,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -33,7 +27,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -46,6 +39,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.projectuasmobile.frontend.Detail
+import com.example.projectuasmobile.frontend.DetailKios
 import com.example.projectuasmobile.frontend.HomePage
 import com.example.projectuasmobile.frontend.Login
 import com.example.projectuasmobile.frontend.RolePick
@@ -68,7 +63,7 @@ class MainActivity : ComponentActivity() {
                     val startD: String
                     val jwt = sharedPreferences.getString("jwt", "")
                     startD = if (jwt.equals("")) {
-                        "homepage"
+                        "detail"
                     } else {
                         "homepage"
                     }
@@ -86,7 +81,12 @@ class MainActivity : ComponentActivity() {
                         composable("rolepick") {
                             RolePick()
                         }
-
+                        composable("detailkios") {
+                            DetailKios()
+                        }
+                        composable("detail") {
+                            Detail()
+                        }
                     }
                 }
             }
