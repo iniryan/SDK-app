@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.dp
 import com.example.projectuasmobile.R
 import kotlinx.coroutines.launch
 
+
+// ini page dummy buat uji coba component
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailKios() {
@@ -44,7 +46,6 @@ fun DetailKios() {
                 .fillMaxSize()
                 .padding(contentPadding)
         ) {
-            // Your main screen content goes here
             ItemCard()
 
             if (showBottomSheet) {
@@ -57,7 +58,6 @@ fun DetailKios() {
                         }
                     }
                 ) {
-                    // Sheet content
                 }
             }
         }
@@ -130,7 +130,6 @@ fun ItemCard() {
 
                 Button(
                     onClick = {
-                        // Perform action when the "Add to Cart" button is clicked
                     },
                     modifier = Modifier.focusTarget(),
                 ) {

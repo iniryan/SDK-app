@@ -1,4 +1,4 @@
-package com.example.projectuasmobile.frontend
+package com.example.projectuasmobile.frontend.customer
 
 import android.annotation.SuppressLint
 import android.content.Context
