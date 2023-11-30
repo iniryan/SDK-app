@@ -40,11 +40,15 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.projectuasmobile.frontend.customer.Detail
+import com.example.projectuasmobile.frontend.customer.BoothDetail
 import com.example.projectuasmobile.frontend.DetailKios
 import com.example.projectuasmobile.frontend.customer.HomePage
 import com.example.projectuasmobile.frontend.auth.Login
+import com.example.projectuasmobile.frontend.auth.Register
 import com.example.projectuasmobile.frontend.auth.RolePick
+import com.example.projectuasmobile.frontend.booth.AddMenu
+import com.example.projectuasmobile.frontend.booth.BoothHomePage
+import com.example.projectuasmobile.frontend.booth.MenuList
 import com.example.projectuasmobile.ui.theme.ProjectUASMobileTheme
 
 class MainActivity : ComponentActivity() {
@@ -83,7 +87,19 @@ class MainActivity : ComponentActivity() {
                             DetailKios()
                         }
                         composable("detail") {
-                            Detail()
+                            BoothDetail()
+                        }
+                        composable("boothHome") {
+                            BoothHomePage(navController)
+                        }
+                        composable("register") {
+                            Register(navController)
+                        }
+                        composable("menu") {
+                            MenuList(navController)
+                        }
+                        composable("addmenu") {
+                            AddMenu(navController)
                         }
                     }
                 }
@@ -137,7 +153,9 @@ fun OnboardingScreen(navController: NavController) {
                 contentScale = ContentScale.FillBounds
             )
         }
-        Column (modifier = Modifier.fillMaxSize().padding(bottom = 60.dp), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally){
+        Column (modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 60.dp), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally){
             Button(
                 onClick = {
                     navController.navigate("rolepick")
@@ -164,26 +182,63 @@ fun OnboardingScreen(navController: NavController) {
 }
 
 @Composable
-fun BottomNavigation() {
+fun BottomNavCustomer(navController: NavController) {
     NavigationBar {
         val bottomNavigation = listOf(
             BottomNavItem(
-                label = "Beranda", iconResId = R.drawable.home
+                label = "Beranda", iconResId = R.drawable.home, destination = "homepage"
             ),
             BottomNavItem(
-                label = "Kios", iconResId = R.drawable.booth
+                label = "Kios", iconResId = R.drawable.booth, destination = "menu"
             ),
             BottomNavItem(
-                label = "Transaksi", iconResId = R.drawable.transaksi
+                label = "Transaksi", iconResId = R.drawable.transaksi, destination = "transaksi"
             ),
             BottomNavItem(
-                label = "Keluar", iconResId = R.drawable.keluar
+                label = "Profil", iconResId = R.drawable.keluar, destination = "profil"
             ),
         )
         bottomNavigation.map {
             NavigationBarItem(
                 selected = it.label == bottomNavigation[0].label,
-                onClick = { },
+                onClick = {
+                    navController.navigate(it.label.toLowerCase())
+                },
+                icon = {
+                    Image(
+                        painter = painterResource(id = it.iconResId),
+                        contentDescription = it.label,
+                        modifier = Modifier.size(24.dp),
+                    )
+                },
+                label = { Text(text = it.label, color = Color(0xFFFF5F00)) },
+            )
+        }
+    }
+}
+@Composable
+fun BottomNavigation(navController: NavController) {
+    NavigationBar {
+        val bottomNavigation = listOf(
+            BottomNavItem(
+                label = "Beranda", iconResId = R.drawable.home, destination = "boothHome"
+            ),
+            BottomNavItem(
+                label = "Menu", iconResId = R.drawable.booth, destination = "menu"
+            ),
+            BottomNavItem(
+                label = "Transaksi", iconResId = R.drawable.transaksi, destination = "transaksi"
+            ),
+            BottomNavItem(
+                label = "Profil", iconResId = R.drawable.keluar, destination = "profil"
+            ),
+        )
+        bottomNavigation.map {
+            NavigationBarItem(
+                selected = it.label == bottomNavigation[0].label,
+                onClick = {
+                    navController.navigate(it.label.toLowerCase())
+                },
                 icon = {
                     Image(
                         painter = painterResource(id = it.iconResId),
@@ -197,4 +252,4 @@ fun BottomNavigation() {
     }
 }
 
-data class BottomNavItem(val label: String, val iconResId: Int)
+data class BottomNavItem(val label: String, val iconResId: Int, val destination: String)

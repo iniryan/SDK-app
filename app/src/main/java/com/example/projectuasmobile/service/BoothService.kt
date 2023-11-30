@@ -1,4 +1,4 @@
 package com.example.projectuasmobile.service
 
-interface BoothResponse {
+interface BoothService {
 }

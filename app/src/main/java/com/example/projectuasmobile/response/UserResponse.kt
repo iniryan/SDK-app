@@ -3,6 +3,7 @@ package com.example.projectuasmobile.response
 class UserResponse {
 //    @SerializedName("username")
     val id: Int = 0
+    val fullname: String = ""
     val username: String = ""
     val email: String = ""
     val provider: String = ""
