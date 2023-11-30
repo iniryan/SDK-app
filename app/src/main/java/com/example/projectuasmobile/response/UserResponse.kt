@@ -1,10 +1,8 @@
 package com.example.projectuasmobile.response
 
-import com.google.gson.annotations.SerializedName
-
 class UserResponse {
-    val id: Int = 0
 //    @SerializedName("username")
+    val id: Int = 0
     val username: String = ""
     val email: String = ""
     val provider: String = ""

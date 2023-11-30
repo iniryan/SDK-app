@@ -1,4 +1,4 @@
-package com.example.projectuasmobile.frontend
+package com.example.projectuasmobile.frontend.auth
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

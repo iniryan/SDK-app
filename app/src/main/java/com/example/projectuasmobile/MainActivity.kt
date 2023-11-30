@@ -36,14 +36,15 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.projectuasmobile.frontend.Detail
+import com.example.projectuasmobile.frontend.customer.Detail
 import com.example.projectuasmobile.frontend.DetailKios
-import com.example.projectuasmobile.frontend.HomePage
-import com.example.projectuasmobile.frontend.Login
-import com.example.projectuasmobile.frontend.RolePick
+import com.example.projectuasmobile.frontend.customer.HomePage
+import com.example.projectuasmobile.frontend.auth.Login
+import com.example.projectuasmobile.frontend.auth.RolePick
 import com.example.projectuasmobile.ui.theme.ProjectUASMobileTheme
 
 class MainActivity : ComponentActivity() {
@@ -51,26 +52,23 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ProjectUASMobileTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val sharedPreferences: SharedPreferences =
-                        LocalContext.current.getSharedPreferences("auth", Context.MODE_PRIVATE)
+                    val sharedPreferences: SharedPreferences = LocalContext.current.getSharedPreferences("auth", Context.MODE_PRIVATE)
                     val navController = rememberNavController()
-
-                    val startD: String
                     val jwt = sharedPreferences.getString("jwt", "")
-                    startD = if (jwt.equals("")) {
-                        "detail"
+
+                    val startD: String = if (jwt.equals("")) {
+                        "onboarding"
                     } else {
                         "homepage"
                     }
 
                     NavHost(navController = navController, startDestination = startD) {
-                        composable("splash") {
-                            SplashScreen()
+                        composable("onboarding") {
+                            OnboardingScreen(navController)
                         }
                         composable("login") {
                             Login(navController)
@@ -94,7 +92,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 @Composable
-fun SplashScreen() {
+fun OnboardingScreen(navController: NavController) {
     val primaryColorOrg = Color(0xFFFF5F00)
     Box(
         modifier = Modifier
@@ -139,9 +137,11 @@ fun SplashScreen() {
                 contentScale = ContentScale.FillBounds
             )
         }
-        Column (modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally){
+        Column (modifier = Modifier.fillMaxSize().padding(bottom = 60.dp), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally){
             Button(
-                onClick = {}, Modifier
+                onClick = {
+                    navController.navigate("rolepick")
+                }, Modifier
                     .width(327.dp)
                     .height(72.dp)
                     .padding(start = 10.dp, top = 12.dp, end = 10.dp, bottom = 12.dp),
@@ -188,7 +188,7 @@ fun BottomNavigation() {
                     Image(
                         painter = painterResource(id = it.iconResId),
                         contentDescription = it.label,
-                        modifier = Modifier.size(24.dp), // Adjust size as needed
+                        modifier = Modifier.size(24.dp),
                     )
                 },
                 label = { Text(text = it.label, color = Color(0xFFFF5F00)) },

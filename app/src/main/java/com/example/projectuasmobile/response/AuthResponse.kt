@@ -2,7 +2,7 @@ package com.example.projectuasmobile.response
 
 import com.google.gson.annotations.SerializedName
 
-class LoginResponse {
+class AuthResponse {
     @SerializedName("jwt")
     var jwt: String = ""
 }

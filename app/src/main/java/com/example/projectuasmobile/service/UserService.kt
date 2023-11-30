@@ -1,7 +1,7 @@
-package com.example.projectuasmobile
+package com.example.projectuasmobile.service
 
 import com.example.projectuasmobile.data.UpdateData
-import com.example.projectuasmobile.response.LoginResponse
+import com.example.projectuasmobile.response.AuthResponse
 import com.example.projectuasmobile.response.UserResponse
 import retrofit2.Call
 import retrofit2.http.Body
@@ -18,5 +18,5 @@ interface UserService {
     fun delete(@Path("id") id: Int): Call<UserResponse>
 
     @PUT("users/{id}")
-    fun update(@Path("id") id: String?, @Body body: UpdateData): Call<LoginResponse>
+    fun update(@Path("id") id: String?, @Body body: UpdateData): Call<AuthResponse>
 }

@@ -1,4 +1,4 @@
-package com.example.projectuasmobile.frontend
+package com.example.projectuasmobile.frontend.customer
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -171,7 +171,6 @@ fun Detail() {
                                         Text(
                                             text = "Nasi Telor pake Telor",
 
-                                            // Title 2
                                             style = TextStyle(
                                                 fontSize = 15.sp,
                                                 lineHeight = 19.sp,
@@ -182,7 +181,6 @@ fun Detail() {
                                         Text(
                                             text = "Nasi campur telor dengan balutan telor.",
 
-                                            // Subtitle 2
                                             style = TextStyle(
                                                 fontSize = 13.sp,
                                                 lineHeight = 18.sp,
@@ -272,7 +270,6 @@ fun Detail() {
                                         Text(
                                             text = "Salmon with Beurre Blanc",
 
-                                            // Title 2
                                             style = TextStyle(
                                                 fontSize = 15.sp,
                                                 lineHeight = 19.sp,
@@ -283,7 +280,6 @@ fun Detail() {
                                         Text(
                                             text = "Seared salmon served with butter sauce & seasonal vegetables.",
 
-                                            // Subtitle 2
                                             style = TextStyle(
                                                 fontSize = 13.sp,
                                                 lineHeight = 18.sp,
@@ -330,7 +326,6 @@ fun Detail() {
                                                 Text(
                                                     "Quantity: $quantity",
 
-                                                    // Title 1
 //                                                    style = TextStyle(
 //                                                        fontSize = 18.sp,
 //                                                        lineHeight = 26.sp,
@@ -397,7 +392,6 @@ fun Detail() {
                                         Text(
                                             text = "Nasi Telor pake Telor",
 
-                                            // Title 2
                                             style = TextStyle(
                                                 fontSize = 15.sp,
                                                 lineHeight = 19.sp,
@@ -408,7 +402,6 @@ fun Detail() {
                                         Text(
                                             text = "Nasi campur telor dengan balutan telor.",
 
-                                            // Subtitle 2
                                             style = TextStyle(
                                                 fontSize = 13.sp,
                                                 lineHeight = 18.sp,
@@ -448,7 +441,6 @@ fun Detail() {
                                                 Text(
                                                     text = "1",
 
-                                                    // Title 1
                                                     style = TextStyle(
                                                         fontSize = 18.sp,
                                                         lineHeight = 26.sp,
@@ -499,7 +491,6 @@ fun Detail() {
                                         Text(
                                             text = "Nasi Telor pake Telor",
 
-                                            // Title 2
                                             style = TextStyle(
                                                 fontSize = 15.sp,
                                                 lineHeight = 19.sp,
@@ -510,7 +501,6 @@ fun Detail() {
                                         Text(
                                             text = "Nasi campur telor dengan balutan telor.",
 
-                                            // Subtitle 2
                                             style = TextStyle(
                                                 fontSize = 13.sp,
                                                 lineHeight = 18.sp,
@@ -550,7 +540,6 @@ fun Detail() {
                                                 Text(
                                                     text = "1",
 
-                                                    // Title 1
                                                     style = TextStyle(
                                                         fontSize = 18.sp,
                                                         lineHeight = 26.sp,
@@ -584,61 +573,61 @@ fun Detail() {
                             }
                         }
                         //notes
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
-                            horizontalAlignment = Alignment.Start,
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .width(390.dp)
-                                    .height(62.dp)
-                                    .padding(
-                                        start = 16.dp, top = 18.dp, end = 10.dp, bottom = 18.dp
-                                    ),
-                                horizontalArrangement = Arrangement.spacedBy(
-                                    10.dp, Alignment.Start
-                                ),
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Text(
-                                    text = "Catatan", style = TextStyle(
-                                        fontSize = 18.sp,
-                                        lineHeight = 26.sp,
-                                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                                        color = Color(0xFF333333),
-                                    )
-                                )
-                            }
-                            Column(
-                                modifier = Modifier
-                                    .width(390.dp)
-                                    .background(color = Color(0xFFFFFFFF))
-                                    .padding(start = 16.dp, end = 16.dp),
-                                verticalArrangement = Arrangement.spacedBy(
-                                    16.dp, Alignment.CenterVertically
-                                ),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                            ) {
-                                OutlinedTextField(
-                                    value = notesField.value,
-                                    onValueChange = {
-                                        notesField.value = it
-                                    },
-                                    singleLine = false,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(100.dp)
-                                        .padding(2.dp)
-                                        .border(
-                                            width = 1.5.dp,
-                                            color = Color(0xFFFF5F00),
-                                            shape = RoundedCornerShape(8.dp)
-                                        ),
-                                    placeholder = { Text(text = "Contoh: pakai sambel ya...") },
-                                    maxLines = 4
-                                )
-                            }
-                        }
+//                        Column(
+//                            verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
+//                            horizontalAlignment = Alignment.Start,
+//                        ) {
+//                            Row(
+//                                modifier = Modifier
+//                                    .width(390.dp)
+//                                    .height(62.dp)
+//                                    .padding(
+//                                        start = 16.dp, top = 18.dp, end = 10.dp, bottom = 18.dp
+//                                    ),
+//                                horizontalArrangement = Arrangement.spacedBy(
+//                                    10.dp, Alignment.Start
+//                                ),
+//                                verticalAlignment = Alignment.CenterVertically,
+//                            ) {
+//                                Text(
+//                                    text = "Catatan", style = TextStyle(
+//                                        fontSize = 18.sp,
+//                                        lineHeight = 26.sp,
+//                                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+//                                        color = Color(0xFF333333),
+//                                    )
+//                                )
+//                            }
+//                            Column(
+//                                modifier = Modifier
+//                                    .width(390.dp)
+//                                    .background(color = Color(0xFFFFFFFF))
+//                                    .padding(start = 16.dp, end = 16.dp),
+//                                verticalArrangement = Arrangement.spacedBy(
+//                                    16.dp, Alignment.CenterVertically
+//                                ),
+//                                horizontalAlignment = Alignment.CenterHorizontally,
+//                            ) {
+//                                OutlinedTextField(
+//                                    value = notesField.value,
+//                                    onValueChange = {
+//                                        notesField.value = it
+//                                    },
+//                                    singleLine = false,
+//                                    modifier = Modifier
+//                                        .fillMaxWidth()
+//                                        .height(100.dp)
+//                                        .padding(2.dp)
+//                                        .border(
+//                                            width = 1.5.dp,
+//                                            color = Color(0xFFFF5F00),
+//                                            shape = RoundedCornerShape(8.dp)
+//                                        ),
+//                                    placeholder = { Text(text = "Contoh: pakai sambel ya...") },
+//                                    maxLines = 4
+//                                )
+//                            }
+//                        }
                     }
                 }
             }
