@@ -7,6 +7,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -57,14 +58,18 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
 @Composable
-fun Login(navController: NavController, context: Context = LocalContext.current) {
+fun Register(navController: NavController, context: Context = LocalContext.current) {
     val preferencesManager = remember { PreferencesManager(context = context) }
     val primaryColorOrg = Color(0xFFFF5F00)
     val usernameField = remember { mutableStateOf(TextFieldValue("")) }
+    val fullnameField = remember { mutableStateOf(TextFieldValue("")) }
+    val emailField = remember { mutableStateOf(TextFieldValue("")) }
     val passwordField = remember { mutableStateOf(TextFieldValue("")) }
     val passwordVisible = remember { mutableStateOf(false) }
+
+    val boothName = remember { mutableStateOf(TextFieldValue("")) }
+    val boothDescription = remember { mutableStateOf(TextFieldValue("")) }
 
     val baseUrl = "http://10.0.2.2:1337/api/"
     //KALAU TIDAK DI EMULATOR
@@ -121,7 +126,7 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = "Login Untuk Masuk",
+                text = "Daftar Untuk Mulai Jualan",
                 style = TextStyle(
                     fontSize = 18.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_regular)),
@@ -139,6 +144,39 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            OutlinedTextField(value = fullnameField.value,
+                onValueChange = {
+                    fullnameField.value = it
+                },
+                singleLine = true,
+                modifier = Modifier
+                    .align(Alignment.Start)
+                    .fillMaxWidth()
+                    .width(340.dp)
+                    .height(54.dp)
+                    .padding(2.dp)
+                    .border(
+                        width = 1.5.dp, color = Color(0xFFFF5F00), shape = RoundedCornerShape(24.dp)
+                    ),
+                leadingIcon = {
+                    Image(
+                        painter = painterResource(id = R.drawable.profile),
+                        contentDescription = "image description",
+                        contentScale = ContentScale.None
+                    )
+                },
+                placeholder = {
+                    Text(
+                        text = "Fullname",
+                        style = TextStyle(
+                            fontSize = 13.sp,
+                            fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                            fontWeight = FontWeight(400),
+                            color = Color(0xFFFF5F00),
+                        )
+                    )
+                })
+            Spacer(modifier = Modifier.height(28.dp))
             OutlinedTextField(value = usernameField.value,
                 onValueChange = {
                     usernameField.value = it
@@ -163,6 +201,39 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                 placeholder = {
                     Text(
                         text = "Username",
+                        style = TextStyle(
+                            fontSize = 13.sp,
+                            fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                            fontWeight = FontWeight(400),
+                            color = Color(0xFFFF5F00),
+                        )
+                    )
+                })
+            Spacer(modifier = Modifier.height(28.dp))
+            OutlinedTextField(value = emailField.value,
+                onValueChange = {
+                    emailField.value = it
+                },
+                singleLine = true,
+                modifier = Modifier
+                    .align(Alignment.Start)
+                    .fillMaxWidth()
+                    .width(340.dp)
+                    .height(54.dp)
+                    .padding(2.dp)
+                    .border(
+                        width = 1.5.dp, color = Color(0xFFFF5F00), shape = RoundedCornerShape(24.dp)
+                    ),
+                leadingIcon = {
+                    Image(
+                        painter = painterResource(id = R.drawable.profile),
+                        contentDescription = "image description",
+                        contentScale = ContentScale.None
+                    )
+                },
+                placeholder = {
+                    Text(
+                        text = "Email",
                         style = TextStyle(
                             fontSize = 13.sp,
                             fontFamily = FontFamily(Font(R.font.poppins_regular)),
@@ -221,6 +292,72 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                     }
                 })
             Spacer(modifier = Modifier.height(16.dp))
+            OutlinedTextField(value = boothName.value,
+                onValueChange = {
+                    boothName.value = it
+                },
+                singleLine = true,
+                modifier = Modifier
+                    .align(Alignment.Start)
+                    .fillMaxWidth()
+                    .width(340.dp)
+                    .height(54.dp)
+                    .padding(2.dp)
+                    .border(
+                        width = 1.5.dp, color = Color(0xFFFF5F00), shape = RoundedCornerShape(24.dp)
+                    ),
+                leadingIcon = {
+                    Image(
+                        painter = painterResource(id = R.drawable.profile),
+                        contentDescription = "image description",
+                        contentScale = ContentScale.None
+                    )
+                },
+                placeholder = {
+                    Text(
+                        text = "Booth Name",
+                        style = TextStyle(
+                            fontSize = 13.sp,
+                            fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                            fontWeight = FontWeight(400),
+                            color = Color(0xFFFF5F00),
+                        )
+                    )
+                })
+            Spacer(modifier = Modifier.height(28.dp))
+            OutlinedTextField(value = boothDescription.value,
+                onValueChange = {
+                    boothDescription.value = it
+                },
+                singleLine = false,
+                modifier = Modifier
+                    .align(Alignment.Start)
+                    .fillMaxWidth()
+                    .width(340.dp)
+                    .height(54.dp)
+                    .padding(2.dp)
+                    .border(
+                        width = 1.5.dp, color = Color(0xFFFF5F00), shape = RoundedCornerShape(24.dp)
+                    ),
+                leadingIcon = {
+                    Image(
+                        painter = painterResource(id = R.drawable.profile),
+                        contentDescription = "image description",
+                        contentScale = ContentScale.None
+                    )
+                },
+                placeholder = {
+                    Text(
+                        text = "Booth Description",
+                        style = TextStyle(
+                            fontSize = 13.sp,
+                            fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                            fontWeight = FontWeight(400),
+                            color = Color(0xFFFF5F00),
+                        )
+                    )
+                })
+            Spacer(modifier = Modifier.height(28.dp))
             Button(
                 onClick = {
                     val retrofit =
@@ -244,7 +381,7 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                             if (response.code() == 200) {
                                 jwt = response.body()?.jwt!!
                                 preferencesManager.saveData("jwt", jwt)
-                                navController.navigate("boothHome")
+                                navController.navigate("homepage")
                             } else if (response.code() == 400) {
                                 print("bad request 400")
                                 Toast.makeText(
@@ -267,7 +404,7 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
             ) {
                 Text(
 
-                    text = "LOGIN",
+                    text = "DAFTAR",
                     style = TextStyle(
                         fontSize = 12.sp,
                         fontFamily = FontFamily(Font(R.font.poppins_regular)),
@@ -276,29 +413,31 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                     )
                 )
             }
-            Spacer(modifier = Modifier.height(14.dp))
-            ClickableText(
-                text = AnnotatedString("Hubungi Admin Untuk Mereset Password"),
-                style = TextStyle(
-                    fontSize = 12.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFF262626),
-                    textAlign = TextAlign.Center,
-                ), onClick = {
-                })
             Spacer(modifier = Modifier.height(48.dp))
-            ClickableText(
-                text = AnnotatedString("Daftarkan dulu boothmu!"),
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                    color = primaryColorOrg,
-                    textAlign = TextAlign.Left
-                ),
-                modifier = Modifier.padding(top = 48.dp)
-            ) {
-                navController.navigate("register")
+            Row {
+                Text(
+                    text = "Sudah punya akun?",
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                        color = Color(0xFF1E1E1E),
+                        textAlign = TextAlign.Left
+                    ),
+                    modifier = Modifier.padding(top = 28.dp)
+                )
+                Spacer(modifier = Modifier.padding(4.dp))
+                ClickableText(
+                    text = AnnotatedString("Masuk aja"),
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                        color = Color(0xFF6650a4),
+                        textAlign = TextAlign.Left
+                    ),
+                    modifier = Modifier.padding(top = 28.dp)
+                ) {
+                    navController.navigate("login")
+                }
             }
         }
     }

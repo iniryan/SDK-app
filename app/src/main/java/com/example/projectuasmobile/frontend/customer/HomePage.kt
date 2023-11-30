@@ -2,6 +2,7 @@ package com.example.projectuasmobile.frontend.customer
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -39,17 +40,56 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.projectuasmobile.BottomNavCustomer
 import com.example.projectuasmobile.BottomNavigation
 import com.example.projectuasmobile.R
+import com.example.projectuasmobile.response.UserResponse
+import com.example.projectuasmobile.service.UserService
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomePage(navController: NavController, context: Context = LocalContext.current) {
     val primaryColorOrg = Color(0xFFFF5F00)
     val searchField = remember { mutableStateOf(TextFieldValue("")) }
+
+//    val listUser = remember { mutableStateListOf<UserResponse>() }
+//
+//    val baseUrl = "http://10.0.2.2:1337/api/"
+//    val retrofit =
+//        Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
+//            .build().create(UserService::class.java)
+//    val call = retrofit.getData()
+//    call.enqueue(object : Callback<List<UserResponse>> {
+//        override fun onResponse(
+//            call: Call<List<UserResponse>>, response: Response<List<UserResponse>>
+//        ) {
+//            if (response.code() == 200) {
+//                listUser.clear()
+//                response.body()?.forEach { userResponse ->
+//                    listUser.add(userResponse)
+//                }
+//            } else if (response.code() == 400) {
+//                print("error login")
+//                Toast.makeText(
+//                    context, "Username atau password salah", Toast.LENGTH_SHORT
+//                ).show()
+//            }
+//        }
+//
+//        override fun onFailure(call: Call<List<UserResponse>>, t: Throwable) {
+//            print(t.message)
+//        }
+//
+//    })
+
     Scaffold(
         bottomBar = {
-            BottomNavigation()
+            BottomNavCustomer(navController = navController)
         },
 
     ) {
