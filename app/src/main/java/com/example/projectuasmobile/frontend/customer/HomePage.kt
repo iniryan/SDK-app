@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -37,6 +39,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -59,6 +62,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 fun HomePage(navController: NavController, context: Context = LocalContext.current) {
     val primaryColorOrg = Color(0xFFFF5F00)
     val searchField = remember { mutableStateOf(TextFieldValue("")) }
+    val imageList = listOf(R.drawable.makanankat, R.drawable.rotikat, R.drawable.juskat, R.drawable.cepatsajikat, R.drawable.baratkat, R.drawable.nasikat, R.drawable.seafoodkat)
 
 //    val listUser = remember { mutableStateListOf<UserResponse>() }
 //
@@ -129,7 +133,29 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                     placeholder = { Text(text = "Pencarian", color = primaryColorOrg) })
                 Spacer(modifier = Modifier.padding(top = 14.dp, bottom = 14.dp))
                 Text(
-                    text = "Daftar Kios", style = TextStyle(
+                    text = "Kategori",
+                    style = TextStyle(
+                        fontSize = 18.sp,
+                        lineHeight = 14.sp,
+                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+                        fontWeight = FontWeight(600),
+                        color = Color(0xFFFF5F00),
+                    ), modifier = Modifier.align(Alignment.Start)
+                )
+                LazyRow (){
+                    items(imageList) { image ->
+                        Image(
+                            painter = painterResource(id = image),
+                            contentDescription = "image description",
+                            contentScale = ContentScale.FillBounds,
+                            modifier = Modifier.width(100.dp)
+                                .height(100.dp)
+                                .padding(all = 12.dp )
+                        )
+                    }
+                }
+                Text(
+                    text = "Rekomendasi Makanan", style = TextStyle(
                         fontSize = 18.sp,
                         lineHeight = 14.sp,
                         fontFamily = FontFamily(Font(R.font.poppins_semibold)),

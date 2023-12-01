@@ -205,6 +205,7 @@ fun BottomNavCustomer(navController: NavController) {
         )
         bottomNavigation.map {
             NavigationBarItem(
+
                 selected = it.label == bottomNavigation[0].label,
                 onClick = {
                     navController.navigate(it.label.toLowerCase())
