@@ -69,6 +69,7 @@ class MainActivity : ComponentActivity() {
 //                        "rolepick"
                     } else {
                         "boothHome"
+
                     }
 
                     NavHost(navController = navController, startDestination = startD) {

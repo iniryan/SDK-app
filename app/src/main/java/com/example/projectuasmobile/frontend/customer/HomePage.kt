@@ -5,6 +5,7 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -141,6 +142,7 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 14.dp)
+                        .clickable { navController.navigate("detail") }
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.dummy),
