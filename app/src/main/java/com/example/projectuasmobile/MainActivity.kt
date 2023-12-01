@@ -69,6 +69,7 @@ class MainActivity : ComponentActivity() {
                         "onboarding"
                     } else {
                         "boothHome"
+
                     }
 
                     NavHost(navController = navController, startDestination = startD) {
