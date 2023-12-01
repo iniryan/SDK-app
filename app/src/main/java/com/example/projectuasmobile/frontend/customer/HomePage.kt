@@ -21,6 +21,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -51,6 +52,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomePage(navController: NavController, context: Context = LocalContext.current) {
@@ -92,7 +94,7 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
             BottomNavCustomer(navController = navController)
         },
 
-    ) {
+        ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Column(
                 modifier = Modifier

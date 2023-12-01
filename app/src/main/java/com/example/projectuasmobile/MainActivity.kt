@@ -40,8 +40,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.projectuasmobile.frontend.customer.BoothDetail
+//import com.example.projectuasmobile.frontend.customer.BoothDetail
 import com.example.projectuasmobile.frontend.DetailKios
+import com.example.projectuasmobile.frontend.Kios
 import com.example.projectuasmobile.frontend.customer.HomePage
 import com.example.projectuasmobile.frontend.auth.Login
 import com.example.projectuasmobile.frontend.auth.Register
@@ -66,7 +67,6 @@ class MainActivity : ComponentActivity() {
 
                     val startD: String = if (jwt.equals("")) {
                         "onboarding"
-//                        "rolepick"
                     } else {
                         "boothHome"
                     }
@@ -87,9 +87,9 @@ class MainActivity : ComponentActivity() {
                         composable("detailkios") {
                             DetailKios()
                         }
-                        composable("detail") {
-                            BoothDetail()
-                        }
+//                        composable("detail") {
+//                            BoothDetail()
+//                        }
                         composable("boothHome") {
                             BoothHomePage(navController)
                         }
@@ -101,6 +101,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("addmenu") {
                             AddMenu(navController)
+                        }
+                        composable("kios") {
+                            Kios(navController)
                         }
                     }
                 }
@@ -187,10 +190,10 @@ fun BottomNavCustomer(navController: NavController) {
     NavigationBar {
         val bottomNavigation = listOf(
             BottomNavItem(
-                label = "Beranda", iconResId = R.drawable.home, destination = "boothHome"
+                label = "Beranda", iconResId = R.drawable.home, destination = "homepage"
             ),
             BottomNavItem(
-                label = "Kios", iconResId = R.drawable.booth, destination = "menu"
+                label = "Kios", iconResId = R.drawable.booth, destination = "kios"
             ),
             BottomNavItem(
                 label = "Transaksi", iconResId = R.drawable.transaksi, destination = "transaksi"
