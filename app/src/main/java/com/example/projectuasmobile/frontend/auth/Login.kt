@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -90,7 +91,8 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
             Image(
                 modifier = Modifier
                     .width(36.dp)
-                    .height(36.dp),
+                    .height(36.dp)
+                    .clickable { navController.navigate("rolepick") },
                 painter = painterResource(id = R.drawable.backwhite),
                 contentDescription = "image description",
                 contentScale = ContentScale.None

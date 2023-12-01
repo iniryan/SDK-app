@@ -66,8 +66,9 @@ class MainActivity : ComponentActivity() {
 
                     val startD: String = if (jwt.equals("")) {
                         "onboarding"
+//                        "rolepick"
                     } else {
-                        "homepage"
+                        "boothHome"
                     }
 
                     NavHost(navController = navController, startDestination = startD) {
@@ -81,7 +82,7 @@ class MainActivity : ComponentActivity() {
                             HomePage(navController)
                         }
                         composable("rolepick") {
-                            RolePick()
+                            RolePick(navController)
                         }
                         composable("detailkios") {
                             DetailKios()
@@ -186,7 +187,7 @@ fun BottomNavCustomer(navController: NavController) {
     NavigationBar {
         val bottomNavigation = listOf(
             BottomNavItem(
-                label = "Beranda", iconResId = R.drawable.home, destination = "homepage"
+                label = "Beranda", iconResId = R.drawable.home, destination = "boothHome"
             ),
             BottomNavItem(
                 label = "Kios", iconResId = R.drawable.booth, destination = "menu"
