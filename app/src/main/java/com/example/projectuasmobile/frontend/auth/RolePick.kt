@@ -1,6 +1,8 @@
 package com.example.projectuasmobile.frontend.auth
 
+import android.content.Context
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -21,10 +24,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.projectuasmobile.R
 
 @Composable
-fun RolePick() {
+fun RolePick(navController: NavController, context: Context = LocalContext.current) {
     Box {
         Column(
             modifier = Modifier
@@ -87,13 +91,15 @@ fun RolePick() {
             Image(
                 painter = painterResource(id = R.drawable.pembeli),
                 contentDescription = "image description",
-                contentScale = ContentScale.Fit
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.clickable { navController.navigate("homepage") }
             )
             Spacer(modifier = Modifier.padding(top = 12.dp))
             Image(
                 painter = painterResource(id = R.drawable.penjual),
                 contentDescription = "image description",
-                contentScale = ContentScale.Fit
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.clickable { navController.navigate("login") }
             )
         }
         Box(
