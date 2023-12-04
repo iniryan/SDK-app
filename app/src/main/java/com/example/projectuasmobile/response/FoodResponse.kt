@@ -7,6 +7,11 @@ data class ApiResponse<T>(
     val data: T? = null
 )
 
+//data class AttrResponse<T>(
+//    @SerializedName("attributes")
+//    val attributes: FoodResponse = FoodResponse()
+//)
+
 class FoodResponse {
     @SerializedName("id")
     var id: Int = 0
