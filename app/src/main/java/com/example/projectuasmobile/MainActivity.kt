@@ -49,6 +49,8 @@ import com.example.projectuasmobile.frontend.auth.Register
 import com.example.projectuasmobile.frontend.auth.RolePick
 import com.example.projectuasmobile.frontend.booth.AddMenu
 import com.example.projectuasmobile.frontend.booth.BoothHomePage
+import com.example.projectuasmobile.frontend.booth.BoothProfile
+import com.example.projectuasmobile.frontend.booth.EditProfile
 import com.example.projectuasmobile.frontend.booth.MenuList
 import com.example.projectuasmobile.ui.theme.ProjectUASMobileTheme
 
@@ -66,7 +68,7 @@ class MainActivity : ComponentActivity() {
                     val jwt = sharedPreferences.getString("jwt", "")
 
                     val startD: String = if (jwt.equals("")) {
-                        "onboarding"
+                        "editProfile"
                     } else {
                         "boothHome"
 
@@ -105,6 +107,12 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("kios") {
                             Kios(navController)
+                        }
+                        composable("boothprofile") {
+                            BoothProfile(navController)
+                        }
+                        composable("editProfile") {
+                            EditProfile(navController)
                         }
                     }
                 }
