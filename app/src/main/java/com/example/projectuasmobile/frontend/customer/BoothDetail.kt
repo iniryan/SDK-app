@@ -207,105 +207,7 @@ fun BoothDetail(navController: NavController, context: Context = LocalContext.cu
                                             ),
                                             verticalAlignment = Alignment.CenterVertically,
                                         ) {
-                                            Row(
-                                                horizontalArrangement = Arrangement.spacedBy(
-                                                    12.dp, Alignment.CenterHorizontally
-                                                ),
-                                                verticalAlignment = Alignment.CenterVertically,
-                                            ) {
-                                                Image(
-                                                    painter = painterResource(id = R.drawable.minus_icon),
-                                                    contentDescription = "image description",
-                                                    contentScale = ContentScale.None
-                                                )
-                                                Text(
-                                                    text = "1",
 
-                                                    // Title 1
-                                                    style = TextStyle(
-                                                        fontSize = 18.sp,
-                                                        lineHeight = 26.sp,
-                                                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                                                        color = Color(0xFF333333),
-                                                    )
-                                                )
-                                                Image(
-                                                    painter = painterResource(id = R.drawable.plus_icon),
-                                                    contentDescription = "image description",
-                                                    contentScale = ContentScale.None
-                                                )
-                                            }
-                                        }
-                                    }
-                                    Image(
-                                        modifier = Modifier
-                                            .width(100.dp)
-                                            .height(100.dp),
-                                        painter = painterResource(id = R.drawable.imgplaceholder),
-                                        contentDescription = "image description",
-                                        contentScale = ContentScale.Crop
-                                    )
-                                }
-                                Divider(
-                                    modifier = Modifier
-                                        .width(358.dp)
-                                        .height(0.5.dp)
-                                        .background(color = Color(0xFFEEEEEE))
-                                )
-                                Row(
-                                    modifier = Modifier
-                                        .width(358.dp)
-                                        .height(127.dp),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.Top,
-                                ) {
-                                    Column(
-                                        modifier = Modifier
-                                            .width(218.dp)
-                                            .height(127.dp),
-                                        verticalArrangement = Arrangement.spacedBy(
-                                            4.dp, Alignment.Top
-                                        ),
-                                        horizontalAlignment = Alignment.Start,
-                                    ) {
-                                        Text(
-                                            text = "Salmon with Beurre Blanc",
-
-                                            style = TextStyle(
-                                                fontSize = 15.sp,
-                                                lineHeight = 19.sp,
-                                                fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                                                color = Color(0xFF333333),
-                                            )
-                                        )
-                                        Text(
-                                            text = "Seared salmon served with butter sauce & seasonal vegetables.",
-
-                                            style = TextStyle(
-                                                fontSize = 13.sp,
-                                                lineHeight = 18.sp,
-                                                fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                                                color = Color(0xFF757575),
-                                            )
-                                        )
-                                        Text(
-                                            text = "Rp10.000", style = TextStyle(
-                                                fontSize = 12.sp,
-                                                lineHeight = 20.sp,
-                                                fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                                                color = Color(0xFF333333),
-                                            )
-                                        )
-                                        Row(
-                                            modifier = Modifier
-                                                .padding(top = 8.dp)
-                                                .width(218.dp)
-                                                .height(28.dp),
-                                            horizontalArrangement = Arrangement.spacedBy(
-                                                16.dp, Alignment.Start
-                                            ),
-                                            verticalAlignment = Alignment.CenterVertically,
-                                        ) {
                                             Row(
                                                 horizontalArrangement = Arrangement.spacedBy(
                                                     12.dp, Alignment.CenterHorizontally
@@ -317,242 +219,29 @@ fun BoothDetail(navController: NavController, context: Context = LocalContext.cu
                                                         quantity--
                                                     }
                                                 }) {
-                                                    Icon(painter = painterResource(id = R.drawable.minus_icon), contentDescription = "Add")
-//                                                    Image(
-//                                                        painter = painterResource(id = R.drawable.minus_icon),
-//                                                        contentDescription = "image description",
-//                                                        contentScale = ContentScale.None
-//                                                    )
+                                                    Icon(
+                                                        painter = painterResource(id = R.drawable.minus_icon),
+                                                        contentDescription = "Minus"
+                                                    )
                                                 }
                                                 Text(
-                                                    "Quantity: $quantity",
+                                                    text = "$quantity",
 
-//                                                    style = TextStyle(
-//                                                        fontSize = 18.sp,
-//                                                        lineHeight = 26.sp,
-//                                                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-//                                                        color = Color(0xFF333333),
-//                                                    )
+                                                    style = TextStyle(
+                                                        fontSize = 14.sp,
+                                                        lineHeight = 14.sp,
+                                                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+                                                        color = Color(0xFF333333),
+                                                    )
                                                 )
                                                 IconButton(onClick = {
                                                     quantity++
                                                 }) {
-                                                    Icon(painter = painterResource(id = R.drawable.plus_icon), contentDescription = "Add")
-//                                                    Image(
-//                                                        painter = painterResource(id = R.drawable.plus_icon),
-//                                                        contentDescription = "image description",
-//                                                        contentScale = ContentScale.None
-//                                                    )
+                                                    Icon(
+                                                        painter = painterResource(id = R.drawable.plus_icon),
+                                                        contentDescription = "Add"
+                                                    )
                                                 }
-                                            }
-                                        }
-                                    }
-                                    Image(
-                                        modifier = Modifier
-                                            .width(100.dp)
-                                            .height(100.dp),
-                                        painter = painterResource(id = R.drawable.imgplaceholder),
-                                        contentDescription = "image description",
-                                        contentScale = ContentScale.Crop
-                                    )
-                                }
-                                Divider(
-                                    modifier = Modifier
-                                        .width(358.dp)
-                                        .height(0.5.dp)
-                                        .background(color = Color(0xFFEEEEEE))
-                                )
-                            }
-                            Column(
-                                modifier = Modifier
-                                    .width(390.dp)
-                                    .height(157.5.dp)
-                                    .background(color = Color(0xFFFFFFFF))
-                                    .padding(start = 16.dp, top = 14.dp, end = 16.dp),
-                                verticalArrangement = Arrangement.spacedBy(
-                                    16.dp, Alignment.CenterVertically
-                                ),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                            ) {
-                                Row(
-                                    modifier = Modifier
-                                        .width(358.dp)
-                                        .height(127.dp),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.Top,
-                                ) {
-                                    Column(
-                                        modifier = Modifier
-                                            .width(218.dp)
-                                            .height(127.dp),
-                                        verticalArrangement = Arrangement.spacedBy(
-                                            4.dp, Alignment.Top
-                                        ),
-                                        horizontalAlignment = Alignment.Start,
-                                    ) {
-                                        Text(
-                                            text = "Nasi Telor pake Telor",
-
-                                            style = TextStyle(
-                                                fontSize = 15.sp,
-                                                lineHeight = 19.sp,
-                                                fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                                                color = Color(0xFF333333),
-                                            )
-                                        )
-                                        Text(
-                                            text = "Nasi campur telor dengan balutan telor.",
-
-                                            style = TextStyle(
-                                                fontSize = 13.sp,
-                                                lineHeight = 18.sp,
-                                                fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                                                color = Color(0xFF757575),
-                                            )
-                                        )
-                                        Text(
-                                            text = "Rp10.000", style = TextStyle(
-                                                fontSize = 12.sp,
-                                                lineHeight = 20.sp,
-                                                fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                                                color = Color(0xFF333333),
-                                            )
-                                        )
-                                        Row(
-                                            modifier = Modifier
-                                                .padding(top = 8.dp)
-                                                .width(218.dp)
-                                                .height(28.dp),
-                                            horizontalArrangement = Arrangement.spacedBy(
-                                                16.dp, Alignment.Start
-                                            ),
-                                            verticalAlignment = Alignment.CenterVertically,
-                                        ) {
-                                            Row(
-                                                horizontalArrangement = Arrangement.spacedBy(
-                                                    12.dp, Alignment.CenterHorizontally
-                                                ),
-                                                verticalAlignment = Alignment.CenterVertically,
-                                            ) {
-                                                Image(
-                                                    painter = painterResource(id = R.drawable.minus_icon),
-                                                    contentDescription = "image description",
-                                                    contentScale = ContentScale.None
-                                                )
-                                                Text(
-                                                    text = "1",
-
-                                                    style = TextStyle(
-                                                        fontSize = 18.sp,
-                                                        lineHeight = 26.sp,
-                                                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                                                        color = Color(0xFF333333),
-                                                    )
-                                                )
-                                                Image(
-                                                    painter = painterResource(id = R.drawable.plus_icon),
-                                                    contentDescription = "image description",
-                                                    contentScale = ContentScale.None
-                                                )
-                                            }
-                                        }
-                                    }
-                                    Image(
-                                        modifier = Modifier
-                                            .width(100.dp)
-                                            .height(100.dp),
-                                        painter = painterResource(id = R.drawable.imgplaceholder),
-                                        contentDescription = "image description",
-                                        contentScale = ContentScale.Crop
-                                    )
-                                }
-                                Divider(
-                                    modifier = Modifier
-                                        .width(358.dp)
-                                        .height(0.5.dp)
-                                        .background(color = Color(0xFFEEEEEE))
-                                )
-                                //image
-                                Row(
-                                    modifier = Modifier
-                                        .width(358.dp)
-                                        .height(127.dp),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.Top,
-                                ) {
-                                    Column(
-                                        modifier = Modifier
-                                            .width(218.dp)
-                                            .height(127.dp),
-                                        verticalArrangement = Arrangement.spacedBy(
-                                            4.dp, Alignment.Top
-                                        ),
-                                        horizontalAlignment = Alignment.Start,
-                                    ) {
-                                        Text(
-                                            text = "Nasi Telor pake Telor",
-
-                                            style = TextStyle(
-                                                fontSize = 15.sp,
-                                                lineHeight = 19.sp,
-                                                fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                                                color = Color(0xFF333333),
-                                            )
-                                        )
-                                        Text(
-                                            text = "Nasi campur telor dengan balutan telor.",
-
-                                            style = TextStyle(
-                                                fontSize = 13.sp,
-                                                lineHeight = 18.sp,
-                                                fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                                                color = Color(0xFF757575),
-                                            )
-                                        )
-                                        Text(
-                                            text = "Rp10.000", style = TextStyle(
-                                                fontSize = 12.sp,
-                                                lineHeight = 20.sp,
-                                                fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                                                color = Color(0xFF333333),
-                                            )
-                                        )
-                                        Row(
-                                            modifier = Modifier
-                                                .padding(top = 8.dp)
-                                                .width(218.dp)
-                                                .height(28.dp),
-                                            horizontalArrangement = Arrangement.spacedBy(
-                                                16.dp, Alignment.Start
-                                            ),
-                                            verticalAlignment = Alignment.CenterVertically,
-                                        ) {
-                                            Row(
-                                                horizontalArrangement = Arrangement.spacedBy(
-                                                    12.dp, Alignment.CenterHorizontally
-                                                ),
-                                                verticalAlignment = Alignment.CenterVertically,
-                                            ) {
-                                                Image(
-                                                    painter = painterResource(id = R.drawable.minus_icon),
-                                                    contentDescription = "image description",
-                                                    contentScale = ContentScale.None
-                                                )
-                                                Text(
-                                                    text = "1",
-
-                                                    style = TextStyle(
-                                                        fontSize = 18.sp,
-                                                        lineHeight = 26.sp,
-                                                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                                                        color = Color(0xFF333333),
-                                                    )
-                                                )
-                                                Image(
-                                                    painter = painterResource(id = R.drawable.plus_icon),
-                                                    contentDescription = "image description",
-                                                    contentScale = ContentScale.None
-                                                )
                                             }
                                         }
                                     }

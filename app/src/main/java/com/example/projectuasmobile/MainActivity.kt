@@ -70,8 +70,7 @@ class MainActivity : ComponentActivity() {
                     val jwt = sharedPreferences.getString("jwt", "")
 
                     val startD: String = if (jwt.equals("")) {
-                        "detailBooth"
-//                        "onboarding"
+                        "onboarding"
                     } else {
                         "boothHome"
 
@@ -129,6 +128,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 @Composable
 fun OnboardingScreen(navController: NavController) {
     val primaryColorOrg = Color(0xFFFF5F00)
