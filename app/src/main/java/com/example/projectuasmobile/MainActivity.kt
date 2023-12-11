@@ -40,10 +40,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-//import com.example.projectuasmobile.frontend.customer.BoothDetail
 import com.example.projectuasmobile.frontend.DetailKios
-import com.example.projectuasmobile.frontend.customer.com.example.projectuasmobile.frontend.customer.Kios
-import com.example.projectuasmobile.frontend.customer.HomePage
 import com.example.projectuasmobile.frontend.auth.Login
 import com.example.projectuasmobile.frontend.auth.Register
 import com.example.projectuasmobile.frontend.auth.RegisterBooth
@@ -55,7 +52,9 @@ import com.example.projectuasmobile.frontend.booth.CheckOutPage
 import com.example.projectuasmobile.frontend.booth.EditProfile
 import com.example.projectuasmobile.frontend.booth.MenuList
 import com.example.projectuasmobile.frontend.customer.BoothDetail
+import com.example.projectuasmobile.frontend.customer.HomePage
 import com.example.projectuasmobile.frontend.customer.PaymentPage
+import com.example.projectuasmobile.frontend.customer.com.example.projectuasmobile.frontend.customer.Kios
 import com.example.projectuasmobile.ui.theme.ProjectUASMobileTheme
 
 class MainActivity : ComponentActivity() {
@@ -94,8 +93,8 @@ class MainActivity : ComponentActivity() {
                         composable("detailkios") {
                             DetailKios()
                         }
-                        composable("detailBooth") {
-                            BoothDetail()
+                        composable("detailBooth/{boothID}") { backStackEntry ->
+                            BoothDetail(navController, backStackEntry.arguments?.getString("boothID"))
                         }
                         composable("boothHome") {
                             BoothHomePage(navController)
@@ -229,7 +228,7 @@ fun BottomNavCustomer(navController: NavController) {
 
                 selected = it.label == bottomNavigation[0].label,
                 onClick = {
-                    navController.navigate(it.label.toLowerCase())
+                    navController.navigate(it.label.lowercase())
                 },
                 icon = {
                     Image(
@@ -264,7 +263,7 @@ fun BottomNavigation(navController: NavController) {
             NavigationBarItem(
                 selected = it.label == bottomNavigation[0].label,
                 onClick = {
-                    navController.navigate(it.label.toLowerCase())
+                    navController.navigate(it.label.lowercase())
                 },
                 icon = {
                     Image(

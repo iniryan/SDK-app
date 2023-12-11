@@ -2,8 +2,6 @@ package com.example.projectuasmobile.response
 
 import com.google.gson.annotations.SerializedName
 
-
-
 class Booth {
     @SerializedName("id")
     var id: Int = 0

@@ -43,7 +43,6 @@ import com.example.projectuasmobile.R
 import com.example.projectuasmobile.data.BoothDataWrapper
 import com.example.projectuasmobile.data.RegisterBoothData
 import com.example.projectuasmobile.response.Booth
-import com.example.projectuasmobile.response.BoothResponse
 import com.example.projectuasmobile.service.BoothService
 import com.google.gson.Gson
 import retrofit2.Call

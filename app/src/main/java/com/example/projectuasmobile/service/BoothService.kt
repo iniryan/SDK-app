@@ -1,7 +1,6 @@
 package com.example.projectuasmobile.service
 
 import com.example.projectuasmobile.data.BoothDataWrapper
-import com.example.projectuasmobile.response.ApiResponse
 import com.example.projectuasmobile.response.Booth
 import com.example.projectuasmobile.response.BoothResponse
 import retrofit2.Call
@@ -16,4 +15,8 @@ interface BoothService {
 
     @GET("booths")
     fun getAllBooth(@Query("filters[boothName][\$contains]") search: String?): Call<BoothResponse<List<Booth>>>
+
+    @GET("booths/{id}")
+    fun getBoothById(@Query("id") id: Int): Call<BoothResponse<Booth>>
 }
+

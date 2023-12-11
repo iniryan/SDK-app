@@ -1,8 +1,7 @@
-package com.example.projectuasmobile.frontend.booth
+package com.example.projectuasmobile.frontend.customer
 
 import android.content.Context
 import android.net.Uri
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -18,7 +17,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.OutlinedTextField
@@ -38,29 +36,18 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.projectuasmobile.R
-import com.example.projectuasmobile.data.FoodData
-import com.example.projectuasmobile.data.FoodDataWrapper
-import com.example.projectuasmobile.response.FoodResponse
-import com.example.projectuasmobile.service.FoodService
-import com.google.gson.Gson
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 @Composable
 fun CheckOutPage(navController: NavController, context: Context = LocalContext.current) {
-    val NameField = remember { mutableStateOf(TextFieldValue("")) }
-    val NotesField = remember { mutableStateOf(TextFieldValue("")) }
-    val TableField = remember { mutableStateOf(TextFieldValue("")) }
+    val nameField = remember { mutableStateOf(TextFieldValue("")) }
+    val notesField = remember { mutableStateOf(TextFieldValue("")) }
+    val tableField = remember { mutableStateOf(TextFieldValue("")) }
     val primaryColorOrg = Color(0xFFFF5F00)
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     val pickImageLauncher = rememberLauncherForActivityResult(
@@ -117,9 +104,9 @@ fun CheckOutPage(navController: NavController, context: Context = LocalContext.c
                     .padding(top = 14.dp)
             )
             OutlinedTextField(
-                value = NameField.value,
+                value = nameField.value,
                 onValueChange = {
-                    NameField.value = it
+                    nameField.value = it
                 },
                 singleLine = true,
                 modifier = Modifier
@@ -146,9 +133,9 @@ fun CheckOutPage(navController: NavController, context: Context = LocalContext.c
                     .padding(top = 14.dp)
             )
             OutlinedTextField(
-                value = NotesField.value,
+                value = notesField.value,
                 onValueChange = {
-                    NotesField.value = it
+                    notesField.value = it
                 },
                 singleLine = false,
                 modifier = Modifier
@@ -175,9 +162,9 @@ fun CheckOutPage(navController: NavController, context: Context = LocalContext.c
                     .padding(top = 14.dp)
             )
             OutlinedTextField(
-                value = TableField.value,
+                value = tableField.value,
                 onValueChange = {
-                    TableField.value = it
+                    tableField.value = it
                 },
                 singleLine = true,
                 modifier = Modifier

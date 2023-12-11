@@ -1,10 +1,8 @@
 package com.example.projectuasmobile.service
 
 import com.example.projectuasmobile.data.LoginData
-import com.example.projectuasmobile.data.RegisterBoothData
 import com.example.projectuasmobile.data.RegisterData
 import com.example.projectuasmobile.response.AuthResponse
-import com.example.projectuasmobile.response.BoothResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST

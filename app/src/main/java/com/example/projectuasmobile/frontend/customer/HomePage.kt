@@ -171,7 +171,6 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                         color = Color(0xFFFF5F00),
                     ), modifier = Modifier.align(Alignment.Start)
                 )
-//            nanti bakal loop row dengan data dari api
                 LazyColumn {
                     listBooth.forEach { booth ->
                         item {
@@ -184,7 +183,7 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(top = 14.dp)
-                                    .clickable { navController.navigate("detail") }
+                                    .clickable { navController.navigate("detail/" + booth) }
                             ) {
                                 Image(
                                     painter = painterResource(id = R.drawable.dummy),

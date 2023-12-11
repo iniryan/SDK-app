@@ -1,7 +1,6 @@
 package com.example.projectuasmobile.frontend.customer
 
 import android.content.Context
-import android.widget.HorizontalScrollView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.projectuasmobile.R
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 @Composable
 fun PaymentPage(navController: NavController, context: Context = LocalContext.current){

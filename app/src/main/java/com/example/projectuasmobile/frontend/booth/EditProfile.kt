@@ -2,7 +2,6 @@ package com.example.projectuasmobile.frontend.booth
 
 import android.content.Context
 import android.net.Uri
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -20,7 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Clear
@@ -45,7 +43,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -54,22 +51,12 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.example.projectuasmobile.R
-import com.example.projectuasmobile.data.FoodData
-import com.example.projectuasmobile.data.FoodDataWrapper
-import com.example.projectuasmobile.response.FoodResponse
-import com.example.projectuasmobile.service.FoodService
-import com.google.gson.Gson
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 @Composable
 fun EditProfile(navController: NavController, context: Context = LocalContext.current) {
-    val BoothNameField = remember { mutableStateOf(TextFieldValue("")) }
-    val BoothDescriptionField = remember { mutableStateOf(TextFieldValue("")) }
-    val BoothProfileField = remember { mutableStateOf(TextFieldValue("")) }
+    val boothNameField = remember { mutableStateOf(TextFieldValue("")) }
+    val boothDescriptionField = remember { mutableStateOf(TextFieldValue("")) }
+    val boothProfileField = remember { mutableStateOf(TextFieldValue("")) }
     val primaryColorOrg = Color(0xFFFF5F00)
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     val pickImageLauncher = rememberLauncherForActivityResult(
@@ -126,9 +113,9 @@ fun EditProfile(navController: NavController, context: Context = LocalContext.cu
                     .padding(top = 14.dp)
             )
             OutlinedTextField(
-                value = BoothNameField.value,
+                value = boothNameField.value,
                 onValueChange = {
-                    BoothNameField.value = it
+                    boothNameField.value = it
                 },singleLine = true,
                 modifier = Modifier
                     .align(Alignment.Start)
@@ -153,9 +140,9 @@ fun EditProfile(navController: NavController, context: Context = LocalContext.cu
                     .padding(top = 14.dp)
             )
             OutlinedTextField(
-                value = BoothDescriptionField.value,
+                value = boothDescriptionField.value,
                 onValueChange = {
-                    BoothDescriptionField.value = it
+                    boothDescriptionField.value = it
                 },
                 singleLine = false,
                 modifier = Modifier

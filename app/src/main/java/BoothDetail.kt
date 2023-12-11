@@ -1,5 +1,6 @@
 package com.example.projectuasmobile.frontend.customer
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -28,17 +29,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.projectuasmobile.R
 
 
 @Composable
-fun BoothDetail() {
+fun BoothDetail(navController: NavController, boothID : String?, context: Context = LocalContext.current) {
     val notesField = remember {
         mutableStateOf("")
     }
@@ -76,7 +79,7 @@ fun BoothDetail() {
                         horizontalAlignment = Alignment.Start,
                     ) {
                         Text(
-                            text = "Warkop Markaz", style = TextStyle(
+                            text = boothName, style = TextStyle(
                                 fontSize = 24.sp,
                                 lineHeight = 36.sp,
                                 fontFamily = FontFamily(Font(R.font.poppins_semibold)),
