@@ -46,6 +46,7 @@ import com.example.projectuasmobile.frontend.Kios
 import com.example.projectuasmobile.frontend.customer.HomePage
 import com.example.projectuasmobile.frontend.auth.Login
 import com.example.projectuasmobile.frontend.auth.Register
+import com.example.projectuasmobile.frontend.auth.RegisterBooth
 import com.example.projectuasmobile.frontend.auth.RolePick
 import com.example.projectuasmobile.frontend.booth.AddMenu
 import com.example.projectuasmobile.frontend.booth.BoothHomePage
@@ -96,6 +97,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("register") {
                             Register(navController)
+                        }
+                        composable("registerBooth") {
+                            RegisterBooth(navController)
                         }
                         composable("menu") {
                             MenuList(navController)

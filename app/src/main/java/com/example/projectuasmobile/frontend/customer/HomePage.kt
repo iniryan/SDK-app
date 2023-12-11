@@ -16,15 +16,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -46,53 +44,63 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.projectuasmobile.BottomNavCustomer
-import com.example.projectuasmobile.BottomNavigation
 import com.example.projectuasmobile.R
-import com.example.projectuasmobile.response.UserResponse
-import com.example.projectuasmobile.service.UserService
+import com.example.projectuasmobile.response.Booth
+import com.example.projectuasmobile.response.BoothResponse
+import com.example.projectuasmobile.service.BoothService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomePage(navController: NavController, context: Context = LocalContext.current) {
     val primaryColorOrg = Color(0xFFFF5F00)
     val searchField = remember { mutableStateOf(TextFieldValue("")) }
-    val imageList = listOf(R.drawable.makanankat, R.drawable.rotikat, R.drawable.juskat, R.drawable.cepatsajikat, R.drawable.baratkat, R.drawable.nasikat, R.drawable.seafoodkat)
+    val imageList = listOf(
+        R.drawable.makanankat,
+        R.drawable.rotikat,
+        R.drawable.juskat,
+        R.drawable.cepatsajikat,
+        R.drawable.baratkat,
+        R.drawable.nasikat,
+        R.drawable.seafoodkat
+    )
 
-//    val listUser = remember { mutableStateListOf<UserResponse>() }
-//
-//    val baseUrl = "http://10.0.2.2:1337/api/"
-//    val retrofit =
-//        Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
-//            .build().create(UserService::class.java)
-//    val call = retrofit.getData()
-//    call.enqueue(object : Callback<List<UserResponse>> {
-//        override fun onResponse(
-//            call: Call<List<UserResponse>>, response: Response<List<UserResponse>>
-//        ) {
-//            if (response.code() == 200) {
-//                listUser.clear()
-//                response.body()?.forEach { userResponse ->
-//                    listUser.add(userResponse)
-//                }
-//            } else if (response.code() == 400) {
-//                print("error login")
-//                Toast.makeText(
-//                    context, "Username atau password salah", Toast.LENGTH_SHORT
-//                ).show()
-//            }
-//        }
-//
-//        override fun onFailure(call: Call<List<UserResponse>>, t: Throwable) {
-//            print(t.message)
-//        }
-//
-//    })
+    val listBooth = remember { mutableStateListOf<Booth>() }
+
+    val baseUrl = "http://10.0.2.2:1337/api/"
+    val retrofit =
+        Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
+            .build().create(BoothService::class.java)
+    val call = retrofit.getAllBooth()
+    call.enqueue(object : Callback<BoothResponse<List<Booth>>> {
+        override fun onResponse(
+            call: Call<BoothResponse<List<Booth>>>,
+            response: Response<BoothResponse<List<Booth>>>
+        ) {
+            if (response.isSuccessful) {
+                listBooth.clear()
+                response.body()?.data!!.forEach{ booth : Booth ->
+                    listBooth.add(booth)
+//                    val x = userRespon.prodi?.namaProdi
+//                    val y = ""
+                }
+            } else {
+                Toast.makeText(
+                    context,
+                    "Error: ${response.code()} - ${response.message()}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+        override fun onFailure(call: Call<BoothResponse<List<Booth>>>, t: Throwable) {
+            print(t.message)
+        }
+    })
 
     Scaffold(
         bottomBar = {
@@ -104,8 +112,7 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 24.dp, vertical = 24.dp)
-                    .verticalScroll(rememberScrollState()),
+                    .padding(horizontal = 24.dp, vertical = 24.dp),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -142,15 +149,16 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                         color = Color(0xFFFF5F00),
                     ), modifier = Modifier.align(Alignment.Start)
                 )
-                LazyRow (){
+                LazyRow {
                     items(imageList) { image ->
                         Image(
                             painter = painterResource(id = image),
                             contentDescription = "image description",
                             contentScale = ContentScale.FillBounds,
-                            modifier = Modifier.width(100.dp)
+                            modifier = Modifier
+                                .width(100.dp)
                                 .height(100.dp)
-                                .padding(all = 12.dp )
+                                .padding(all = 12.dp)
                         )
                     }
                 }
@@ -164,111 +172,69 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                     ), modifier = Modifier.align(Alignment.Start)
                 )
 //            nanti bakal loop row dengan data dari api
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
-                    verticalAlignment = Alignment.Top,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 14.dp)
-                        .clickable { navController.navigate("detail") }
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.dummy),
-                        contentDescription = "image description",
-                        contentScale = ContentScale.FillBounds,
-                        modifier = Modifier
-                            .width(80.dp)
-                            .height(84.dp)
-                    )
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(1.dp, Alignment.Top),
-                        horizontalAlignment = Alignment.Start,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "Warkop Markaz", style = TextStyle(
-                                fontSize = 16.sp,
-                                lineHeight = 17.64.sp,
-                                fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                                color = Color(0xFF1E1E1E),
-                            )
-                        )
-                        Text(
-                            text = "Booth No.1", style = TextStyle(
-                                fontSize = 12.sp,
-                                lineHeight = 17.64.sp,
-                                fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                                color = Color(0x801E1E1E),
-                            )
-                        )
-                        Spacer(modifier = Modifier.padding(top = 2.dp))
-                        Divider(modifier = Modifier
-                            .border(width = 1.dp, color = Color(0xFFE0E0E0))
-                            .fillMaxSize()
-                            .height(0.2.dp))
-                        Spacer(modifier = Modifier.padding(top = 2.dp))
-                        Text(
-                            text = "Menyediakan berbagai minuman sachet, kopi, dan Rokok Batangan ",
-                            style = TextStyle(
-                                fontSize = 12.sp,
-                                lineHeight = 17.64.sp,
-                                fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                                color = Color(0x801E1E1E),
-                            )
-                        )
-                    }
-                }
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
-                    verticalAlignment = Alignment.Top,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 14.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.dummy),
-                        contentDescription = "image description",
-                        contentScale = ContentScale.FillBounds,
-                        modifier = Modifier
-                            .width(80.dp)
-                            .height(84.dp)
-                    )
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(1.dp, Alignment.Top),
-                        horizontalAlignment = Alignment.Start,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "Warung Nikmat bu Halima", style = TextStyle(
-                                fontSize = 16.sp,
-                                lineHeight = 17.64.sp,
-                                fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                                color = Color(0xFF1E1E1E),
-                            )
-                        )
-                        Text(
-                            text = "Booth No.2", style = TextStyle(
-                                fontSize = 12.sp,
-                                lineHeight = 17.64.sp,
-                                fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                                color = Color(0x801E1E1E),
-                            )
-                        )
-                        Spacer(modifier = Modifier.padding(top = 2.dp))
-                        Divider(modifier = Modifier
-                            .border(width = 1.dp, color = Color(0xFFE0E0E0))
-                            .fillMaxSize()
-                            .height(0.2.dp))
-                        Spacer(modifier = Modifier.padding(top = 2.dp))
-                        Text(
-                            text = "Menyediakan berbagai makanan dan minuman dengan citarasa Madura",
-                            style = TextStyle(
-                                fontSize = 12.sp,
-                                lineHeight = 17.64.sp,
-                                fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                                color = Color(0x801E1E1E),
-                            )
-                        )
+                LazyColumn {
+                    listBooth.forEach { booth ->
+                        item {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(
+                                    12.dp,
+                                    Alignment.Start
+                                ),
+                                verticalAlignment = Alignment.Top,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 14.dp)
+                                    .clickable { navController.navigate("detail") }
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.dummy),
+                                    contentDescription = "image description",
+                                    contentScale = ContentScale.FillBounds,
+                                    modifier = Modifier
+                                        .width(80.dp)
+                                        .height(84.dp)
+                                )
+                                Column(
+                                    verticalArrangement = Arrangement.spacedBy(1.dp, Alignment.Top),
+                                    horizontalAlignment = Alignment.Start,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text(
+                                        text = booth.attributes.boothName, style = TextStyle(
+                                            fontSize = 16.sp,
+                                            lineHeight = 17.64.sp,
+                                            fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+                                            color = Color(0xFF1E1E1E),
+                                        )
+                                    )
+                                    Text(
+                                        text = "Status Kios: "+ if (booth.attributes.open) "Buka" else "Tutup", style = TextStyle(
+                                            fontSize = 12.sp,
+                                            lineHeight = 17.64.sp,
+                                            fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                                            color = Color(0x801E1E1E),
+                                        )
+                                    )
+                                    Spacer(modifier = Modifier.padding(top = 2.dp))
+                                    Divider(
+                                        modifier = Modifier
+                                            .border(width = 1.dp, color = Color(0xFFE0E0E0))
+                                            .fillMaxSize()
+                                            .height(1.dp)
+                                    )
+                                    Spacer(modifier = Modifier.padding(top = 2.dp))
+                                    Text(
+                                        text = booth.attributes.boothDescription,
+                                        style = TextStyle(
+                                            fontSize = 12.sp,
+                                            lineHeight = 17.64.sp,
+                                            fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                                            color = Color(0x801E1E1E),
+                                        )
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }
