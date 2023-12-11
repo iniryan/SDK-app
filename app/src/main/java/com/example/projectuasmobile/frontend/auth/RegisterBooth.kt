@@ -151,7 +151,7 @@ fun RegisterBooth(navController: NavController, context: Context = LocalContext.
                     ),
                 leadingIcon = {
                     Image(
-                        painter = painterResource(id = R.drawable.profile),
+                        painter = painterResource(id = R.drawable.profilee),
                         contentDescription = "image description",
                         contentScale = ContentScale.None
                     )
@@ -182,7 +182,7 @@ fun RegisterBooth(navController: NavController, context: Context = LocalContext.
                     ),
                 leadingIcon = {
                     Image(
-                        painter = painterResource(id = R.drawable.profile),
+                        painter = painterResource(id = R.drawable.profilee),
                         contentDescription = "image description",
                         contentScale = ContentScale.None
                     )
@@ -215,7 +215,7 @@ fun RegisterBooth(navController: NavController, context: Context = LocalContext.
                     ),
                 leadingIcon = {
                     Image(
-                        painter = painterResource(id = R.drawable.profile),
+                        painter = painterResource(id = R.drawable.profilee),
                         contentDescription = "image description",
                         contentScale = ContentScale.None
                     )

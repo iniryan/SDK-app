@@ -42,7 +42,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 //import com.example.projectuasmobile.frontend.customer.BoothDetail
 import com.example.projectuasmobile.frontend.DetailKios
-import com.example.projectuasmobile.frontend.Kios
+import com.example.projectuasmobile.frontend.customer.com.example.projectuasmobile.frontend.customer.Kios
 import com.example.projectuasmobile.frontend.customer.HomePage
 import com.example.projectuasmobile.frontend.auth.Login
 import com.example.projectuasmobile.frontend.auth.Register
@@ -72,7 +72,7 @@ class MainActivity : ComponentActivity() {
                     val jwt = sharedPreferences.getString("jwt", "")
 
                     val startD: String = if (jwt.equals("")) {
-                        "payment"
+                        "onboarding"
                     } else {
                         "boothHome"
 
