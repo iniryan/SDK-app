@@ -92,7 +92,7 @@ fun Kios(navController: NavController, context: Context = LocalContext.current) 
                     placeholder = { Text(text = "Pencarian", color = primaryColorOrg) })
                 Spacer(modifier = Modifier.padding(top = 14.dp, bottom = 14.dp))
                 Text(
-                    text = "Booooooooth", style = TextStyle(
+                    text = "Daftar Kios", style = TextStyle(
                         fontSize = 18.sp,
                         lineHeight = 14.sp,
                         fontFamily = FontFamily(Font(R.font.poppins_semibold)),

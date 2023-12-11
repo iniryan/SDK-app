@@ -1,7 +1,10 @@
 package com.example.projectuasmobile.frontend.booth
 
 import android.content.Context
+import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -21,8 +24,10 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -56,6 +61,11 @@ fun AddMenu(navController: NavController, context: Context = LocalContext.curren
     val foodDescriptionField = remember { mutableStateOf(TextFieldValue("")) }
     val foodPriceField = remember { mutableStateOf(TextFieldValue("")) }
     val primaryColorOrg = Color(0xFFFF5F00)
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    val pickImageLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri: Uri? -> uri?.let { selectedImageUri = it } }
+    )
 
     Box(modifier = Modifier.fillMaxSize()) {
 
@@ -182,6 +192,7 @@ fun AddMenu(navController: NavController, context: Context = LocalContext.curren
                 placeholder = { Text(text = "Contoh: 10000") }
             )
             Spacer(modifier = Modifier.padding(10.dp))
+
             ElevatedButton(
                 modifier = Modifier
                     .align(Alignment.Start)
@@ -242,6 +253,7 @@ fun AddMenu(navController: NavController, context: Context = LocalContext.curren
                     }
                 }
             )
+
             {
                 Text(
                     text = "Tambah Menu",
