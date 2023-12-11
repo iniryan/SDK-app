@@ -1,4 +1,4 @@
-package com.example.projectuasmobile.frontend.customer
+package com.example.projectuasmobile.frontend.customer.com.example.projectuasmobile.frontend.customer
 
 import android.content.Context
 import androidx.compose.foundation.Image

@@ -51,7 +51,7 @@ import com.example.projectuasmobile.frontend.booth.BoothProfile
 import com.example.projectuasmobile.frontend.booth.CheckOutPage
 import com.example.projectuasmobile.frontend.booth.EditProfile
 import com.example.projectuasmobile.frontend.booth.MenuList
-import com.example.projectuasmobile.frontend.customer.BoothDetail
+import com.example.projectuasmobile.frontend.customer.com.example.projectuasmobile.frontend.customer.BoothDetail
 import com.example.projectuasmobile.frontend.customer.HomePage
 import com.example.projectuasmobile.frontend.customer.PaymentPage
 import com.example.projectuasmobile.frontend.customer.com.example.projectuasmobile.frontend.customer.Kios
