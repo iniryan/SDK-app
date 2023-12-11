@@ -183,7 +183,7 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(top = 14.dp)
-                                    .clickable { navController.navigate("detail/" + booth) }
+                                    .clickable { navController.navigate("detailBooth") }
                             ) {
                                 Image(
                                     painter = painterResource(id = R.drawable.dummy),

@@ -41,7 +41,7 @@ import com.example.projectuasmobile.R
 
 
 @Composable
-fun BoothDetail(navController: NavController, boothID : String?, context: Context = LocalContext.current) {
+fun BoothDetail(navController: NavController, context: Context = LocalContext.current) {
     val notesField = remember {
         mutableStateOf("")
     }
@@ -79,7 +79,7 @@ fun BoothDetail(navController: NavController, boothID : String?, context: Contex
                         horizontalAlignment = Alignment.Start,
                     ) {
                         Text(
-                            text = boothName, style = TextStyle(
+                            text = "Wakrop", style = TextStyle(
                                 fontSize = 24.sp,
                                 lineHeight = 36.sp,
                                 fontFamily = FontFamily(Font(R.font.poppins_semibold)),

@@ -40,7 +40,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.projectuasmobile.frontend.DetailKios
 import com.example.projectuasmobile.frontend.auth.Login
 import com.example.projectuasmobile.frontend.auth.Register
 import com.example.projectuasmobile.frontend.auth.RegisterBooth
@@ -48,10 +47,10 @@ import com.example.projectuasmobile.frontend.auth.RolePick
 import com.example.projectuasmobile.frontend.booth.AddMenu
 import com.example.projectuasmobile.frontend.booth.BoothHomePage
 import com.example.projectuasmobile.frontend.booth.BoothProfile
-import com.example.projectuasmobile.frontend.booth.CheckOutPage
 import com.example.projectuasmobile.frontend.booth.EditProfile
 import com.example.projectuasmobile.frontend.booth.MenuList
-import com.example.projectuasmobile.frontend.customer.com.example.projectuasmobile.frontend.customer.BoothDetail
+import com.example.projectuasmobile.frontend.customer.BoothDetail
+import com.example.projectuasmobile.frontend.customer.CheckOutPage
 import com.example.projectuasmobile.frontend.customer.HomePage
 import com.example.projectuasmobile.frontend.customer.PaymentPage
 import com.example.projectuasmobile.frontend.customer.com.example.projectuasmobile.frontend.customer.Kios
@@ -71,7 +70,8 @@ class MainActivity : ComponentActivity() {
                     val jwt = sharedPreferences.getString("jwt", "")
 
                     val startD: String = if (jwt.equals("")) {
-                        "onboarding"
+                        "detailBooth"
+//                        "onboarding"
                     } else {
                         "boothHome"
 
@@ -90,11 +90,8 @@ class MainActivity : ComponentActivity() {
                         composable("rolepick") {
                             RolePick(navController)
                         }
-                        composable("detailkios") {
-                            DetailKios()
-                        }
-                        composable("detailBooth/{boothID}") { backStackEntry ->
-                            BoothDetail(navController, backStackEntry.arguments?.getString("boothID"))
+                        composable("detailBooth") {
+                            BoothDetail(navController)
                         }
                         composable("boothHome") {
                             BoothHomePage(navController)
