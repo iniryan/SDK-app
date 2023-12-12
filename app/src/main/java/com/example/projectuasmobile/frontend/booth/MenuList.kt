@@ -2,6 +2,7 @@ package com.example.projectuasmobile.frontend.booth
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -24,6 +26,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,39 +44,47 @@ import androidx.navigation.NavController
 import com.example.projectuasmobile.BottomNavigation
 import com.example.projectuasmobile.PreferencesManager
 import com.example.projectuasmobile.R
+import com.example.projectuasmobile.response.ApiResponse
+import com.example.projectuasmobile.response.FoodResponse
+import com.example.projectuasmobile.service.FoodService
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MenuList(navController: NavController, context: Context = LocalContext.current) {
     val preferencesManager = remember { PreferencesManager(context = context) }
-//    val listMenu = remember { mutableStateListOf<FoodResponse>() }
-//    val baseUrl = "http://10.0.2.2:1337/api/"
-//    val retrofit =
-//        Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
-//            .build().create(FoodService::class.java)
-//    val call = retrofit.getData()
-//    call.enqueue(object : Callback<List<FoodResponse>> {
-//        override fun onResponse(
-//            call: Call<List<FoodResponse>>, response: Response<List<FoodResponse>>
-//        ) {
-//            if (response.code() == 200) {
-//                listMenu.clear()
-//                response.body()?.forEach { menuResponse ->
-//                    listMenu.add(menuResponse)
-//                }
-//            } else if (response.code() == 400) {
-//                print("error login")
-//                Toast.makeText(
-//                    context, "Username atau password salah", Toast.LENGTH_SHORT
-//                ).show()
-//            }
-//        }
-//
-//        override fun onFailure(call: Call<List<FoodResponse>>, t: Throwable) {
-//            print(t.message)
-//        }
-//
-//    })
+    val listMenu = remember { mutableStateListOf<FoodResponse>() }
+    val baseUrl = "http://10.0.2.2:1337/api/"
+    val retrofit =
+        Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
+            .build().create(FoodService::class.java)
+    val call = retrofit.getAllFood()
+    call.enqueue(object : Callback<ApiResponse<List<FoodResponse>>> {
+        override fun onResponse(
+            call: Call<ApiResponse<List<FoodResponse>>>, response: Response<ApiResponse<List<FoodResponse>>>
+        ) {
+            if (response.code() == 200) {
+                listMenu.clear()
+                response.body()?.data!!.forEach { menuResponse ->
+                    listMenu.add(menuResponse)
+                }
+            } else if (response.code() == 400) {
+                print("error login")
+                Toast.makeText(
+                    context, "Username atau password salah", Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+        override fun onFailure(call: Call<ApiResponse<List<FoodResponse>>>, t: Throwable) {
+            print(t.message)
+        }
+
+    })
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = {
@@ -91,9 +102,8 @@ fun MenuList(navController: NavController, context: Context = LocalContext.curre
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 24.dp, vertical = 14.dp)
-                    .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.Top,
+                    .padding(horizontal = 24.dp, vertical = 14.dp),
+                    verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Spacer(modifier = Modifier.padding(top = 14.dp, bottom = 14.dp))
@@ -107,9 +117,9 @@ fun MenuList(navController: NavController, context: Context = LocalContext.curre
                     ), modifier = Modifier.align(Alignment.Start)
                 )
 //            nanti bakal loop row dengan data dari api
-//                LazyColumn {
-//                    listMenu.forEach { menu ->
-//                        item {
+                LazyColumn {
+                    listMenu.forEach { menu ->
+                        item {
                             Row(
                                 horizontalArrangement = Arrangement.spacedBy(
                                     12.dp,
@@ -134,8 +144,7 @@ fun MenuList(navController: NavController, context: Context = LocalContext.curre
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
                                     Text(
-//                                        text = menu.foodName, style = TextStyle(
-                                        text = "Lalapan Ayam", style = TextStyle(
+                                        text = menu.attributes.foodName, style = TextStyle(
                                             fontSize = 16.sp,
                                             lineHeight = 17.64.sp,
                                             fontFamily = FontFamily(Font(R.font.poppins_semibold)),
@@ -143,8 +152,7 @@ fun MenuList(navController: NavController, context: Context = LocalContext.curre
                                         )
                                     )
                                     Text(
-                                        text = "Rp10.000", style = TextStyle(
-//                                        text = menu.foodPrice.toString(), style = TextStyle(
+                                        text = menu.attributes.foodPrice.toString(), style = TextStyle(
                                             fontSize = 12.sp,
                                             lineHeight = 17.64.sp,
                                             fontFamily = FontFamily(Font(R.font.poppins_medium)),
@@ -160,8 +168,7 @@ fun MenuList(navController: NavController, context: Context = LocalContext.curre
                                     )
                                     Spacer(modifier = Modifier.padding(top = 2.dp))
                                     Text(
-                                        text = "Nasi + Ayam + Lalapan + Sambal",
-//                                        text = menu.foodDescription,
+                                        text = menu.attributes.foodDescription,
                                         style = TextStyle(
                                             fontSize = 12.sp,
                                             lineHeight = 17.64.sp,
@@ -171,10 +178,10 @@ fun MenuList(navController: NavController, context: Context = LocalContext.curre
                                     )
                                 }
                             }
-//                        }
-//                    }
-//
-//                }
+                        }
+                    }
+
+                }
 
             }
         }
