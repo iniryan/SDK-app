@@ -1,0 +1,564 @@
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_11_24_2023_11_24_AM_[Changes]/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_11_24_2023_11_24_AM_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Update_at_11_24_2023_11_24_AM_[Changes]/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_11_24_2023_11_24_AM_[Changes]/shelved.patch	(revision fa5ce4c34defaff2dcef46d5c0bc2b246327bbef)
++++ /dev/null	(revision fa5ce4c34defaff2dcef46d5c0bc2b246327bbef)
+@@ -1,100 +0,0 @@
+-Index: app/src/main/java/com/example/projectuasmobile/frontend/HomePage.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.projectuasmobile.frontend\r\n\r\nimport android.annotation.SuppressLint\r\nimport android.content.Context\r\nimport androidx.compose.foundation.Image\r\nimport androidx.compose.foundation.border\r\nimport androidx.compose.foundation.layout.Arrangement\r\nimport androidx.compose.foundation.layout.Box\r\nimport androidx.compose.foundation.layout.Column\r\nimport androidx.compose.foundation.layout.Row\r\nimport androidx.compose.foundation.layout.Spacer\r\nimport androidx.compose.foundation.layout.fillMaxSize\r\nimport androidx.compose.foundation.layout.fillMaxWidth\r\nimport androidx.compose.foundation.layout.height\r\nimport androidx.compose.foundation.layout.padding\r\nimport androidx.compose.foundation.layout.width\r\nimport androidx.compose.foundation.rememberScrollState\r\nimport androidx.compose.foundation.shape.RoundedCornerShape\r\nimport androidx.compose.foundation.verticalScroll\r\nimport androidx.compose.material.icons.Icons\r\nimport androidx.compose.material.icons.filled.Search\r\nimport androidx.compose.material3.Divider\r\nimport androidx.compose.material3.ExperimentalMaterial3Api\r\nimport androidx.compose.material3.Icon\r\nimport androidx.compose.material3.OutlinedTextField\r\nimport androidx.compose.material3.Scaffold\r\nimport androidx.compose.material3.Text\r\nimport androidx.compose.runtime.*\r\nimport androidx.compose.ui.Alignment\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.compose.ui.graphics.Color\r\nimport androidx.compose.ui.layout.ContentScale\r\nimport androidx.compose.ui.platform.LocalContext\r\nimport androidx.compose.ui.res.painterResource\r\nimport androidx.compose.ui.text.TextStyle\r\nimport androidx.compose.ui.text.font.Font\r\nimport androidx.compose.ui.text.font.FontFamily\r\nimport androidx.compose.ui.text.input.TextFieldValue\r\nimport androidx.compose.ui.text.style.TextAlign\r\nimport androidx.compose.ui.unit.dp\r\nimport androidx.compose.ui.unit.sp\r\nimport androidx.navigation.NavController\r\nimport com.example.projectuasmobile.BottomNavigation\r\nimport com.example.projectuasmobile.R\r\n\r\n@SuppressLint(\"UnusedMaterial3ScaffoldPaddingParameter\")\r\n@OptIn(ExperimentalMaterial3Api::class)\r\n@Composable\r\nfun HomePage(navController: NavController, context: Context = LocalContext.current) {\r\n    val searchField = remember { mutableStateOf(TextFieldValue(\"\")) }\r\n    Scaffold(\r\n        bottomBar = {\r\n            BottomNavigation()\r\n        },\r\n\r\n    ) {\r\n        Box(modifier = Modifier.fillMaxSize()) {\r\n            Column(\r\n                modifier = Modifier\r\n                    .fillMaxSize()\r\n                    .padding(horizontal = 24.dp, vertical = 24.dp)\r\n                    .verticalScroll(rememberScrollState()),\r\n                verticalArrangement = Arrangement.Top,\r\n                horizontalAlignment = Alignment.CenterHorizontally,\r\n            ) {\r\n                OutlinedTextField(value = searchField.value,\r\n                    onValueChange = {\r\n                        searchField.value = it\r\n                    },\r\n                    singleLine = true,\r\n                    modifier = Modifier\r\n                        .align(Alignment.Start)\r\n                        .fillMaxWidth()\r\n                        .padding(2.dp)\r\n                        .border(\r\n                            width = 1.5.dp,\r\n                            color = Color(0xFFFF5F00),\r\n                            shape = RoundedCornerShape(8.dp)\r\n                        ),\r\n                    leadingIcon = {\r\n                        Icon(\r\n                            Icons.Default.Search,\r\n                            contentDescription = \"search\",\r\n                        )\r\n                    },\r\n                    placeholder = { Text(text = \"Pencarian\") })\r\n                Spacer(modifier = Modifier.padding(top = 14.dp, bottom = 14.dp))\r\n                Text(\r\n                    text = \"Daftar Kios\", style = TextStyle(\r\n                        fontSize = 18.sp,\r\n                        lineHeight = 14.sp,\r\n                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),\r\n                        textAlign = TextAlign.Left,\r\n                        color = Color(0xFFFF5F00),\r\n                    ), modifier = Modifier.align(Alignment.Start)\r\n                )\r\n//            nanti bakal loop row dengan data dari api\r\n                Row(\r\n                    horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),\r\n                    verticalAlignment = Alignment.Top,\r\n                    modifier = Modifier\r\n                        .fillMaxWidth()\r\n                        .padding(top = 14.dp)\r\n                ) {\r\n                    Image(\r\n                        painter = painterResource(id = R.drawable.dummy),\r\n                        contentDescription = \"image description\",\r\n                        contentScale = ContentScale.FillBounds,\r\n                        modifier = Modifier\r\n                            .width(80.dp)\r\n                            .height(84.dp)\r\n                    )\r\n                    Column(\r\n                        verticalArrangement = Arrangement.spacedBy(1.dp, Alignment.Top),\r\n                        horizontalAlignment = Alignment.Start,\r\n                        modifier = Modifier.fillMaxWidth()\r\n                    ) {\r\n                        Text(\r\n                            text = \"Warkop Markaz\", style = TextStyle(\r\n                                fontSize = 16.sp,\r\n                                lineHeight = 17.64.sp,\r\n                                fontFamily = FontFamily(Font(R.font.poppins_medium)),\r\n                                color = Color(0xFF1E1E1E),\r\n                            )\r\n                        )\r\n                        Text(\r\n                            text = \"Booth No.1\", style = TextStyle(\r\n                                fontSize = 10.sp,\r\n                                lineHeight = 17.64.sp,\r\n                                fontFamily = FontFamily(Font(R.font.poppins_regular)),\r\n                                color = Color(0x801E1E1E),\r\n                            )\r\n                        )\r\n                        Spacer(modifier = Modifier.padding(top = 2.dp))\r\n                        Divider(modifier = Modifier\r\n                            .border(width = 1.dp, color = Color(0xFFE0E0E0))\r\n                            .fillMaxSize()\r\n                            .height(0.2.dp))\r\n                        Spacer(modifier = Modifier.padding(top = 2.dp))\r\n                        Text(\r\n                            text = \"Menyediakan berbagai minuman sachet, kopi, dan Rokok Batangan \",\r\n                            style = TextStyle(\r\n                                fontSize = 10.sp,\r\n                                lineHeight = 17.64.sp,\r\n                                fontFamily = FontFamily(Font(R.font.poppins_regular)),\r\n                                color = Color(0x801E1E1E),\r\n                            )\r\n                        )\r\n                    }\r\n                }\r\n                Row(\r\n                    horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),\r\n                    verticalAlignment = Alignment.Top,\r\n                    modifier = Modifier\r\n                        .fillMaxWidth()\r\n                        .padding(top = 14.dp)\r\n                ) {\r\n                    Image(\r\n                        painter = painterResource(id = R.drawable.dummy),\r\n                        contentDescription = \"image description\",\r\n                        contentScale = ContentScale.FillBounds,\r\n                        modifier = Modifier\r\n                            .width(80.dp)\r\n                            .height(84.dp)\r\n                    )\r\n                    Column(\r\n                        verticalArrangement = Arrangement.spacedBy(1.dp, Alignment.Top),\r\n                        horizontalAlignment = Alignment.Start,\r\n                        modifier = Modifier.fillMaxWidth()\r\n                    ) {\r\n                        Text(\r\n                            text = \"Warung Nikmat bu Halima\", style = TextStyle(\r\n                                fontSize = 16.sp,\r\n                                lineHeight = 17.64.sp,\r\n                                fontFamily = FontFamily(Font(R.font.poppins_medium)),\r\n                                color = Color(0xFF1E1E1E),\r\n                            )\r\n                        )\r\n                        Text(\r\n                            text = \"Booth No.2\", style = TextStyle(\r\n                                fontSize = 10.sp,\r\n                                lineHeight = 17.64.sp,\r\n                                fontFamily = FontFamily(Font(R.font.poppins_regular)),\r\n                                color = Color(0x801E1E1E),\r\n                            )\r\n                        )\r\n                        Spacer(modifier = Modifier.padding(top = 2.dp))\r\n                        Divider(modifier = Modifier\r\n                            .border(width = 1.dp, color = Color(0xFFE0E0E0))\r\n                            .fillMaxSize()\r\n                            .height(0.2.dp))\r\n                        Spacer(modifier = Modifier.padding(top = 2.dp))\r\n                        Text(\r\n                            text = \"Menyediakan berbagai makanan dan minuman dengan citarasa Madura\",\r\n                            style = TextStyle(\r\n                                fontSize = 10.sp,\r\n                                lineHeight = 17.64.sp,\r\n                                fontFamily = FontFamily(Font(R.font.poppins_regular)),\r\n                                color = Color(0x801E1E1E),\r\n                            )\r\n                        )\r\n                    }\r\n                }\r\n            }\r\n\r\n        }\r\n    }\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/projectuasmobile/frontend/HomePage.kt b/app/src/main/java/com/example/projectuasmobile/frontend/HomePage.kt
+---- a/app/src/main/java/com/example/projectuasmobile/frontend/HomePage.kt	(revision 594de00b83b5b315c822a8478eb8a2a33b5e5139)
+-+++ b/app/src/main/java/com/example/projectuasmobile/frontend/HomePage.kt	(date 1700799671810)
+-@@ -40,7 +40,7 @@
+- import androidx.compose.ui.unit.dp
+- import androidx.compose.ui.unit.sp
+- import androidx.navigation.NavController
+--import com.example.projectuasmobile.BottomNavigation
+-+//import com.example.projectuasmobile.BottomNavigation
+- import com.example.projectuasmobile.R
+- 
+- @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+-@@ -50,7 +50,7 @@
+-     val searchField = remember { mutableStateOf(TextFieldValue("")) }
+-     Scaffold(
+-         bottomBar = {
+--            BottomNavigation()
+-+//            BottomNavigation()
+-         },
+- 
+-     ) {
+-Index: app/src/main/java/com/example/projectuasmobile/MainActivity.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.projectuasmobile\r\n\r\nimport android.os.Bundle\r\nimport android.window.SplashScreen\r\nimport androidx.activity.ComponentActivity\r\nimport androidx.activity.compose.setContent\r\nimport androidx.compose.foundation.Image\r\nimport androidx.compose.foundation.background\r\nimport androidx.compose.foundation.border\r\nimport androidx.compose.foundation.layout.Arrangement\r\nimport androidx.compose.foundation.layout.Box\r\nimport androidx.compose.foundation.layout.Column\r\nimport androidx.compose.foundation.layout.Row\r\nimport androidx.compose.foundation.layout.Spacer\r\nimport androidx.compose.foundation.layout.fillMaxSize\r\nimport androidx.compose.foundation.layout.fillMaxWidth\r\nimport androidx.compose.foundation.layout.height\r\nimport androidx.compose.foundation.layout.padding\r\nimport androidx.compose.foundation.layout.width\r\nimport androidx.compose.foundation.shape.RoundedCornerShape\r\nimport androidx.compose.foundation.text.ClickableText\r\nimport androidx.compose.foundation.text.KeyboardOptions\r\nimport androidx.compose.material3.Button\r\nimport androidx.compose.material3.ButtonColors\r\nimport androidx.compose.material3.ButtonDefaults\r\nimport androidx.compose.material3.ElevatedButton\r\nimport androidx.compose.material3.ExperimentalMaterial3Api\r\nimport androidx.compose.material3.Icon\r\nimport androidx.compose.material3.IconButton\r\nimport androidx.compose.material3.MaterialTheme\r\nimport androidx.compose.material3.OutlinedTextField\r\nimport androidx.compose.material3.Surface\r\nimport androidx.compose.material3.Text\r\nimport androidx.compose.runtime.*\r\nimport androidx.compose.ui.Alignment\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.compose.ui.graphics.Color\r\nimport androidx.compose.ui.layout.ContentScale\r\nimport androidx.compose.ui.res.painterResource\r\nimport androidx.compose.ui.text.AnnotatedString\r\nimport androidx.compose.ui.text.TextStyle\r\nimport androidx.compose.ui.text.font.Font\r\nimport androidx.compose.ui.text.font.FontFamily\r\nimport androidx.compose.ui.text.font.FontWeight\r\nimport androidx.compose.ui.text.input.KeyboardType\r\nimport androidx.compose.ui.text.input.PasswordVisualTransformation\r\nimport androidx.compose.ui.text.input.TextFieldValue\r\nimport androidx.compose.ui.text.input.VisualTransformation\r\nimport androidx.compose.ui.text.style.TextAlign\r\nimport androidx.compose.ui.unit.dp\r\nimport androidx.compose.ui.unit.sp\r\nimport com.example.projectuasmobile.ui.theme.ProjectUASMobileTheme\r\n\r\nclass MainActivity : ComponentActivity() {\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        setContent {\r\n            ProjectUASMobileTheme {\r\n                // A surface container using the 'background' color from the theme\r\n                Surface(\r\n                    modifier = Modifier.fillMaxSize(),\r\n                    color = MaterialTheme.colorScheme.background\r\n                ) {\r\n                    SplashScreen()\r\n//                    Login()\r\n                }\r\n            }\r\n        }\r\n    }\r\n}\r\n@Composable\r\nfun SplashScreen() {\r\n    val Primary = Color(0xFFFF5F00)\r\n    Box(\r\n        modifier = Modifier\r\n            .width(430.dp)\r\n            .height(932.dp)\r\n            .background(color = Color(0xFFFF5F00))\r\n    ) {\r\n//        Image(\r\n//            modifier =Modifier\r\n//                .width(33.5444.dp)\r\n//                .height(49.dp),\r\n//            painter = painterResource(id = R.drawable.logokecil),\r\n//            contentDescription = \"logo\",\r\n//            contentScale = ContentScale.FillBounds\r\n//        )\r\n\r\n        Row (modifier = Modifier\r\n            .fillMaxSize()\r\n            .padding(24.dp)) {\r\n            Image(\r\n                modifier = Modifier\r\n                    .width(24.dp)\r\n                    .height(32.dp),\r\n                painter = painterResource(id = R.drawable.logokecil),\r\n                contentDescription = \"image description\",\r\n                contentScale = ContentScale.FillBounds\r\n            )\r\n            Text(\r\n                modifier = Modifier\r\n                    .width(104.dp)\r\n                    .height(30.dp),\r\n                text = \"SDK-Apps\",\r\n                style = TextStyle(\r\n                    fontSize = 20.sp,\r\n                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),\r\n                    fontWeight = FontWeight(600),\r\n                    color = Color(0xFFEEEEEE),\r\n                )\r\n            )\r\n\r\n        }\r\n            Column(\r\n                modifier = Modifier.fillMaxSize(),\r\n                verticalArrangement = Arrangement.Center,\r\n                horizontalAlignment = Alignment.CenterHorizontally\r\n            ) {\r\n\r\n                Image(\r\n                    painter = painterResource(id = R.drawable.splashtext),\r\n                    contentDescription = \"image description\",\r\n                    contentScale = ContentScale.FillBounds\r\n                )\r\n            }\r\n        Column (modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally){\r\n            Button(\r\n                onClick = { /*TODO*/ }, Modifier\r\n                    .width(327.dp)\r\n                    .height(72.dp)\r\n                    .padding(start = 10.dp, top = 12.dp, end = 10.dp, bottom = 12.dp),\r\n                colors = ButtonDefaults.buttonColors(containerColor = Color.White)\r\n            ) {\r\n                Text(\r\n                    text = \"Mulai Gunakan Aplikasi\",\r\n                    style = TextStyle(\r\n                        fontSize = 12.sp,\r\n                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),\r\n                        fontWeight = FontWeight(600),\r\n                        color = Color(0xFFFF5F00),\r\n                    )\r\n                )\r\n\r\n            }\r\n        }\r\n\r\n    }\r\n}\r\n\r\n@OptIn(ExperimentalMaterial3Api::class)\r\n@Composable\r\nfun Login() {\r\n    val usernameField = remember { mutableStateOf(TextFieldValue(\"\")) }\r\n    val passwordField = remember { mutableStateOf(TextFieldValue(\"\")) }\r\n    val passwordVisible = remember { mutableStateOf(false) }\r\n\r\n    Box(modifier = Modifier.fillMaxSize()) {\r\n        Column(\r\n            modifier = Modifier\r\n                .fillMaxSize()\r\n                .padding(horizontal = 24.dp),\r\n            verticalArrangement = Arrangement.Center,\r\n            horizontalAlignment = Alignment.CenterHorizontally,\r\n        ) {\r\n            Text(\r\n                text = \"SDK-app\",\r\n                style = TextStyle(\r\n                    fontSize = 48.sp,\r\n                    fontFamily = FontFamily(Font(R.font.poppins_medium)),\r\n                    textAlign = TextAlign.Left\r\n                ),\r\n                modifier = Modifier.align(Alignment.Start)\r\n            )\r\n            Text(\r\n                text = \"Memudahkan untuk order anda\",\r\n                style = TextStyle(\r\n                    fontSize = 16.sp,\r\n                    fontFamily = FontFamily(Font(R.font.poppins_regular)),\r\n                    color = Color(0xFF1E1E1E),\r\n                    textAlign = TextAlign.Left\r\n                ),\r\n                modifier = Modifier.align(Alignment.Start)\r\n            )\r\n            Text(\r\n                text = \"Email\",\r\n                style = TextStyle(\r\n                    fontSize = 14.sp,\r\n                    fontFamily = FontFamily(Font(R.font.poppins_regular)),\r\n                    color = Color(0xFF1E1E1E),\r\n                    textAlign = TextAlign.Center,\r\n                ),\r\n                modifier = Modifier\r\n                    .align(Alignment.Start)\r\n                    .padding(top = 48.dp)\r\n            )\r\n            OutlinedTextField(\r\n                value = usernameField.value,\r\n                onValueChange = {\r\n                    usernameField.value = it\r\n                },\r\n                singleLine = true,\r\n                modifier = Modifier\r\n                    .align(Alignment.Start)\r\n                    .fillMaxWidth()\r\n                    .padding(2.dp),\r\n                placeholder = { Text(text = \"Contoh: example@test.com\") }\r\n            )\r\n            Text(\r\n                text = \"Password\",\r\n                style = TextStyle(\r\n                    fontSize = 14.sp,\r\n                    fontFamily = FontFamily(Font(R.font.poppins_regular)),\r\n                    color = Color(0xFF1E1E1E),\r\n                    textAlign = TextAlign.Center,\r\n                ),\r\n                modifier = Modifier\r\n                    .align(Alignment.Start)\r\n                    .padding(top = 28.dp)\r\n            )\r\n            OutlinedTextField(\r\n                value = passwordField.value,\r\n                onValueChange = {\r\n                    passwordField.value = it\r\n                },\r\n                singleLine = true,\r\n                modifier = Modifier\r\n                    .align(Alignment.Start)\r\n                    .fillMaxWidth()\r\n                    .padding(2.dp),\r\n                placeholder = { Text(text = \"Masukkan password\") },\r\n                visualTransformation =\r\n                if (passwordVisible.value)\r\n                    VisualTransformation.None\r\n                else\r\n                    PasswordVisualTransformation(),\r\n                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),\r\n                trailingIcon = {\r\n                    IconButton(\r\n                        onClick = { passwordVisible.value = !passwordVisible.value },\r\n                        modifier = Modifier.padding(end = 10.dp)\r\n                    ) {\r\n                        Icon(\r\n                            painter =\r\n                            if (passwordVisible.value)\r\n                                painterResource(id = R.drawable.eye_open)\r\n                            else\r\n                                painterResource(id = R.drawable.eye_close),\r\n                            contentDescription = \"Toggle Password\"\r\n                        )\r\n                    }\r\n                }\r\n            )\r\n            Spacer(modifier = Modifier.padding(20.dp))\r\n            ElevatedButton(\r\n                modifier = Modifier\r\n                    .align(Alignment.Start)\r\n                    .fillMaxWidth()\r\n                    .padding(2.dp)\r\n                    .height(48.dp),\r\n                colors = ButtonDefaults.buttonColors(\r\n                    contentColor = Color.White,\r\n                ),\r\n                shape = RoundedCornerShape(8.dp),\r\n                onClick = {\r\n\r\n                }\r\n            )\r\n            {\r\n                Text(\r\n                    text = \"Mulai Berbagi\",\r\n                    style = TextStyle(\r\n                        fontSize = 16.sp,\r\n                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),\r\n                        color = Color.White,\r\n                        textAlign = TextAlign.Center,\r\n                    )\r\n                )\r\n            }\r\n            Text(\r\n                text = \"atau masuk dengan\",\r\n                style = TextStyle(\r\n                    fontSize = 14.sp,\r\n                    fontFamily = FontFamily(Font(R.font.poppins_regular)),\r\n                    color = Color(0xFF1E1E1E),\r\n                    textAlign = TextAlign.Center,\r\n                ),\r\n                modifier = Modifier\r\n                    .align(Alignment.CenterHorizontally)\r\n                    .padding(top = 14.dp)\r\n                    .padding(bottom = 28.dp)\r\n            )\r\n\r\n        }\r\n    }\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/projectuasmobile/MainActivity.kt b/app/src/main/java/com/example/projectuasmobile/MainActivity.kt
+---- a/app/src/main/java/com/example/projectuasmobile/MainActivity.kt	(revision 594de00b83b5b315c822a8478eb8a2a33b5e5139)
+-+++ b/app/src/main/java/com/example/projectuasmobile/MainActivity.kt	(date 1700799728202)
+-@@ -49,6 +49,7 @@
+- import androidx.compose.ui.text.style.TextAlign
+- import androidx.compose.ui.unit.dp
+- import androidx.compose.ui.unit.sp
+-+import com.example.projectuasmobile.frontend.RolePick
+- import com.example.projectuasmobile.ui.theme.ProjectUASMobileTheme
+- 
+- class MainActivity : ComponentActivity() {
+-@@ -61,7 +62,8 @@
+-                     modifier = Modifier.fillMaxSize(),
+-                     color = MaterialTheme.colorScheme.background
+-                 ) {
+--                    SplashScreen()
+-+                    RolePick()
+-+//                    SplashScreen()
+- //                    Login()
+-                 }
+-             }
+-@@ -91,8 +93,8 @@
+-             .padding(24.dp)) {
+-             Image(
+-                 modifier = Modifier
+--                    .width(24.dp)
+--                    .height(32.dp),
+-+                    .width(20.dp)
+-+                    .height(28.dp),
+-                 painter = painterResource(id = R.drawable.logokecil),
+-                 contentDescription = "image description",
+-                 contentScale = ContentScale.FillBounds
+-Index: app/src/main/java/com/example/projectuasmobile/frontend/RolePick.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.projectuasmobile.frontend\r\n\r\nimport androidx.compose.foundation.Image\r\nimport androidx.compose.foundation.layout.Arrangement\r\nimport androidx.compose.foundation.layout.Box\r\nimport androidx.compose.foundation.layout.Column\r\nimport androidx.compose.foundation.layout.Spacer\r\nimport androidx.compose.foundation.layout.fillMaxSize\r\nimport androidx.compose.foundation.layout.padding\r\nimport androidx.compose.material3.Text\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.compose.ui.Alignment\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.compose.ui.graphics.Color\r\nimport androidx.compose.ui.layout.ContentScale\r\nimport androidx.compose.ui.res.painterResource\r\nimport androidx.compose.ui.text.TextStyle\r\nimport androidx.compose.ui.text.font.Font\r\nimport androidx.compose.ui.text.font.FontFamily\r\nimport androidx.compose.ui.text.font.FontWeight\r\nimport androidx.compose.ui.text.style.TextAlign\r\nimport androidx.compose.ui.unit.dp\r\nimport androidx.compose.ui.unit.sp\r\nimport com.example.projectuasmobile.R\r\n\r\n@Composable\r\nfun RolePick(){\r\n    Box(){\r\n        Column (modifier = Modifier\r\n            .fillMaxSize()\r\n            .padding(24.dp),verticalArrangement = Arrangement.spacedBy(-14.dp, Alignment.Top),\r\n            horizontalAlignment = Alignment.CenterHorizontally,)\r\n        {\r\n            Text(\r\n                text = \"SENTRA\",\r\n                style = TextStyle(\r\n                    fontSize = 16.sp,\r\n                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),\r\n                    fontWeight = FontWeight(600),\r\n                    color = Color(0xCCFF5F00),\r\n                    textAlign = TextAlign.Center,\r\n\r\n                    )\r\n            )\r\n\r\n            Text(\r\n                text = \"DIGITAL\",\r\n                style = TextStyle(\r\n                    fontSize = 36.sp,\r\n                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),\r\n                    fontWeight = FontWeight(600),\r\n                    color = Color(0xFFFF5F00),\r\n                    textAlign = TextAlign.Center,\r\n                )\r\n            )\r\n            Text(\r\n                text = \"KULINER\",\r\n                style = TextStyle(\r\n                    fontSize = 16.sp,\r\n                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),\r\n                    fontWeight = FontWeight(600),\r\n                    color = Color(0xCCFF5F00),\r\n                    textAlign = TextAlign.Center,\r\n                )\r\n            )\r\n            Spacer(modifier = Modifier.padding(top = 32.dp))\r\n            Text(\r\n                text = \"Sebagai Apa Kamu ?\",\r\n                style = TextStyle(\r\n                    fontSize = 14.sp,\r\n                    fontFamily = FontFamily(Font(R.font.poppins_regular)),\r\n                    fontWeight = FontWeight(400),\r\n                    color = Color(0xFF1E1E1E),\r\n                    textAlign = TextAlign.Center,\r\n                )\r\n            )\r\n        }\r\n        Column {\r\n            Image(\r\n                painter = painterResource(id = R.drawable.pembeli),\r\n                contentDescription = \"image description\",\r\n                contentScale = ContentScale.Fit\r\n            )\r\n            Image(\r\n                painter = painterResource(id = R.drawable.penjual),\r\n                contentDescription = \"image description\",\r\n                contentScale = ContentScale.Fit\r\n            )\r\n        }\r\n    }\r\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/projectuasmobile/frontend/RolePick.kt b/app/src/main/java/com/example/projectuasmobile/frontend/RolePick.kt
+---- a/app/src/main/java/com/example/projectuasmobile/frontend/RolePick.kt	(revision 594de00b83b5b315c822a8478eb8a2a33b5e5139)
+-+++ b/app/src/main/java/com/example/projectuasmobile/frontend/RolePick.kt	(date 1700799854120)
+-@@ -6,7 +6,9 @@
+- import androidx.compose.foundation.layout.Column
+- import androidx.compose.foundation.layout.Spacer
+- import androidx.compose.foundation.layout.fillMaxSize
+-+import androidx.compose.foundation.layout.height
+- import androidx.compose.foundation.layout.padding
+-+import androidx.compose.foundation.layout.width
+- import androidx.compose.material3.Text
+- import androidx.compose.runtime.Composable
+- import androidx.compose.ui.Alignment
+-@@ -75,8 +77,11 @@
+-                 )
+-             )
+-         }
+--        Column {
+-+        Column (modifier = Modifier.fillMaxSize().padding(24.dp)){
+-             Image(
+-+                modifier = Modifier
+-+                    .width(600.dp)
+-+                    .height(400.dp),
+-                 painter = painterResource(id = R.drawable.pembeli),
+-                 contentDescription = "image description",
+-                 contentScale = ContentScale.Fit
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_11_25_2023_9_53_PM__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_11_25_2023_9_53_PM__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Update_at_11_25_2023_9_53_PM__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_11_25_2023_9_53_PM__Changes_.xml	(revision fa5ce4c34defaff2dcef46d5c0bc2b246327bbef)
++++ /dev/null	(revision fa5ce4c34defaff2dcef46d5c0bc2b246327bbef)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_11_25_2023_9_53_PM_[Changes]" date="1700924032654" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_25_2023_9_53_PM_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 11/25/2023 9:53 PM [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_11_25_2023_9_53_PM_[Changes]/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_11_25_2023_9_53_PM_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Update_at_11_25_2023_9_53_PM_[Changes]/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_11_25_2023_9_53_PM_[Changes]/shelved.patch	(revision fa5ce4c34defaff2dcef46d5c0bc2b246327bbef)
++++ /dev/null	(revision fa5ce4c34defaff2dcef46d5c0bc2b246327bbef)
+@@ -1,335 +0,0 @@
+-Index: app/src/main/java/com/example/projectuasmobile/MainActivity.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.projectuasmobile\r\n\r\nimport android.content.Context\r\nimport android.content.SharedPreferences\r\nimport android.os.Bundle\r\nimport androidx.activity.ComponentActivity\r\nimport androidx.activity.compose.setContent\r\nimport androidx.compose.foundation.Image\r\nimport androidx.compose.foundation.background\r\nimport androidx.compose.foundation.layout.Arrangement\r\nimport androidx.compose.foundation.layout.Box\r\nimport androidx.compose.foundation.layout.Column\r\nimport androidx.compose.foundation.layout.Row\r\nimport androidx.compose.foundation.layout.fillMaxSize\r\nimport androidx.compose.foundation.layout.height\r\nimport androidx.compose.foundation.layout.padding\r\nimport androidx.compose.foundation.layout.width\r\nimport androidx.compose.material.icons.Icons\r\nimport androidx.compose.material.icons.filled.ExitToApp\r\nimport androidx.compose.material.icons.filled.Home\r\nimport androidx.compose.material.icons.filled.ShoppingCart\r\nimport androidx.compose.material.icons.filled.Star\r\nimport androidx.compose.material3.Button\r\nimport androidx.compose.material3.ButtonDefaults\r\nimport androidx.compose.material3.Icon\r\nimport androidx.compose.material3.MaterialTheme\r\nimport androidx.compose.material3.NavigationBar\r\nimport androidx.compose.material3.NavigationBarItem\r\nimport androidx.compose.material3.Surface\r\nimport androidx.compose.material3.Text\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.compose.ui.Alignment\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.compose.ui.graphics.Color\r\nimport androidx.compose.ui.graphics.vector.ImageVector\r\nimport androidx.compose.ui.layout.ContentScale\r\nimport androidx.compose.ui.platform.LocalContext\r\nimport androidx.compose.ui.res.painterResource\r\nimport androidx.compose.ui.text.TextStyle\r\nimport androidx.compose.ui.text.font.Font\r\nimport androidx.compose.ui.text.font.FontFamily\r\nimport androidx.compose.ui.text.font.FontWeight\r\nimport androidx.compose.ui.unit.dp\r\nimport androidx.compose.ui.unit.sp\r\nimport androidx.navigation.compose.NavHost\r\nimport androidx.navigation.compose.composable\r\nimport androidx.navigation.compose.rememberNavController\r\nimport com.example.projectuasmobile.frontend.HomePage\r\nimport com.example.projectuasmobile.frontend.Login\r\nimport com.example.projectuasmobile.frontend.RolePick\r\nimport com.example.projectuasmobile.ui.theme.ProjectUASMobileTheme\r\n\r\nclass MainActivity : ComponentActivity() {\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        setContent {\r\n            ProjectUASMobileTheme {\r\n                // A surface container using the 'background' color from the theme\r\n                Surface(\r\n                    modifier = Modifier.fillMaxSize(),\r\n                    color = MaterialTheme.colorScheme.background\r\n                ) {\r\n                    val sharedPreferences: SharedPreferences =\r\n                        LocalContext.current.getSharedPreferences(\"auth\", Context.MODE_PRIVATE)\r\n                    val navController = rememberNavController()\r\n\r\n                    val startD: String\r\n                    val jwt = sharedPreferences.getString(\"jwt\", \"\")\r\n                    startD = if (jwt.equals(\"\")) {\r\n                        \"rolepick\"\r\n                    } else {\r\n                        \"homepage\"\r\n                    }\r\n\r\n                    NavHost(navController = navController, startDestination = startD) {\r\n                        composable(\"splash\") {\r\n                            SplashScreen()\r\n                        }\r\n                        composable(\"login\") {\r\n                            Login(navController)\r\n                        }\r\n                        composable(\"homepage\") {\r\n                            HomePage(navController)\r\n                        }\r\n                        composable(\"rolepick\") {\r\n                            RolePick()\r\n                        }\r\n\r\n                    }\r\n                }\r\n            }\r\n        }\r\n    }\r\n}\r\n@Composable\r\nfun SplashScreen() {\r\n    val Primary = Color(0xFFFF5F00)\r\n    Box(\r\n        modifier = Modifier\r\n            .width(430.dp)\r\n            .height(932.dp)\r\n            .background(color = Color(0xFFFF5F00))\r\n    ) {\r\n//        Image(\r\n//            modifier =Modifier\r\n//                .width(33.5444.dp)\r\n//                .height(49.dp),\r\n//            painter = painterResource(id = R.drawable.logokecil),\r\n//            contentDescription = \"logo\",\r\n//            contentScale = ContentScale.FillBounds\r\n//        )\r\n\r\n        Row (modifier = Modifier\r\n            .fillMaxSize()\r\n            .padding(24.dp)) {\r\n            Image(\r\n                modifier = Modifier\r\n                    .width(24.dp)\r\n                    .height(32.dp),\r\n                painter = painterResource(id = R.drawable.logokecil),\r\n                contentDescription = \"image description\",\r\n                contentScale = ContentScale.FillBounds\r\n            )\r\n            Text(\r\n                modifier = Modifier\r\n                    .width(104.dp)\r\n                    .height(30.dp),\r\n                text = \"SDK-Apps\",\r\n                style = TextStyle(\r\n                    fontSize = 20.sp,\r\n                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),\r\n                    fontWeight = FontWeight(600),\r\n                    color = Color(0xFFEEEEEE),\r\n                )\r\n            )\r\n\r\n        }\r\n        Column(\r\n            modifier = Modifier.fillMaxSize(),\r\n            verticalArrangement = Arrangement.Center,\r\n            horizontalAlignment = Alignment.CenterHorizontally\r\n        ) {\r\n\r\n            Image(\r\n                painter = painterResource(id = R.drawable.splashtext),\r\n                contentDescription = \"image description\",\r\n                contentScale = ContentScale.FillBounds\r\n            )\r\n        }\r\n        Column (modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally){\r\n            Button(\r\n                onClick = {}, Modifier\r\n                    .width(327.dp)\r\n                    .height(72.dp)\r\n                    .padding(start = 10.dp, top = 12.dp, end = 10.dp, bottom = 12.dp),\r\n                colors = ButtonDefaults.buttonColors(containerColor = Color.White)\r\n            ) {\r\n                Text(\r\n                    text = \"Mulai Gunakan Aplikasi\",\r\n                    style = TextStyle(\r\n                        fontSize = 12.sp,\r\n                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),\r\n                        fontWeight = FontWeight(600),\r\n                        color = Color(0xFFFF5F00),\r\n                    )\r\n                )\r\n\r\n            }\r\n        }\r\n\r\n    }\r\n}\r\n\r\n@Composable\r\nfun BottomNavigation() {\r\n    NavigationBar {\r\n        val bottomNavigation = listOf(\r\n            BottomNavItem(\r\n                label = \"Beranda\", icon = Icons.Default.Home\r\n            ),\r\n            BottomNavItem(\r\n                label = \"Kios\", icon = Icons.Default.Star\r\n            ),\r\n            BottomNavItem(\r\n                label = \"Transaksi\", icon = Icons.Default.ShoppingCart\r\n            ),\r\n            BottomNavItem(\r\n                label = \"Keluar\", icon = Icons.Default.ExitToApp\r\n            ),\r\n        )\r\n        bottomNavigation.map {\r\n            NavigationBarItem(\r\n                selected = it.label == bottomNavigation[0].label,\r\n                onClick = { },\r\n                icon = {\r\n                    Icon(\r\n                        imageVector = it.icon,\r\n                        contentDescription = it.label,\r\n                        tint = Color(0xFFFF5F00)\r\n                    )\r\n                },\r\n                label = { Text(text = it.label, color = Color(0xFFFF5F00)) },\r\n            )\r\n        }\r\n    }\r\n}\r\ndata class BottomNavItem(val label: String, val icon: ImageVector)
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/projectuasmobile/MainActivity.kt b/app/src/main/java/com/example/projectuasmobile/MainActivity.kt
+---- a/app/src/main/java/com/example/projectuasmobile/MainActivity.kt	(revision 0bfd4f8788b19b0aaa2288d8182b9fa02005142d)
+-+++ b/app/src/main/java/com/example/projectuasmobile/MainActivity.kt	(date 1700804546267)
+-@@ -67,7 +67,7 @@
+-                     val startD: String
+-                     val jwt = sharedPreferences.getString("jwt", "")
+-                     startD = if (jwt.equals("")) {
+--                        "rolepick"
+-+                        "login"
+-                     } else {
+-                         "homepage"
+-                     }
+-@@ -125,7 +125,7 @@
+-                 modifier = Modifier
+-                     .width(104.dp)
+-                     .height(30.dp),
+--                text = "SDK-Apps",
+-+                text = "SDK-App",
+-                 style = TextStyle(
+-                     fontSize = 20.sp,
+-                     fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+-Index: app/src/main/java/com/example/projectuasmobile/frontend/Login.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.projectuasmobile.frontend\r\n\r\nimport android.content.Context\r\nimport android.widget.Toast\r\nimport androidx.compose.foundation.border\r\nimport androidx.compose.foundation.layout.Arrangement\r\nimport androidx.compose.foundation.layout.Box\r\nimport androidx.compose.foundation.layout.Column\r\nimport androidx.compose.foundation.layout.Row\r\nimport androidx.compose.foundation.layout.Spacer\r\nimport androidx.compose.foundation.layout.fillMaxSize\r\nimport androidx.compose.foundation.layout.fillMaxWidth\r\nimport androidx.compose.foundation.layout.height\r\nimport androidx.compose.foundation.layout.padding\r\nimport androidx.compose.foundation.shape.RoundedCornerShape\r\nimport androidx.compose.foundation.text.ClickableText\r\nimport androidx.compose.foundation.text.KeyboardOptions\r\nimport androidx.compose.material3.ButtonDefaults\r\nimport androidx.compose.material3.ElevatedButton\r\nimport androidx.compose.material3.ExperimentalMaterial3Api\r\nimport androidx.compose.material3.Icon\r\nimport androidx.compose.material3.IconButton\r\nimport androidx.compose.material3.OutlinedTextField\r\nimport androidx.compose.material3.Text\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.compose.runtime.getValue\r\nimport androidx.compose.runtime.mutableStateOf\r\nimport androidx.compose.runtime.remember\r\nimport androidx.compose.runtime.setValue\r\nimport androidx.compose.ui.Alignment\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.compose.ui.graphics.Color\r\nimport androidx.compose.ui.platform.LocalContext\r\nimport androidx.compose.ui.res.painterResource\r\nimport androidx.compose.ui.text.AnnotatedString\r\nimport androidx.compose.ui.text.font.Font\r\nimport androidx.compose.ui.text.font.FontFamily\r\nimport androidx.compose.ui.text.TextStyle\r\nimport androidx.compose.ui.text.input.KeyboardType\r\nimport androidx.compose.ui.text.input.PasswordVisualTransformation\r\nimport androidx.compose.ui.text.input.TextFieldValue\r\nimport androidx.compose.ui.text.input.VisualTransformation\r\nimport androidx.compose.ui.text.style.TextAlign\r\nimport androidx.compose.ui.unit.dp\r\nimport androidx.compose.ui.unit.sp\r\nimport androidx.navigation.NavController\r\nimport com.example.projectuasmobile.LoginService\r\nimport com.example.projectuasmobile.PreferencesManager\r\nimport com.example.projectuasmobile.R\r\nimport com.example.projectuasmobile.data.LoginData\r\nimport com.example.projectuasmobile.response.LoginResponse\r\nimport retrofit2.Call\r\nimport retrofit2.Callback\r\nimport retrofit2.Response\r\nimport retrofit2.Retrofit\r\nimport retrofit2.converter.gson.GsonConverterFactory\r\n\r\n\r\n@OptIn(ExperimentalMaterial3Api::class)\r\n@Composable\r\nfun Login(navController: NavController, context: Context = LocalContext.current) {\r\n    val preferencesManager = remember { PreferencesManager(context = context) }\r\n\r\n    val usernameField = remember { mutableStateOf(TextFieldValue(\"\")) }\r\n    val passwordField = remember { mutableStateOf(TextFieldValue(\"\")) }\r\n    val passwordVisible = remember { mutableStateOf(false) }\r\n\r\n    val baseUrl = \"http://10.0.2.2:1337/api/\"\r\n    //KALAU TIDAK DI EMULATOR\r\n    //val baseUrl = \"http://10.217.17.11:1337/api/\"\r\n\r\n    var jwt by remember { mutableStateOf(\"\") }\r\n    jwt = preferencesManager.getData(\"jwt\")\r\n\r\n    Box(modifier = Modifier.fillMaxSize()) {\r\n        Column(\r\n            modifier = Modifier\r\n                .fillMaxSize()\r\n                .padding(horizontal = 24.dp),\r\n            verticalArrangement = Arrangement.Center,\r\n            horizontalAlignment = Alignment.CenterHorizontally,\r\n        ) {\r\n            Text(\r\n                text = \"SDK-app\", style = TextStyle(\r\n                    fontSize = 48.sp,\r\n                    fontFamily = FontFamily(Font(R.font.poppins_medium)),\r\n                    textAlign = TextAlign.Left\r\n                ), modifier = Modifier.align(Alignment.Start)\r\n            )\r\n            Text(\r\n                text = \"Memudahkan untuk order anda\", style = TextStyle(\r\n                    fontSize = 16.sp,\r\n                    fontFamily = FontFamily(Font(R.font.poppins_regular)),\r\n                    color = Color(0xFF1E1E1E),\r\n                    textAlign = TextAlign.Left\r\n                ), modifier = Modifier.align(Alignment.Start)\r\n            )\r\n            Text(\r\n                text = \"Email\", style = TextStyle(\r\n                    fontSize = 14.sp,\r\n                    fontFamily = FontFamily(Font(R.font.poppins_regular)),\r\n                    color = Color(0xFF1E1E1E),\r\n                    textAlign = TextAlign.Center,\r\n                ), modifier = Modifier\r\n                    .align(Alignment.Start)\r\n                    .padding(top = 48.dp)\r\n            )\r\n            OutlinedTextField(value = usernameField.value,\r\n                onValueChange = {\r\n                    usernameField.value = it\r\n                },\r\n                singleLine = true,\r\n                modifier = Modifier\r\n                    .align(Alignment.Start)\r\n                    .fillMaxWidth()\r\n                    .padding(2.dp)\r\n                    .border(\r\n                        width = 1.5.dp, color = Color(0xFFFF5F00), shape = RoundedCornerShape(8.dp)\r\n                    ),\r\n                placeholder = { Text(text = \"Contoh: example@test.com\") })\r\n            Text(\r\n                text = \"Password\", style = TextStyle(\r\n                    fontSize = 14.sp,\r\n                    fontFamily = FontFamily(Font(R.font.poppins_regular)),\r\n                    color = Color(0xFF1E1E1E),\r\n                    textAlign = TextAlign.Center,\r\n                ), modifier = Modifier\r\n                    .align(Alignment.Start)\r\n                    .padding(top = 28.dp)\r\n            )\r\n            OutlinedTextField(value = passwordField.value,\r\n                onValueChange = {\r\n                    passwordField.value = it\r\n                },\r\n                singleLine = true,\r\n                modifier = Modifier\r\n                    .align(Alignment.Start)\r\n                    .fillMaxWidth()\r\n                    .padding(2.dp)\r\n                    .border(\r\n                        width = 1.5.dp, color = Color(0xFFFF5F00), shape = RoundedCornerShape(8.dp)\r\n                    ),\r\n                placeholder = { Text(text = \"Masukkan password\") },\r\n                visualTransformation = if (passwordVisible.value) VisualTransformation.None\r\n                else PasswordVisualTransformation(),\r\n                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),\r\n                trailingIcon = {\r\n                    IconButton(\r\n                        onClick = { passwordVisible.value = !passwordVisible.value },\r\n                        modifier = Modifier.padding(end = 10.dp)\r\n                    ) {\r\n                        Icon(\r\n                            painter = if (passwordVisible.value) painterResource(id = R.drawable.eye_open)\r\n                            else painterResource(id = R.drawable.eye_close),\r\n                            contentDescription = \"Toggle Password\"\r\n                        )\r\n                    }\r\n                })\r\n            Spacer(modifier = Modifier.padding(20.dp))\r\n            ElevatedButton(modifier = Modifier\r\n                .align(Alignment.Start)\r\n                .fillMaxWidth()\r\n                .padding(2.dp)\r\n                .height(48.dp), colors = ButtonDefaults.buttonColors(\r\n                contentColor = Color.White,\r\n            ), shape = RoundedCornerShape(8.dp), onClick = {\r\n                val retrofit =\r\n                    Retrofit.Builder()\r\n                        .baseUrl(baseUrl)\r\n                        .addConverterFactory(GsonConverterFactory.create())\r\n                        .build()\r\n                        .create(LoginService::class.java)\r\n                val call = retrofit.getData(\r\n                    LoginData(\r\n                        usernameField.value.text,\r\n                        passwordField.value.text\r\n                    )\r\n                )\r\n                call.enqueue(object : Callback<LoginResponse> {\r\n                    override fun onResponse(\r\n                        call: Call<LoginResponse>,\r\n                        response: Response<LoginResponse>\r\n                    ) {\r\n                        print(response.code())\r\n                        if (response.code() == 200) {\r\n                            jwt = response.body()?.jwt!!\r\n                            preferencesManager.saveData(\"jwt\", jwt)\r\n                            navController.navigate(\"homepage\")\r\n                        } else if (response.code() == 400) {\r\n                            print(\"bad request 400\")\r\n                            Toast.makeText(\r\n                                context,\r\n                                \"Username atau password salah\",\r\n                                Toast.LENGTH_SHORT\r\n                            ).show()\r\n                        }\r\n                    }\r\n\r\n                    override fun onFailure(call: Call<LoginResponse>, t: Throwable) {\r\n                        print(t.message)\r\n                    }\r\n                })\r\n            }) {\r\n                Text(\r\n                    text = \"Mulai Berbagi\", style = TextStyle(\r\n                        fontSize = 16.sp,\r\n                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),\r\n                        color = Color.White,\r\n                        textAlign = TextAlign.Center,\r\n                    )\r\n                )\r\n            }\r\n            Text(\r\n                text = \"atau masuk dengan\",\r\n                style = TextStyle(\r\n                    fontSize = 14.sp,\r\n                    fontFamily = FontFamily(Font(R.font.poppins_regular)),\r\n                    color = Color(0xFF1E1E1E),\r\n                    textAlign = TextAlign.Center,\r\n                ),\r\n                modifier = Modifier\r\n                    .align(Alignment.CenterHorizontally)\r\n                    .padding(top = 14.dp)\r\n                    .padding(bottom = 28.dp)\r\n            )\r\n            Row {\r\n                Text(\r\n                    text = \"Belum punya akun?\", style = TextStyle(\r\n                        fontSize = 14.sp,\r\n                        fontFamily = FontFamily(Font(R.font.poppins_regular)),\r\n                        color = Color(0xFF1E1E1E),\r\n                        textAlign = TextAlign.Left\r\n                    ), modifier = Modifier.padding(top = 48.dp)\r\n                )\r\n                Spacer(modifier = Modifier.padding(4.dp))\r\n                ClickableText(\r\n                    text = AnnotatedString(\"Daftar dulu\"), style = TextStyle(\r\n                        fontSize = 14.sp,\r\n                        fontFamily = FontFamily(Font(R.font.poppins_medium)),\r\n                        color = Color(0xFF6650a4),\r\n                        textAlign = TextAlign.Left\r\n                    ), modifier = Modifier.padding(top = 48.dp)\r\n                ) {\r\n                    //navController.navigate(\"register\")\r\n                }\r\n            }\r\n\r\n        }\r\n    }\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/projectuasmobile/frontend/Login.kt b/app/src/main/java/com/example/projectuasmobile/frontend/Login.kt
+---- a/app/src/main/java/com/example/projectuasmobile/frontend/Login.kt	(revision 0bfd4f8788b19b0aaa2288d8182b9fa02005142d)
+-+++ b/app/src/main/java/com/example/projectuasmobile/frontend/Login.kt	(date 1700806819636)
+-@@ -2,6 +2,7 @@
+- 
+- import android.content.Context
+- import android.widget.Toast
+-+import androidx.compose.foundation.Image
+- import androidx.compose.foundation.border
+- import androidx.compose.foundation.layout.Arrangement
+- import androidx.compose.foundation.layout.Box
+-@@ -21,6 +22,7 @@
+- import androidx.compose.material3.Icon
+- import androidx.compose.material3.IconButton
+- import androidx.compose.material3.OutlinedTextField
+-+import androidx.compose.material3.Surface
+- import androidx.compose.material3.Text
+- import androidx.compose.runtime.Composable
+- import androidx.compose.runtime.getValue
+-@@ -30,12 +32,14 @@
+- import androidx.compose.ui.Alignment
+- import androidx.compose.ui.Modifier
+- import androidx.compose.ui.graphics.Color
+-+import androidx.compose.ui.layout.ContentScale
+- import androidx.compose.ui.platform.LocalContext
+- import androidx.compose.ui.res.painterResource
+- import androidx.compose.ui.text.AnnotatedString
+- import androidx.compose.ui.text.font.Font
+- import androidx.compose.ui.text.font.FontFamily
+- import androidx.compose.ui.text.TextStyle
+-+import androidx.compose.ui.text.font.FontWeight
+- import androidx.compose.ui.text.input.KeyboardType
+- import androidx.compose.ui.text.input.PasswordVisualTransformation
+- import androidx.compose.ui.text.input.TextFieldValue
+-@@ -73,38 +77,48 @@
+-     jwt = preferencesManager.getData("jwt")
+- 
+-     Box(modifier = Modifier.fillMaxSize()) {
+--        Column(
+--            modifier = Modifier
+--                .fillMaxSize()
+--                .padding(horizontal = 24.dp),
+--            verticalArrangement = Arrangement.Center,
+--            horizontalAlignment = Alignment.CenterHorizontally,
+--        ) {
+--            Text(
+--                text = "SDK-app", style = TextStyle(
+--                    fontSize = 48.sp,
+--                    fontFamily = FontFamily(Font(R.font.poppins_medium)),
+--                    textAlign = TextAlign.Left
+--                ), modifier = Modifier.align(Alignment.Start)
+--            )
+--            Text(
+--                text = "Memudahkan untuk order anda", style = TextStyle(
+--                    fontSize = 16.sp,
+--                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
+--                    color = Color(0xFF1E1E1E),
+--                    textAlign = TextAlign.Left
+--                ), modifier = Modifier.align(Alignment.Start)
+--            )
+--            Text(
+--                text = "Email", style = TextStyle(
+--                    fontSize = 14.sp,
+--                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
+--                    color = Color(0xFF1E1E1E),
+--                    textAlign = TextAlign.Center,
+--                ), modifier = Modifier
+--                    .align(Alignment.Start)
+--                    .padding(top = 48.dp)
+--            )
+-+        Image(
+-+            painter = painterResource(id = R.drawable.background),
+-+            contentDescription = "",
+-+            contentScale = ContentScale.FillBounds,
+-+            modifier = Modifier.matchParentSize()
+-+        )
+-+            Column(
+-+                modifier = Modifier
+-+                    .fillMaxSize()
+-+                    .padding(top = 50.dp),
+-+                horizontalAlignment = Alignment.CenterHorizontally,
+-+                verticalArrangement = Arrangement.Top
+-+            ) {
+-+                Text(
+-+                    text = "SDK-App",
+-+                    style = TextStyle(
+-+                        fontSize = 54.sp,
+-+                        fontFamily = FontFamily(Font(R.font.poppins_bold)),
+-+                        fontWeight = FontWeight(700),
+-+                        color = Color(0xFFFFFFFF),
+-+                        textAlign = TextAlign.Center,
+-+                    )
+-+                )
+-+            }
+-+            Column (modifier = Modifier
+-+                .fillMaxSize()
+-+                .padding(top = 126.dp),
+-+                horizontalAlignment = Alignment.CenterHorizontally,
+-+               ){
+-+                Text(
+-+                    text = "Login Untuk Masuk",
+-+                    style = TextStyle(
+-+                        fontSize = 18.sp,
+-+                        fontFamily = FontFamily(Font(R.font.poppins_regular)),
+-+                        fontWeight = FontWeight(400),
+-+                        color = Color(0xFFFFFFFF),
+-+                        textAlign = TextAlign.Center,
+-+                    )
+-+                )
+-+
+-+        }
+-+        Column (modifier = Modifier.fillMaxSize().padding(32.dp), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally){
+-             OutlinedTextField(value = usernameField.value,
+-                 onValueChange = {
+-                     usernameField.value = it
+-@@ -115,19 +129,18 @@
+-                     .fillMaxWidth()
+-                     .padding(2.dp)
+-                     .border(
+--                        width = 1.5.dp, color = Color(0xFFFF5F00), shape = RoundedCornerShape(8.dp)
+-+                        width = 1.5.dp, color = Color(0xFFFF5F00), shape = RoundedCornerShape(24.dp)
+-                     ),
+--                placeholder = { Text(text = "Contoh: example@test.com") })
+--            Text(
+--                text = "Password", style = TextStyle(
+--                    fontSize = 14.sp,
+--                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
+--                    color = Color(0xFF1E1E1E),
+--                    textAlign = TextAlign.Center,
+--                ), modifier = Modifier
+--                    .align(Alignment.Start)
+--                    .padding(top = 28.dp)
+--            )
+-+                placeholder = { Text(
+-+                    text = "Email",
+-+                    style = TextStyle(
+-+                        fontSize = 15.sp,
+-+                        fontFamily = FontFamily(Font(R.font.poppins_regular)),
+-+                        fontWeight = FontWeight(400),
+-+                        color = Color(0xFFFF5F00),
+-+                    )
+-+                ) })
+-+            Spacer(modifier = Modifier.height(16.dp))
+-             OutlinedTextField(value = passwordField.value,
+-                 onValueChange = {
+-                     passwordField.value = it
+-@@ -138,9 +151,17 @@
+-                     .fillMaxWidth()
+-                     .padding(2.dp)
+-                     .border(
+--                        width = 1.5.dp, color = Color(0xFFFF5F00), shape = RoundedCornerShape(8.dp)
+-+                        width = 1.5.dp, color = Color(0xFFFF5F00), shape = RoundedCornerShape(24.dp)
+-                     ),
+--                placeholder = { Text(text = "Masukkan password") },
+-+                placeholder = { Text(
+-+                    text = "Password",
+-+                    style = TextStyle(
+-+                        fontSize = 15.sp,
+-+                        fontFamily = FontFamily(Font(R.font.poppins_regular)),
+-+                        fontWeight = FontWeight(400),
+-+                        color = Color(0xFFFF5F00),
+-+                    )
+-+                ) },
+-                 visualTransformation = if (passwordVisible.value) VisualTransformation.None
+-                 else PasswordVisualTransformation(),
+-                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+-@@ -156,95 +177,6 @@
+-                         )
+-                     }
+-                 })
+--            Spacer(modifier = Modifier.padding(20.dp))
+--            ElevatedButton(modifier = Modifier
+--                .align(Alignment.Start)
+--                .fillMaxWidth()
+--                .padding(2.dp)
+--                .height(48.dp), colors = ButtonDefaults.buttonColors(
+--                contentColor = Color.White,
+--            ), shape = RoundedCornerShape(8.dp), onClick = {
+--                val retrofit =
+--                    Retrofit.Builder()
+--                        .baseUrl(baseUrl)
+--                        .addConverterFactory(GsonConverterFactory.create())
+--                        .build()
+--                        .create(LoginService::class.java)
+--                val call = retrofit.getData(
+--                    LoginData(
+--                        usernameField.value.text,
+--                        passwordField.value.text
+--                    )
+--                )
+--                call.enqueue(object : Callback<LoginResponse> {
+--                    override fun onResponse(
+--                        call: Call<LoginResponse>,
+--                        response: Response<LoginResponse>
+--                    ) {
+--                        print(response.code())
+--                        if (response.code() == 200) {
+--                            jwt = response.body()?.jwt!!
+--                            preferencesManager.saveData("jwt", jwt)
+--                            navController.navigate("homepage")
+--                        } else if (response.code() == 400) {
+--                            print("bad request 400")
+--                            Toast.makeText(
+--                                context,
+--                                "Username atau password salah",
+--                                Toast.LENGTH_SHORT
+--                            ).show()
+--                        }
+--                    }
+--
+--                    override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+--                        print(t.message)
+--                    }
+--                })
+--            }) {
+--                Text(
+--                    text = "Mulai Berbagi", style = TextStyle(
+--                        fontSize = 16.sp,
+--                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+--                        color = Color.White,
+--                        textAlign = TextAlign.Center,
+--                    )
+--                )
+--            }
+--            Text(
+--                text = "atau masuk dengan",
+--                style = TextStyle(
+--                    fontSize = 14.sp,
+--                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
+--                    color = Color(0xFF1E1E1E),
+--                    textAlign = TextAlign.Center,
+--                ),
+--                modifier = Modifier
+--                    .align(Alignment.CenterHorizontally)
+--                    .padding(top = 14.dp)
+--                    .padding(bottom = 28.dp)
+--            )
+--            Row {
+--                Text(
+--                    text = "Belum punya akun?", style = TextStyle(
+--                        fontSize = 14.sp,
+--                        fontFamily = FontFamily(Font(R.font.poppins_regular)),
+--                        color = Color(0xFF1E1E1E),
+--                        textAlign = TextAlign.Left
+--                    ), modifier = Modifier.padding(top = 48.dp)
+--                )
+--                Spacer(modifier = Modifier.padding(4.dp))
+--                ClickableText(
+--                    text = AnnotatedString("Daftar dulu"), style = TextStyle(
+--                        fontSize = 14.sp,
+--                        fontFamily = FontFamily(Font(R.font.poppins_medium)),
+--                        color = Color(0xFF6650a4),
+--                        textAlign = TextAlign.Left
+--                    ), modifier = Modifier.padding(top = 48.dp)
+--                ) {
+--                    //navController.navigate("register")
+--                }
+--            }
+--
+-         }
+-     }
+- }
+-Index: app/src/main/res/drawable/background.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/res/drawable/background.xml b/app/src/main/res/drawable/background.xml
+-new file mode 100644
+---- /dev/null	(date 1700804989379)
+-+++ b/app/src/main/res/drawable/background.xml	(date 1700804989379)
+-@@ -0,0 +1,28 @@
+-+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+-+    xmlns:aapt="http://schemas.android.com/aapt"
+-+    android:width="430dp"
+-+    android:height="932dp"
+-+    android:viewportWidth="430"
+-+    android:viewportHeight="932">
+-+  <group>
+-+    <clip-path
+-+        android:pathData="M0,0h430v932h-430z"/>
+-+    <path
+-+        android:pathData="M0,0h430v932h-430z"
+-+        android:fillColor="#ffffff"/>
+-+    <path
+-+        android:pathData="M5,-39L425,-39A5,5 0,0 1,430 -34L430,491A5,5 0,0 1,425 496L5,496A5,5 0,0 1,0 491L0,-34A5,5 0,0 1,5 -39z">
+-+      <aapt:attr name="android:fillColor">
+-+        <gradient 
+-+            android:startX="215"
+-+            android:startY="-39"
+-+            android:endX="215"
+-+            android:endY="496"
+-+            android:type="linear">
+-+          <item android:offset="0" android:color="#FFFF5F00"/>
+-+          <item android:offset="1" android:color="#00FF5F00"/>
+-+        </gradient>
+-+      </aapt:attr>
+-+    </path>
+-+  </group>
+-+</vector>
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_11_24_2023_11_32_AM_[Changes]/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_11_24_2023_11_32_AM_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Update_at_11_24_2023_11_32_AM_[Changes]/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_11_24_2023_11_32_AM_[Changes]/shelved.patch	(revision fa5ce4c34defaff2dcef46d5c0bc2b246327bbef)
++++ /dev/null	(revision fa5ce4c34defaff2dcef46d5c0bc2b246327bbef)
+@@ -1,72 +0,0 @@
+-Index: app/src/main/java/com/example/projectuasmobile/MainActivity.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.projectuasmobile\r\n\r\nimport android.content.Context\r\nimport android.content.SharedPreferences\r\nimport android.os.Bundle\r\nimport androidx.activity.ComponentActivity\r\nimport androidx.activity.compose.setContent\r\nimport androidx.compose.foundation.Image\r\nimport androidx.compose.foundation.background\r\nimport androidx.compose.foundation.layout.Arrangement\r\nimport androidx.compose.foundation.layout.Box\r\nimport androidx.compose.foundation.layout.Column\r\nimport androidx.compose.foundation.layout.Row\r\nimport androidx.compose.foundation.layout.fillMaxSize\r\nimport androidx.compose.foundation.layout.height\r\nimport androidx.compose.foundation.layout.padding\r\nimport androidx.compose.foundation.layout.width\r\nimport androidx.compose.material.icons.Icons\r\nimport androidx.compose.material.icons.filled.ExitToApp\r\nimport androidx.compose.material.icons.filled.Home\r\nimport androidx.compose.material.icons.filled.ShoppingCart\r\nimport androidx.compose.material.icons.filled.Star\r\nimport androidx.compose.material3.Button\r\nimport androidx.compose.material3.ButtonDefaults\r\nimport androidx.compose.material3.Icon\r\nimport androidx.compose.material3.MaterialTheme\r\nimport androidx.compose.material3.NavigationBar\r\nimport androidx.compose.material3.NavigationBarItem\r\nimport androidx.compose.material3.Surface\r\nimport androidx.compose.material3.Text\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.compose.ui.Alignment\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.compose.ui.graphics.Color\r\nimport androidx.compose.ui.graphics.vector.ImageVector\r\nimport androidx.compose.ui.layout.ContentScale\r\nimport androidx.compose.ui.platform.LocalContext\r\nimport androidx.compose.ui.res.painterResource\r\nimport androidx.compose.ui.text.TextStyle\r\nimport androidx.compose.ui.text.font.Font\r\nimport androidx.compose.ui.text.font.FontFamily\r\nimport androidx.compose.ui.text.font.FontWeight\r\nimport androidx.compose.ui.unit.dp\r\nimport androidx.compose.ui.unit.sp\r\nimport androidx.navigation.compose.NavHost\r\nimport androidx.navigation.compose.composable\r\nimport androidx.navigation.compose.rememberNavController\r\nimport com.example.projectuasmobile.frontend.HomePage\r\nimport com.example.projectuasmobile.frontend.Login\r\nimport com.example.projectuasmobile.ui.theme.ProjectUASMobileTheme\r\n\r\nclass MainActivity : ComponentActivity() {\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        setContent {\r\n            ProjectUASMobileTheme {\r\n                // A surface container using the 'background' color from the theme\r\n                Surface(\r\n                    modifier = Modifier.fillMaxSize(),\r\n                    color = MaterialTheme.colorScheme.background\r\n                ) {\r\n                    val sharedPreferences: SharedPreferences =\r\n                        LocalContext.current.getSharedPreferences(\"auth\", Context.MODE_PRIVATE)\r\n                    val navController = rememberNavController()\r\n\r\n                    val startD: String\r\n                    val jwt = sharedPreferences.getString(\"jwt\", \"\")\r\n                    startD = if (jwt.equals(\"\")) {\r\n                        \"rolepick\"\r\n                    } else {\r\n                        \"homepage\"\r\n                    }\r\n\r\n                    NavHost(navController = navController, startDestination = startD) {\r\n                        composable(\"splash\") {\r\n                            SplashScreen()\r\n                        }\r\n                        composable(\"login\") {\r\n                            Login(navController)\r\n                        }\r\n                        composable(\"homepage\") {\r\n                            HomePage(navController)\r\n                        }\r\n                    }\r\n                }\r\n            }\r\n        }\r\n    }\r\n}\r\n@Composable\r\nfun SplashScreen() {\r\n    val Primary = Color(0xFFFF5F00)\r\n    Box(\r\n        modifier = Modifier\r\n            .width(430.dp)\r\n            .height(932.dp)\r\n            .background(color = Color(0xFFFF5F00))\r\n    ) {\r\n//        Image(\r\n//            modifier =Modifier\r\n//                .width(33.5444.dp)\r\n//                .height(49.dp),\r\n//            painter = painterResource(id = R.drawable.logokecil),\r\n//            contentDescription = \"logo\",\r\n//            contentScale = ContentScale.FillBounds\r\n//        )\r\n\r\n        Row (modifier = Modifier\r\n            .fillMaxSize()\r\n            .padding(24.dp)) {\r\n            Image(\r\n                modifier = Modifier\r\n                    .width(24.dp)\r\n                    .height(32.dp),\r\n                painter = painterResource(id = R.drawable.logokecil),\r\n                contentDescription = \"image description\",\r\n                contentScale = ContentScale.FillBounds\r\n            )\r\n            Text(\r\n                modifier = Modifier\r\n                    .width(104.dp)\r\n                    .height(30.dp),\r\n                text = \"SDK-Apps\",\r\n                style = TextStyle(\r\n                    fontSize = 20.sp,\r\n                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),\r\n                    fontWeight = FontWeight(600),\r\n                    color = Color(0xFFEEEEEE),\r\n                )\r\n            )\r\n\r\n        }\r\n        Column(\r\n            modifier = Modifier.fillMaxSize(),\r\n            verticalArrangement = Arrangement.Center,\r\n            horizontalAlignment = Alignment.CenterHorizontally\r\n        ) {\r\n\r\n            Image(\r\n                painter = painterResource(id = R.drawable.splashtext),\r\n                contentDescription = \"image description\",\r\n                contentScale = ContentScale.FillBounds\r\n            )\r\n        }\r\n        Column (modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally){\r\n            Button(\r\n                onClick = {}, Modifier\r\n                    .width(327.dp)\r\n                    .height(72.dp)\r\n                    .padding(start = 10.dp, top = 12.dp, end = 10.dp, bottom = 12.dp),\r\n                colors = ButtonDefaults.buttonColors(containerColor = Color.White)\r\n            ) {\r\n                Text(\r\n                    text = \"Mulai Gunakan Aplikasi\",\r\n                    style = TextStyle(\r\n                        fontSize = 12.sp,\r\n                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),\r\n                        fontWeight = FontWeight(600),\r\n                        color = Color(0xFFFF5F00),\r\n                    )\r\n                )\r\n\r\n            }\r\n        }\r\n\r\n    }\r\n}\r\n\r\n@Composable\r\nfun BottomNavigation() {\r\n    NavigationBar {\r\n        val bottomNavigation = listOf(\r\n            BottomNavItem(\r\n                label = \"Beranda\", icon = Icons.Default.Home\r\n            ),\r\n            BottomNavItem(\r\n                label = \"Kios\", icon = Icons.Default.Star\r\n            ),\r\n            BottomNavItem(\r\n                label = \"Transaksi\", icon = Icons.Default.ShoppingCart\r\n            ),\r\n            BottomNavItem(\r\n                label = \"Keluar\", icon = Icons.Default.ExitToApp\r\n            ),\r\n        )\r\n        bottomNavigation.map {\r\n            NavigationBarItem(\r\n                selected = it.label == bottomNavigation[0].label,\r\n                onClick = { },\r\n                icon = {\r\n                    Icon(\r\n                        imageVector = it.icon,\r\n                        contentDescription = it.label,\r\n                        tint = Color(0xFFFF5F00)\r\n                    )\r\n                },\r\n                label = { Text(text = it.label, color = Color(0xFFFF5F00)) },\r\n            )\r\n        }\r\n    }\r\n}\r\ndata class BottomNavItem(val label: String, val icon: ImageVector)
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/projectuasmobile/MainActivity.kt b/app/src/main/java/com/example/projectuasmobile/MainActivity.kt
+---- a/app/src/main/java/com/example/projectuasmobile/MainActivity.kt	(revision 932bd8b2549495e8683e297290c89b7129535c33)
+-+++ b/app/src/main/java/com/example/projectuasmobile/MainActivity.kt	(date 1700800369856)
+-@@ -47,6 +47,7 @@
+- import androidx.navigation.compose.rememberNavController
+- import com.example.projectuasmobile.frontend.HomePage
+- import com.example.projectuasmobile.frontend.Login
+-+import com.example.projectuasmobile.frontend.RolePick
+- import com.example.projectuasmobile.ui.theme.ProjectUASMobileTheme
+- 
+- class MainActivity : ComponentActivity() {
+-@@ -81,6 +82,9 @@
+-                         composable("homepage") {
+-                             HomePage(navController)
+-                         }
+-+                        composable("rolepick"){
+-+                            RolePick()
+-+                        }
+-                     }
+-                 }
+-             }
+-@@ -89,12 +93,12 @@
+- }
+- @Composable
+- fun SplashScreen() {
+--    val Primary = Color(0xFFFF5F00)
+-+    val primaryColor = Color(0xFFFF5F00)
+-     Box(
+-         modifier = Modifier
+-             .width(430.dp)
+-             .height(932.dp)
+--            .background(color = Color(0xFFFF5F00))
+-+            .background(color = primaryColor)
+-     ) {
+- //        Image(
+- //            modifier =Modifier
+-@@ -156,7 +160,7 @@
+-                         fontSize = 12.sp,
+-                         fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+-                         fontWeight = FontWeight(600),
+--                        color = Color(0xFFFF5F00),
+-+                        color = primaryColor,
+-                     )
+-                 )
+- 
+-Index: app/src/main/java/com/example/projectuasmobile/frontend/RolePick.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.projectuasmobile.frontend\r\n\r\nimport androidx.compose.foundation.Image\r\nimport androidx.compose.foundation.layout.Arrangement\r\nimport androidx.compose.foundation.layout.Box\r\nimport androidx.compose.foundation.layout.Column\r\nimport androidx.compose.foundation.layout.Spacer\r\nimport androidx.compose.foundation.layout.fillMaxSize\r\nimport androidx.compose.foundation.layout.height\r\nimport androidx.compose.foundation.layout.padding\r\nimport androidx.compose.foundation.layout.width\r\nimport androidx.compose.material3.Text\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.compose.ui.Alignment\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.compose.ui.graphics.Color\r\nimport androidx.compose.ui.layout.ContentScale\r\nimport androidx.compose.ui.res.painterResource\r\nimport androidx.compose.ui.text.TextStyle\r\nimport androidx.compose.ui.text.font.Font\r\nimport androidx.compose.ui.text.font.FontFamily\r\nimport androidx.compose.ui.text.font.FontWeight\r\nimport androidx.compose.ui.text.style.TextAlign\r\nimport androidx.compose.ui.unit.dp\r\nimport androidx.compose.ui.unit.sp\r\nimport com.example.projectuasmobile.R\r\n\r\n@Composable\r\nfun RolePick(){\r\n    Box(){\r\n        Column (modifier = Modifier\r\n            .fillMaxSize()\r\n            .padding(24.dp),verticalArrangement = Arrangement.spacedBy(-14.dp, Alignment.Top),\r\n            horizontalAlignment = Alignment.CenterHorizontally,)\r\n        {\r\n            Text(\r\n                text = \"SENTRA\",\r\n                style = TextStyle(\r\n                    fontSize = 16.sp,\r\n                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),\r\n                    fontWeight = FontWeight(600),\r\n                    color = Color(0xCCFF5F00),\r\n                    textAlign = TextAlign.Center,\r\n\r\n                    )\r\n            )\r\n\r\n            Text(\r\n                text = \"DIGITAL\",\r\n                style = TextStyle(\r\n                    fontSize = 36.sp,\r\n                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),\r\n                    fontWeight = FontWeight(600),\r\n                    color = Color(0xFFFF5F00),\r\n                    textAlign = TextAlign.Center,\r\n                )\r\n            )\r\n            Text(\r\n                text = \"KULINER\",\r\n                style = TextStyle(\r\n                    fontSize = 16.sp,\r\n                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),\r\n                    fontWeight = FontWeight(600),\r\n                    color = Color(0xCCFF5F00),\r\n                    textAlign = TextAlign.Center,\r\n                )\r\n            )\r\n            Spacer(modifier = Modifier.padding(top = 32.dp))\r\n            Text(\r\n                text = \"Sebagai Apa Kamu ?\",\r\n                style = TextStyle(\r\n                    fontSize = 14.sp,\r\n                    fontFamily = FontFamily(Font(R.font.poppins_regular)),\r\n                    fontWeight = FontWeight(400),\r\n                    color = Color(0xFF1E1E1E),\r\n                    textAlign = TextAlign.Center,\r\n                )\r\n            )\r\n        }\r\n        Column (modifier = Modifier.fillMaxSize().padding(24.dp)){\r\n            Image(\r\n                modifier = Modifier\r\n                    .width(600.dp)\r\n                    .height(400.dp),\r\n                painter = painterResource(id = R.drawable.pembeli),\r\n                contentDescription = \"image description\",\r\n                contentScale = ContentScale.Fit\r\n            )\r\n            Image(\r\n                painter = painterResource(id = R.drawable.penjual),\r\n                contentDescription = \"image description\",\r\n                contentScale = ContentScale.Fit\r\n            )\r\n        }\r\n    }\r\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/projectuasmobile/frontend/RolePick.kt b/app/src/main/java/com/example/projectuasmobile/frontend/RolePick.kt
+---- a/app/src/main/java/com/example/projectuasmobile/frontend/RolePick.kt	(revision 932bd8b2549495e8683e297290c89b7129535c33)
+-+++ b/app/src/main/java/com/example/projectuasmobile/frontend/RolePick.kt	(date 1700800275593)
+-@@ -79,9 +79,6 @@
+-         }
+-         Column (modifier = Modifier.fillMaxSize().padding(24.dp)){
+-             Image(
+--                modifier = Modifier
+--                    .width(600.dp)
+--                    .height(400.dp),
+-                 painter = painterResource(id = R.drawable.pembeli),
+-                 contentDescription = "image description",
+-                 contentScale = ContentScale.Fit
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_11_24_2023_11_24_AM__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_11_24_2023_11_24_AM__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Update_at_11_24_2023_11_24_AM__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_11_24_2023_11_24_AM__Changes_.xml	(revision fa5ce4c34defaff2dcef46d5c0bc2b246327bbef)
++++ /dev/null	(revision fa5ce4c34defaff2dcef46d5c0bc2b246327bbef)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_11_24_2023_11_24_AM_[Changes]" date="1700799944748" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_24_2023_11_24_AM_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 11/24/2023 11:24 AM [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_11_24_2023_11_32_AM__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_11_24_2023_11_32_AM__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Update_at_11_24_2023_11_32_AM__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_11_24_2023_11_32_AM__Changes_.xml	(revision fa5ce4c34defaff2dcef46d5c0bc2b246327bbef)
++++ /dev/null	(revision fa5ce4c34defaff2dcef46d5c0bc2b246327bbef)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_11_24_2023_11_32_AM_[Changes]" date="1700800383028" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_24_2023_11_32_AM_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 11/24/2023 11:32 AM [Changes]" />
+-</changelist>
+\ No newline at end of file

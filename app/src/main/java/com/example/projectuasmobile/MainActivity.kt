@@ -40,9 +40,10 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+//import com.example.projectuasmobile.frontend.customer.BoothDetail
+import com.example.projectuasmobile.frontend.customer.HomePage
 import com.example.projectuasmobile.frontend.auth.Login
 import com.example.projectuasmobile.frontend.auth.Register
-import com.example.projectuasmobile.frontend.auth.RegisterBooth
 import com.example.projectuasmobile.frontend.auth.RolePick
 import com.example.projectuasmobile.frontend.booth.AddMenu
 import com.example.projectuasmobile.frontend.booth.BoothHomePage
@@ -51,7 +52,6 @@ import com.example.projectuasmobile.frontend.booth.EditProfile
 import com.example.projectuasmobile.frontend.booth.MenuList
 import com.example.projectuasmobile.frontend.customer.BoothDetail
 import com.example.projectuasmobile.frontend.customer.CheckOutPage
-import com.example.projectuasmobile.frontend.customer.HomePage
 import com.example.projectuasmobile.frontend.customer.PaymentPage
 import com.example.projectuasmobile.frontend.customer.com.example.projectuasmobile.frontend.customer.Kios
 import com.example.projectuasmobile.ui.theme.ProjectUASMobileTheme
@@ -70,7 +70,7 @@ class MainActivity : ComponentActivity() {
                     val jwt = sharedPreferences.getString("jwt", "")
 
                     val startD: String = if (jwt.equals("")) {
-                        "onboarding"
+                        "boothprofile"
                     } else {
                         "boothHome"
 
@@ -89,6 +89,9 @@ class MainActivity : ComponentActivity() {
                         composable("rolepick") {
                             RolePick(navController)
                         }
+//                        composable("detailkios") {
+//                            DetailKios()
+//                        }
                         composable("detailBooth") {
                             BoothDetail(navController)
                         }
@@ -97,9 +100,6 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("register") {
                             Register(navController)
-                        }
-                        composable("registerBooth") {
-                            RegisterBooth(navController)
                         }
                         composable("menu") {
                             MenuList(navController)
@@ -128,7 +128,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 @Composable
 fun OnboardingScreen(navController: NavController) {
     val primaryColorOrg = Color(0xFFFF5F00)
@@ -211,13 +210,7 @@ fun BottomNavCustomer(navController: NavController) {
                 label = "Beranda", iconResId = R.drawable.home, destination = "homepage"
             ),
             BottomNavItem(
-                label = "Kios", iconResId = R.drawable.booth, destination = "kios"
-            ),
-            BottomNavItem(
                 label = "Transaksi", iconResId = R.drawable.transaksi, destination = "transaksi"
-            ),
-            BottomNavItem(
-                label = "Profil", iconResId = R.drawable.keluar, destination = "profil"
             ),
         )
         bottomNavigation.map {
@@ -225,7 +218,7 @@ fun BottomNavCustomer(navController: NavController) {
 
                 selected = it.label == bottomNavigation[0].label,
                 onClick = {
-                    navController.navigate(it.label.lowercase())
+                    navController.navigate(it.label.toLowerCase())
                 },
                 icon = {
                     Image(
@@ -253,14 +246,14 @@ fun BottomNavigation(navController: NavController) {
                 label = "Transaksi", iconResId = R.drawable.transaksi, destination = "transaksi"
             ),
             BottomNavItem(
-                label = "Profil", iconResId = R.drawable.keluar, destination = "profil"
+                label = "Profil", iconResId = R.drawable.profilee, destination = "boothprofile"
             ),
         )
         bottomNavigation.map {
             NavigationBarItem(
                 selected = it.label == bottomNavigation[0].label,
                 onClick = {
-                    navController.navigate(it.label.lowercase())
+                    navController.navigate(it.destination)
                 },
                 icon = {
                     Image(
