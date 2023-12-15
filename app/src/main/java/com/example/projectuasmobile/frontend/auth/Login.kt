@@ -246,6 +246,9 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                             if (response.code() == 200) {
                                 jwt = response.body()?.jwt!!
                                 preferencesManager.saveData("jwt", jwt)
+                                val userID = response.body()?.user?.id.toString()
+                                preferencesManager.saveData("userID", userID)
+                                preferencesManager.saveData("username", usernameField.value.text)
                                 navController.navigate("boothHome")
                             } else if (response.code() == 400) {
                                 print("bad request 400")

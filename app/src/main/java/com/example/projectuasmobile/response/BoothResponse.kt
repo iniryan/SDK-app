@@ -14,10 +14,10 @@ class BoothAttributes{
     val boothName: String = ""
     @SerializedName("boothDescription")
     val boothDescription: String = ""
-    @SerializedName("owner")
-    val owner: Int = 0
     @SerializedName("open")
     val open: Boolean = true
+    @SerializedName("owner")
+    val owner: ApiResponse<User>? = null
 }
 data class BoothResponse<T>(
     @SerializedName("data")

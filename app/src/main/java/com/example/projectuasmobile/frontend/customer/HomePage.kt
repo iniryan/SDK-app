@@ -75,7 +75,7 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
     val retrofit =
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
             .build().create(BoothService::class.java)
-    val call = retrofit.getAllBooth(searchField.value.text)
+    val call = retrofit.getAllBooth(searchField.value.text, "*")
     call.enqueue(object : Callback<BoothResponse<List<Booth>>> {
         override fun onResponse(
             call: Call<BoothResponse<List<Booth>>>,
@@ -183,7 +183,7 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(top = 14.dp)
-                                    .clickable { navController.navigate("detailBooth") }
+                                    .clickable { navController.navigate("detailBooth/" + booth.id + "/" + booth.attributes.boothName + "/" + booth.attributes.boothDescription) }
                             ) {
                                 Image(
                                     painter = painterResource(id = R.drawable.dummy),

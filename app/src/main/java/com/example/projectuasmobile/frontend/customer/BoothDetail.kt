@@ -41,11 +41,13 @@ import com.example.projectuasmobile.R
 
 
 @Composable
-fun BoothDetail(navController: NavController, context: Context = LocalContext.current) {
+fun BoothDetail(navController: NavController,  boothID : String?, boothName: String?, boothDescription: String?, context: Context = LocalContext.current) {
     val notesField = remember {
         mutableStateOf("")
     }
     var quantity by remember { mutableIntStateOf(1) }
+    var title by remember { mutableStateOf(boothName?: "") }
+    var desc by remember { mutableStateOf(boothDescription?: "") }
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier

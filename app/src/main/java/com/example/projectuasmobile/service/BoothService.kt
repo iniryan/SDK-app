@@ -14,7 +14,7 @@ interface BoothService {
     fun createBooth(@Body boothData: BoothDataWrapper): Call<Booth>
 
     @GET("booths")
-    fun getAllBooth(@Query("filters[boothName][\$contains]") search: String?): Call<BoothResponse<List<Booth>>>
+    fun getAllBooth(@Query("filters[boothName][\$contains]") search: String?, @Query("populate") populate: String?): Call<BoothResponse<List<Booth>>>
 
     @GET("booths/{id}")
     fun getBoothById(@Query("id") id: Int): Call<BoothResponse<Booth>>

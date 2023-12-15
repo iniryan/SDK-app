@@ -40,10 +40,10 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-//import com.example.projectuasmobile.frontend.customer.BoothDetail
 import com.example.projectuasmobile.frontend.customer.HomePage
 import com.example.projectuasmobile.frontend.auth.Login
 import com.example.projectuasmobile.frontend.auth.Register
+import com.example.projectuasmobile.frontend.auth.RegisterBooth
 import com.example.projectuasmobile.frontend.auth.RolePick
 import com.example.projectuasmobile.frontend.booth.AddMenu
 import com.example.projectuasmobile.frontend.booth.BoothHomePage
@@ -53,7 +53,7 @@ import com.example.projectuasmobile.frontend.booth.MenuList
 import com.example.projectuasmobile.frontend.customer.BoothDetail
 import com.example.projectuasmobile.frontend.customer.CheckOutPage
 import com.example.projectuasmobile.frontend.customer.PaymentPage
-import com.example.projectuasmobile.frontend.customer.com.example.projectuasmobile.frontend.customer.Kios
+import com.example.projectuasmobile.frontend.customer.Kios
 import com.example.projectuasmobile.ui.theme.ProjectUASMobileTheme
 
 class MainActivity : ComponentActivity() {
@@ -70,10 +70,9 @@ class MainActivity : ComponentActivity() {
                     val jwt = sharedPreferences.getString("jwt", "")
 
                     val startD: String = if (jwt.equals("")) {
-                        "boothprofile"
+                        "onboarding"
                     } else {
                         "boothHome"
-
                     }
 
                     NavHost(navController = navController, startDestination = startD) {
@@ -89,17 +88,21 @@ class MainActivity : ComponentActivity() {
                         composable("rolepick") {
                             RolePick(navController)
                         }
-//                        composable("detailkios") {
-//                            DetailKios()
-//                        }
-                        composable("detailBooth") {
-                            BoothDetail(navController)
+                        composable("detailBooth/{boothID}/{boothName}/{boothDescription}") { backStackEntry ->
+                            BoothDetail(navController,
+                                backStackEntry.arguments?.getString("boothID"),
+                                backStackEntry.arguments?.getString("boothName"),
+                                backStackEntry.arguments?.getString("boothDescription"),
+                            )
                         }
                         composable("boothHome") {
                             BoothHomePage(navController)
                         }
                         composable("register") {
                             Register(navController)
+                        }
+                        composable("registerBooth") {
+                            RegisterBooth(navController)
                         }
                         composable("menu") {
                             MenuList(navController)
@@ -218,7 +221,7 @@ fun BottomNavCustomer(navController: NavController) {
 
                 selected = it.label == bottomNavigation[0].label,
                 onClick = {
-                    navController.navigate(it.label.toLowerCase())
+                    navController.navigate(it.destination)
                 },
                 icon = {
                     Image(

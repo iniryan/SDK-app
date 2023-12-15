@@ -1,4 +1,4 @@
-package com.example.projectuasmobile.frontend.customer.com.example.projectuasmobile.frontend.customer
+package com.example.projectuasmobile.frontend.customer
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -67,7 +67,7 @@ fun Kios(navController: NavController, context: Context = LocalContext.current) 
     val retrofit =
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
             .build().create(BoothService::class.java)
-    val call = retrofit.getAllBooth(searchField.value.text)
+    val call = retrofit.getAllBooth(searchField.value.text, "*")
     call.enqueue(object : Callback<BoothResponse<List<Booth>>> {
         override fun onResponse(
             call: Call<BoothResponse<List<Booth>>>,
