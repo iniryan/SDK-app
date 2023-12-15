@@ -70,8 +70,7 @@ class MainActivity : ComponentActivity() {
                     val jwt = sharedPreferences.getString("jwt", "")
 
                     val startD: String = if (jwt.equals("")) {
-//                        "onboarding"
-                        "homepage"
+                        "onboarding"
                     } else {
                         "boothHome"
                     }
@@ -219,7 +218,6 @@ fun BottomNavCustomer(navController: NavController) {
         )
         bottomNavigation.map {
             NavigationBarItem(
-
                 selected = it.label == bottomNavigation[0].label,
                 onClick = {
                     navController.navigate(it.destination)
