@@ -81,7 +81,7 @@ fun BoothDetail(navController: NavController,  boothID : String?, boothName: Str
                         horizontalAlignment = Alignment.Start,
                     ) {
                         Text(
-                            text = "Wakrop", style = TextStyle(
+                            text = title, style = TextStyle(
                                 fontSize = 24.sp,
                                 lineHeight = 36.sp,
                                 fontFamily = FontFamily(Font(R.font.poppins_semibold)),
@@ -89,7 +89,7 @@ fun BoothDetail(navController: NavController,  boothID : String?, boothName: Str
                             )
                         )
                         Text(
-                            text = "Menyediakan berbagai minuman sachet, kopi, dan Rokok Batangan",
+                            text = desc,
                             style = TextStyle(
                                 fontSize = 14.sp,
                                 lineHeight = 18.sp,
