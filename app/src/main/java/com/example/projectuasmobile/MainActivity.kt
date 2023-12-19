@@ -253,7 +253,7 @@ fun BottomNavigation(navController: NavController) {
         )
         bottomNavigation.map {
             NavigationBarItem(
-                selected = it.label == bottomNavigation[0].label,
+                selected = navController.currentDestination?.route == it.destination,
                 onClick = {
                     navController.navigate(it.destination)
                 },
