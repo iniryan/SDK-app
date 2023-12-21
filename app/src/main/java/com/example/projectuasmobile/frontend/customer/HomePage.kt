@@ -45,7 +45,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.projectuasmobile.BottomNavCustomer
 import com.example.projectuasmobile.R
-import com.example.projectuasmobile.response.Booth
+import com.example.projectuasmobile.response.ApiResponse
 import com.example.projectuasmobile.response.BoothResponse
 import com.example.projectuasmobile.service.BoothService
 import retrofit2.Call
@@ -69,21 +69,21 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
         R.drawable.seafoodkat
     )
 
-    val listBooth = remember { mutableStateListOf<Booth>() }
+    val listBooth = remember { mutableStateListOf<BoothResponse>() }
 
     val baseUrl = "http://10.0.2.2:1337/api/"
     val retrofit =
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
             .build().create(BoothService::class.java)
     val call = retrofit.getAllBooth(searchField.value.text, "*")
-    call.enqueue(object : Callback<BoothResponse<List<Booth>>> {
+    call.enqueue(object : Callback<ApiResponse<List<BoothResponse>>> {
         override fun onResponse(
-            call: Call<BoothResponse<List<Booth>>>,
-            response: Response<BoothResponse<List<Booth>>>
+            call: Call<ApiResponse<List<BoothResponse>>>,
+            response: Response<ApiResponse<List<BoothResponse>>>
         ) {
             if (response.isSuccessful) {
                 listBooth.clear()
-                response.body()?.data!!.forEach{ booth : Booth ->
+                response.body()?.data!!.forEach{ booth : BoothResponse ->
                     listBooth.add(booth)
 //                    val x = userRespon.prodi?.namaProdi
 //                    val y = ""
@@ -97,7 +97,7 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
             }
         }
 
-        override fun onFailure(call: Call<BoothResponse<List<Booth>>>, t: Throwable) {
+        override fun onFailure(call: Call<ApiResponse<List<BoothResponse>>>, t: Throwable) {
             print(t.message)
         }
     })

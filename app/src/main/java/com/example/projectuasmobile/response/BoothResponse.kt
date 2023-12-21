@@ -2,7 +2,7 @@ package com.example.projectuasmobile.response
 
 import com.google.gson.annotations.SerializedName
 
-class Booth {
+class BoothResponse {
     @SerializedName("id")
     var id: Int = 0
     @SerializedName("attributes")
@@ -19,7 +19,3 @@ class BoothAttributes{
     @SerializedName("owner")
     val owner: ApiResponse<User>? = null
 }
-data class BoothResponse<T>(
-    @SerializedName("data")
-    val data: T?
-)

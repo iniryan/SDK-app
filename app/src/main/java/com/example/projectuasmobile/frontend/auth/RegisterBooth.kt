@@ -42,7 +42,7 @@ import com.example.projectuasmobile.PreferencesManager
 import com.example.projectuasmobile.R
 import com.example.projectuasmobile.data.BoothDataWrapper
 import com.example.projectuasmobile.data.RegisterBoothData
-import com.example.projectuasmobile.response.Booth
+import com.example.projectuasmobile.response.BoothResponse
 import com.example.projectuasmobile.service.BoothService
 import com.google.gson.Gson
 import retrofit2.Call
@@ -249,10 +249,10 @@ fun RegisterBooth(navController: NavController, context: Context = LocalContext.
                     val json = Gson().toJson(createBooth)
                     println("Request JSON: $json")
                     val call = retrofit.createBooth(createBooth)
-                    call.enqueue(object : Callback<Booth> {
+                    call.enqueue(object : Callback<BoothResponse> {
                         override fun onResponse(
-                            call: Call<Booth>,
-                            response: Response<Booth>
+                            call: Call<BoothResponse>,
+                            response: Response<BoothResponse>
                         ) {
                             if (response.isSuccessful) {
                                 val boothResponse = response.body()
@@ -278,7 +278,7 @@ fun RegisterBooth(navController: NavController, context: Context = LocalContext.
                             }
                         }
 
-                        override fun onFailure(call: Call<Booth>, t: Throwable) {
+                        override fun onFailure(call: Call<BoothResponse>, t: Throwable) {
                             print(t.message)
                         }
                     })

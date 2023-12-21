@@ -9,11 +9,6 @@ class FoodResponse {
     var attributes: FoodAttributes = FoodAttributes()
 }
 
-data class ApiResponse<T>(
-    @SerializedName("data")
-    val data: T? = null
-)
-
 class FoodAttributes {
     @SerializedName("foodName")
     var foodName: String = ""
