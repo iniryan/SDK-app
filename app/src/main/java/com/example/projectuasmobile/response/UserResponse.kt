@@ -28,7 +28,7 @@ class UserResponse {
     @SerializedName("fullname")
     val fullname: String = ""
     @SerializedName("booth")
-    val booth: Booth? = null
+    val booth: BoothResponse? = null
 }
 
 class UserAttributes {
