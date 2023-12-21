@@ -54,7 +54,8 @@ class MainActivity : ComponentActivity() {
                     val jwt = sharedPreferences.getString("jwt", "")
 
                     val startD: String = if (jwt.equals("")) {
-                        "onboarding"
+//                        "onboarding"
+                        "homepage"
                     } else {
                         "boothHome"
                     }

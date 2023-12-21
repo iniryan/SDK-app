@@ -18,4 +18,6 @@ class BoothAttributes{
     val open: Boolean = true
     @SerializedName("owner")
     val owner: ApiResponse<User>? = null
+//    @SerializedName("foods")
+//    val foods: List<ApiResponse<FoodResponse>>? = null
 }

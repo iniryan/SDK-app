@@ -1,6 +1,7 @@
 package com.example.projectuasmobile.frontend.customer
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,8 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -38,6 +39,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.projectuasmobile.R
+import com.example.projectuasmobile.response.ApiResponse
+import com.example.projectuasmobile.response.FoodResponse
+import com.example.projectuasmobile.service.FoodService
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 @Composable
@@ -48,11 +57,40 @@ fun BoothDetail(navController: NavController,  boothID : String?, boothName: Str
     var quantity by remember { mutableIntStateOf(1) }
     var title by remember { mutableStateOf(boothName?: "") }
     var desc by remember { mutableStateOf(boothDescription?: "") }
+    var boothID by remember { mutableStateOf(boothID?: "") }
+    val listMenu = remember { mutableStateListOf<FoodResponse>() }
+    val baseUrl = "http://10.0.2.2:1337/api/"
+    val retrofit =
+        Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
+            .build().create(FoodService::class.java)
+    val call = retrofit.getAllFood()
+    call.enqueue(object : Callback<ApiResponse<List<FoodResponse>>> {
+        override fun onResponse(
+            call: Call<ApiResponse<List<FoodResponse>>>, response: Response<ApiResponse<List<FoodResponse>>>
+        ) {
+            if (response.code() == 200) {
+                listMenu.clear()
+                response.body()?.data!!.forEach { menuResponse ->
+                    listMenu.add(menuResponse)
+                }
+            } else if (response.code() == 400) {
+                print("error login")
+                Toast.makeText(
+                    context, "Username atau password salah", Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+        override fun onFailure(call: Call<ApiResponse<List<FoodResponse>>>, t: Throwable) {
+            print(t.message)
+        }
+
+    })
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+//                .verticalScroll(rememberScrollState())
                 .background(color = Color(0xFFFFFFFF))
         ) {
             Image(
@@ -138,130 +176,137 @@ fun BoothDetail(navController: NavController,  boothID : String?, boothName: Str
                                     )
                                 )
                             }
-                            Divider(
-                                modifier = Modifier
-                                    .width(390.dp)
-                                    .height(1.dp)
-                                    .background(color = Color(0xFFEEEEEE))
-                            )
-                            Column(
-                                modifier = Modifier
-                                    .width(390.dp)
-                                    .height(157.5.dp)
-                                    .background(color = Color(0xFFFFFFFF))
-                                    .padding(start = 16.dp, top = 14.dp, end = 16.dp),
-                                verticalArrangement = Arrangement.spacedBy(
-                                    16.dp, Alignment.CenterVertically
-                                ),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                            ) {
-                                Row(
-                                    modifier = Modifier
-                                        .width(358.dp)
-                                        .height(127.dp),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.Top,
-                                ) {
-                                    Column(
-                                        modifier = Modifier
-                                            .width(218.dp)
-                                            .height(127.dp),
-                                        verticalArrangement = Arrangement.spacedBy(
-                                            4.dp, Alignment.Top
-                                        ),
-                                        horizontalAlignment = Alignment.Start,
-                                    ) {
-                                        Text(
-                                            text = "Nasi Telor pake Telor",
-
-                                            style = TextStyle(
-                                                fontSize = 15.sp,
-                                                lineHeight = 19.sp,
-                                                fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                                                color = Color(0xFF333333),
-                                            )
-                                        )
-                                        Text(
-                                            text = "Nasi campur telor dengan balutan telor.",
-
-                                            style = TextStyle(
-                                                fontSize = 13.sp,
-                                                lineHeight = 18.sp,
-                                                fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                                                color = Color(0xFF757575),
-                                            )
-                                        )
-                                        Text(
-                                            text = "Rp10.000", style = TextStyle(
-                                                fontSize = 12.sp,
-                                                lineHeight = 20.sp,
-                                                fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                                                color = Color(0xFF333333),
-                                            )
-                                        )
-                                        Row(
+                            LazyColumn {
+                                listMenu.forEach { menu ->
+                                    item {
+                                        Divider(
                                             modifier = Modifier
-                                                .padding(top = 8.dp)
-                                                .width(218.dp)
-                                                .height(28.dp),
-                                            horizontalArrangement = Arrangement.spacedBy(
-                                                16.dp, Alignment.Start
+                                                .width(390.dp)
+                                                .height(1.dp)
+                                                .background(color = Color(0xFFEEEEEE))
+                                        )
+                                        Column(
+                                            modifier = Modifier
+                                                .width(390.dp)
+                                                .height(157.5.dp)
+                                                .background(color = Color(0xFFFFFFFF))
+                                                .padding(start = 16.dp, top = 14.dp, end = 16.dp),
+                                            verticalArrangement = Arrangement.spacedBy(
+                                                16.dp, Alignment.CenterVertically
                                             ),
-                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalAlignment = Alignment.CenterHorizontally,
                                         ) {
-
                                             Row(
-                                                horizontalArrangement = Arrangement.spacedBy(
-                                                    12.dp, Alignment.CenterHorizontally
-                                                ),
-                                                verticalAlignment = Alignment.CenterVertically,
+                                                modifier = Modifier
+                                                    .width(358.dp)
+                                                    .height(127.dp),
+                                                horizontalArrangement = Arrangement.SpaceBetween,
+                                                verticalAlignment = Alignment.Top,
                                             ) {
-                                                IconButton(onClick = {
-                                                    if (quantity > 1) {
-                                                        quantity--
-                                                    }
-                                                }) {
-                                                    Icon(
-                                                        painter = painterResource(id = R.drawable.minus_icon),
-                                                        contentDescription = "Minus"
-                                                    )
-                                                }
-                                                Text(
-                                                    text = "$quantity",
+                                                Column(
+                                                    modifier = Modifier
+                                                        .width(218.dp)
+                                                        .height(127.dp),
+                                                    verticalArrangement = Arrangement.spacedBy(
+                                                        4.dp, Alignment.Top
+                                                    ),
+                                                    horizontalAlignment = Alignment.Start,
+                                                ) {
+                                                    Text(
+                                                        text = menu.attributes.foodName,
 
-                                                    style = TextStyle(
-                                                        fontSize = 14.sp,
-                                                        lineHeight = 14.sp,
-                                                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                                                        color = Color(0xFF333333),
+                                                        style = TextStyle(
+                                                            fontSize = 15.sp,
+                                                            lineHeight = 19.sp,
+                                                            fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+                                                            color = Color(0xFF333333),
+                                                        )
                                                     )
-                                                )
-                                                IconButton(onClick = {
-                                                    quantity++
-                                                }) {
-                                                    Icon(
-                                                        painter = painterResource(id = R.drawable.plus_icon),
-                                                        contentDescription = "Add"
+                                                    Text(
+                                                        text = menu.attributes.foodDescription,
+
+                                                        style = TextStyle(
+                                                            fontSize = 13.sp,
+                                                            lineHeight = 18.sp,
+                                                            fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                                                            color = Color(0xFF757575),
+                                                        )
                                                     )
+                                                    Text(
+                                                        text = menu.attributes.foodPrice.toString(), style = TextStyle(
+                                                            fontSize = 12.sp,
+                                                            lineHeight = 20.sp,
+                                                            fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                                                            color = Color(0xFF333333),
+                                                        )
+                                                    )
+                                                    Row(
+                                                        modifier = Modifier
+                                                            .padding(top = 8.dp)
+                                                            .width(218.dp)
+                                                            .height(28.dp),
+                                                        horizontalArrangement = Arrangement.spacedBy(
+                                                            16.dp, Alignment.Start
+                                                        ),
+                                                        verticalAlignment = Alignment.CenterVertically,
+                                                    ) {
+
+                                                        Row(
+                                                            horizontalArrangement = Arrangement.spacedBy(
+                                                                12.dp, Alignment.CenterHorizontally
+                                                            ),
+                                                            verticalAlignment = Alignment.CenterVertically,
+                                                        ) {
+                                                            IconButton(onClick = {
+                                                                if (quantity > 1) {
+                                                                    quantity--
+                                                                }
+                                                            }) {
+                                                                Icon(
+                                                                    painter = painterResource(id = R.drawable.minus_icon),
+                                                                    contentDescription = "Minus"
+                                                                )
+                                                            }
+                                                            Text(
+                                                                text = "$quantity",
+
+                                                                style = TextStyle(
+                                                                    fontSize = 14.sp,
+                                                                    lineHeight = 14.sp,
+                                                                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+                                                                    color = Color(0xFF333333),
+                                                                )
+                                                            )
+                                                            IconButton(onClick = {
+                                                                quantity++
+                                                            }) {
+                                                                Icon(
+                                                                    painter = painterResource(id = R.drawable.plus_icon),
+                                                                    contentDescription = "Add"
+                                                                )
+                                                            }
+                                                        }
+                                                    }
                                                 }
+                                                Image(
+                                                    modifier = Modifier
+                                                        .width(100.dp)
+                                                        .height(100.dp),
+                                                    painter = painterResource(id = R.drawable.imgplaceholder),
+                                                    contentDescription = "image description",
+                                                    contentScale = ContentScale.Crop
+                                                )
                                             }
+                                            Divider(
+                                                modifier = Modifier
+                                                    .width(358.dp)
+                                                    .height(0.5.dp)
+                                                    .background(color = Color(0xFFEEEEEE))
+                                            )
                                         }
                                     }
-                                    Image(
-                                        modifier = Modifier
-                                            .width(100.dp)
-                                            .height(100.dp),
-                                        painter = painterResource(id = R.drawable.imgplaceholder),
-                                        contentDescription = "image description",
-                                        contentScale = ContentScale.Crop
-                                    )
                                 }
-                                Divider(
-                                    modifier = Modifier
-                                        .width(358.dp)
-                                        .height(0.5.dp)
-                                        .background(color = Color(0xFFEEEEEE))
-                                )
+
                             }
                         }
                         //notes

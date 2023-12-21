@@ -7,6 +7,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface BoothService {
@@ -17,6 +18,7 @@ interface BoothService {
     fun getAllBooth(@Query("filters[boothName][\$contains]") search: String?, @Query("populate") populate: String?): Call<ApiResponse<List<BoothResponse>>>
 
     @GET("booths/{id}")
-    fun getBoothById(@Query("id") id: Int): Call<ApiResponse<BoothResponse>>
+    fun getFoodById(@Path("id") id: Int, @Query("populate") populate: String?): Call<ApiResponse<List<BoothResponse>>>
+
 }
 
