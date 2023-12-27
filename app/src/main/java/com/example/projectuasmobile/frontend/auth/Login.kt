@@ -242,7 +242,6 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                             call: Call<AuthResponse>,
                             response: Response<AuthResponse>
                         ) {
-                            print(response.code())
                             if (response.code() == 200) {
                                 jwt = response.body()?.jwt!!
                                 preferencesManager.saveData("jwt", jwt)

@@ -43,6 +43,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.projectuasmobile.PreferencesManager
 import com.example.projectuasmobile.R
 import com.example.projectuasmobile.data.FoodData
 import com.example.projectuasmobile.data.FoodDataWrapper
@@ -60,7 +61,11 @@ fun AddMenu(navController: NavController, context: Context = LocalContext.curren
     val foodNameField = remember { mutableStateOf(TextFieldValue("")) }
     val foodDescriptionField = remember { mutableStateOf(TextFieldValue("")) }
     val foodPriceField = remember { mutableStateOf(TextFieldValue("")) }
+
+    val preferencesManager = remember { PreferencesManager(context = context) }
+    val boothId = preferencesManager.getData("boothID")
     val primaryColorOrg = Color(0xFFFF5F00)
+
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     val pickImageLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
@@ -212,8 +217,7 @@ fun AddMenu(navController: NavController, context: Context = LocalContext.curren
                         .create(FoodService::class.java)
                     try {
                         val price = foodPriceField.value.text.toInt()
-//                        val foodData = FoodData(foodNameField.value.text, foodDescriptionField.value.text, price)
-                        val foodData = FoodDataWrapper(FoodData(foodNameField.value.text, foodDescriptionField.value.text, price))
+                        val foodData = FoodDataWrapper(FoodData(foodNameField.value.text, foodDescriptionField.value.text, price, boothId.toInt()))
                         val json = Gson().toJson(foodData)
                         println("Request JSON: $json")
                         val call = retrofit.addFood(foodData)

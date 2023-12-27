@@ -40,7 +40,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.projectuasmobile.R
 import com.example.projectuasmobile.response.ApiResponse
+import com.example.projectuasmobile.response.BoothResponse
+import com.example.projectuasmobile.response.DataWrapper
 import com.example.projectuasmobile.response.FoodResponse
+import com.example.projectuasmobile.service.BoothService
 import com.example.projectuasmobile.service.FoodService
 import retrofit2.Call
 import retrofit2.Callback
@@ -58,12 +61,13 @@ fun BoothDetail(navController: NavController,  boothID : String?, boothName: Str
     var title by remember { mutableStateOf(boothName?: "") }
     var desc by remember { mutableStateOf(boothDescription?: "") }
     var boothID by remember { mutableStateOf(boothID?: "") }
+
     val listMenu = remember { mutableStateListOf<FoodResponse>() }
     val baseUrl = "http://10.0.2.2:1337/api/"
     val retrofit =
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
             .build().create(FoodService::class.java)
-    val call = retrofit.getAllFood()
+    val call = retrofit.getAllFood(boothID, "*")
     call.enqueue(object : Callback<ApiResponse<List<FoodResponse>>> {
         override fun onResponse(
             call: Call<ApiResponse<List<FoodResponse>>>, response: Response<ApiResponse<List<FoodResponse>>>
@@ -177,7 +181,7 @@ fun BoothDetail(navController: NavController,  boothID : String?, boothName: Str
                                 )
                             }
                             LazyColumn {
-                                listMenu.forEach { menu ->
+                                listMenu.forEach { menuResponse ->
                                     item {
                                         Divider(
                                             modifier = Modifier
@@ -213,7 +217,7 @@ fun BoothDetail(navController: NavController,  boothID : String?, boothName: Str
                                                     horizontalAlignment = Alignment.Start,
                                                 ) {
                                                     Text(
-                                                        text = menu.attributes.foodName,
+                                                        text = menuResponse.attributes.foodName,
 
                                                         style = TextStyle(
                                                             fontSize = 15.sp,
@@ -223,7 +227,7 @@ fun BoothDetail(navController: NavController,  boothID : String?, boothName: Str
                                                         )
                                                     )
                                                     Text(
-                                                        text = menu.attributes.foodDescription,
+                                                        text = menuResponse.attributes.foodDescription,
 
                                                         style = TextStyle(
                                                             fontSize = 13.sp,
@@ -233,7 +237,7 @@ fun BoothDetail(navController: NavController,  boothID : String?, boothName: Str
                                                         )
                                                     )
                                                     Text(
-                                                        text = menu.attributes.foodPrice.toString(), style = TextStyle(
+                                                        text = menuResponse.attributes.foodPrice.toString(), style = TextStyle(
                                                             fontSize = 12.sp,
                                                             lineHeight = 20.sp,
                                                             fontFamily = FontFamily(Font(R.font.poppins_medium)),

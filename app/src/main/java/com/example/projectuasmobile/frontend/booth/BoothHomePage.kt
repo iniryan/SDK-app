@@ -2,6 +2,7 @@ package com.example.projectuasmobile.frontend.booth
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -48,12 +49,50 @@ import androidx.navigation.NavController
 import com.example.projectuasmobile.BottomNavigation
 import com.example.projectuasmobile.PreferencesManager
 import com.example.projectuasmobile.R
+import com.example.projectuasmobile.response.BoothResponse
+import com.example.projectuasmobile.response.UserResponse
+import com.example.projectuasmobile.service.BoothService
+import com.example.projectuasmobile.service.UserService
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun BoothHomePage(navController: NavController, context: Context = LocalContext.current) {
     val preferencesManager = remember { PreferencesManager(context = context) }
+    val userID = preferencesManager.getData("userID")
+
+    val baseUrl = "http://10.0.2.2:1337/api/"
+    val retrofit =
+        Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
+            .build().create(UserService::class.java)
+    val call = retrofit.getDataById(userID.toInt(), "booth")
+    call.enqueue(object : Callback<UserResponse> {
+        override fun onResponse(
+            call: Call<UserResponse>, response: Response<UserResponse>
+        ) {
+            if (response.code() == 200) {
+                val booth = response.body()?.booth
+                if (booth != null) {
+                    preferencesManager.saveData("boothID", booth.id.toString())
+                }
+            } else if (response.code() == 400) {
+                print("error login")
+                Toast.makeText(
+                    context, "Username atau password salah", Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+        override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+            print(t.message)
+        }
+
+    })
 
     val primaryColorOrg = Color(0xFFFF5F00)
     Scaffold(

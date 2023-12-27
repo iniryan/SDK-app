@@ -62,7 +62,7 @@ fun MenuList(navController: NavController, context: Context = LocalContext.curre
     val retrofit =
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
             .build().create(FoodService::class.java)
-    val call = retrofit.getAllFood()
+    val call = retrofit.getAllFood("1", "*")
     call.enqueue(object : Callback<ApiResponse<List<FoodResponse>>> {
         override fun onResponse(
             call: Call<ApiResponse<List<FoodResponse>>>, response: Response<ApiResponse<List<FoodResponse>>>

@@ -20,5 +20,5 @@ interface FoodService {
     fun getFoodById(@Path("id") id: Int, @Query("populate") populate: String?): Call<ApiResponse<List<FoodResponse>>>
 
     @GET("foods")
-    fun getAllFood(): Call<ApiResponse<List<FoodResponse>>>
+    fun getAllFood(@Query("filters[booth][\$contains]") search: String?, @Query("populate") populate: String?): Call<ApiResponse<List<FoodResponse>>>
 }
