@@ -31,6 +31,7 @@ import com.example.projectuasmobile.frontend.auth.RolePick
 import com.example.projectuasmobile.frontend.booth.AddMenu
 import com.example.projectuasmobile.frontend.booth.BoothHomePage
 import com.example.projectuasmobile.frontend.booth.BoothProfile
+import com.example.projectuasmobile.frontend.booth.EditMenu
 import com.example.projectuasmobile.frontend.booth.EditProfile
 import com.example.projectuasmobile.frontend.booth.MenuList
 import com.example.projectuasmobile.frontend.customer.BoothDetail
@@ -49,13 +50,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val sharedPreferences: SharedPreferences = LocalContext.current.getSharedPreferences("auth", Context.MODE_PRIVATE)
+                    val sharedPreferences: SharedPreferences =
+                        LocalContext.current.getSharedPreferences("auth", Context.MODE_PRIVATE)
                     val navController = rememberNavController()
                     val jwt = sharedPreferences.getString("jwt", "")
 
                     val startD: String = if (jwt.equals("")) {
-//                        "onboarding"
-                        "homepage"
+                        "onboarding"
                     } else {
                         "boothHome"
                     }
@@ -74,10 +75,20 @@ class MainActivity : ComponentActivity() {
                             RolePick(navController)
                         }
                         composable("detailBooth/{boothID}/{boothName}/{boothDescription}") { backStackEntry ->
-                            BoothDetail(navController,
+                            BoothDetail(
+                                navController,
                                 backStackEntry.arguments?.getString("boothID"),
                                 backStackEntry.arguments?.getString("boothName"),
                                 backStackEntry.arguments?.getString("boothDescription"),
+                            )
+                        }
+                        composable("editMenu/{foodID}/{foodName}/{foodDescription}/{foodPrice}") { backStackEntry ->
+                            EditMenu(
+                                navController,
+                                backStackEntry.arguments?.getString("foodID"),
+                                backStackEntry.arguments?.getString("foodName"),
+                                backStackEntry.arguments?.getString("foodDescription"),
+                                backStackEntry.arguments?.getString("foodPrice"),
                             )
                         }
                         composable("boothHome") {
@@ -146,6 +157,7 @@ fun BottomNavCustomer(navController: NavController) {
         }
     }
 }
+
 @Composable
 fun BottomNavigation(navController: NavController) {
     NavigationBar {

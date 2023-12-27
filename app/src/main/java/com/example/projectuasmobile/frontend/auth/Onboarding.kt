@@ -37,9 +37,11 @@ fun OnboardingScreen(navController: NavController) {
             .height(932.dp)
             .background(color = primaryColorOrg)
     ) {
-        Row (modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp)) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp)
+        ) {
             Image(
                 modifier = Modifier
                     .width(24.dp)
@@ -74,9 +76,13 @@ fun OnboardingScreen(navController: NavController) {
                 contentScale = ContentScale.FillBounds
             )
         }
-        Column (modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = 60.dp), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally){
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 60.dp),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Button(
                 onClick = {
                     navController.navigate("rolepick")

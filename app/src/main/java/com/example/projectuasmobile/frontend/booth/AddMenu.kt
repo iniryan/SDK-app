@@ -85,7 +85,7 @@ fun AddMenu(navController: NavController, context: Context = LocalContext.curren
                 modifier = Modifier
                     .width(36.dp)
                     .height(36.dp)
-                    .clickable { navController.navigate("boothHome") },
+                    .clickable { navController.navigate("menu") },
                 painter = painterResource(id = R.drawable.backwhite),
                 contentDescription = "image description",
                 contentScale = ContentScale.None
@@ -217,7 +217,14 @@ fun AddMenu(navController: NavController, context: Context = LocalContext.curren
                         .create(FoodService::class.java)
                     try {
                         val price = foodPriceField.value.text.toInt()
-                        val foodData = FoodDataWrapper(FoodData(foodNameField.value.text, foodDescriptionField.value.text, price, boothId.toInt()))
+                        val foodData = FoodDataWrapper(
+                            FoodData(
+                                foodNameField.value.text,
+                                foodDescriptionField.value.text,
+                                price,
+                                boothId.toInt()
+                            )
+                        )
                         val json = Gson().toJson(foodData)
                         println("Request JSON: $json")
                         val call = retrofit.addFood(foodData)

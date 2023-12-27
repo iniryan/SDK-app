@@ -1,7 +1,6 @@
 package com.example.projectuasmobile.frontend.auth
 
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -325,11 +324,6 @@ fun Register(navController: NavController, context: Context = LocalContext.curre
                                 navController.navigate("registerBooth")
                             } else if (response.code() == 400) {
                                 print("bad request 400")
-                                Toast.makeText(
-                                    context,
-                                    "Username atau password salah",
-                                    Toast.LENGTH_SHORT
-                                ).show()
                             }
                         }
 

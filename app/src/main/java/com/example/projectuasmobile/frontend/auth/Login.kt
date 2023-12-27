@@ -106,8 +106,7 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
             verticalArrangement = Arrangement.Top
         ) {
             Text(
-                text = "SDK-App",
-                style = TextStyle(
+                text = "SDK-App", style = TextStyle(
                     fontSize = 54.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_bold)),
                     fontWeight = FontWeight(700),
@@ -123,8 +122,7 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = "Login Untuk Masuk",
-                style = TextStyle(
+                text = "Login Untuk Masuk", style = TextStyle(
                     fontSize = 18.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_regular)),
                     fontWeight = FontWeight(400),
@@ -164,8 +162,7 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                 },
                 placeholder = {
                     Text(
-                        text = "Username",
-                        style = TextStyle(
+                        text = "Username", style = TextStyle(
                             fontSize = 13.sp,
                             fontFamily = FontFamily(Font(R.font.poppins_regular)),
                             fontWeight = FontWeight(400),
@@ -197,8 +194,7 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                 },
                 placeholder = {
                     Text(
-                        text = "Password",
-                        style = TextStyle(
+                        text = "Password", style = TextStyle(
                             fontSize = 13.sp,
                             fontFamily = FontFamily(Font(R.font.poppins_regular)),
                             fontWeight = FontWeight(400),
@@ -225,22 +221,17 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
             Spacer(modifier = Modifier.height(16.dp))
             Button(
                 onClick = {
-                    val retrofit =
-                        Retrofit.Builder()
-                            .baseUrl(baseUrl)
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build()
-                            .create(AuthService::class.java)
+                    val retrofit = Retrofit.Builder().baseUrl(baseUrl)
+                        .addConverterFactory(GsonConverterFactory.create()).build()
+                        .create(AuthService::class.java)
                     val call = retrofit.getData(
                         LoginData(
-                            usernameField.value.text,
-                            passwordField.value.text
+                            usernameField.value.text, passwordField.value.text
                         )
                     )
                     call.enqueue(object : Callback<AuthResponse> {
                         override fun onResponse(
-                            call: Call<AuthResponse>,
-                            response: Response<AuthResponse>
+                            call: Call<AuthResponse>, response: Response<AuthResponse>
                         ) {
                             if (response.code() == 200) {
                                 jwt = response.body()?.jwt!!
@@ -252,9 +243,7 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                             } else if (response.code() == 400) {
                                 print("bad request 400")
                                 Toast.makeText(
-                                    context,
-                                    "Username atau password salah",
-                                    Toast.LENGTH_SHORT
+                                    context, "Username atau password salah", Toast.LENGTH_SHORT
                                 ).show()
                             }
                         }
@@ -263,7 +252,8 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                             print(t.message)
                         }
                     })
-                }, modifier = Modifier
+                },
+                modifier = Modifier
                     .width(217.dp)
                     .height(64.dp)
                     .padding(start = 10.dp, top = 12.dp, end = 10.dp, bottom = 12.dp),
@@ -271,8 +261,7 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
             ) {
                 Text(
 
-                    text = "LOGIN",
-                    style = TextStyle(
+                    text = "LOGIN", style = TextStyle(
                         fontSize = 12.sp,
                         fontFamily = FontFamily(Font(R.font.poppins_regular)),
                         fontWeight = FontWeight(600),
@@ -281,26 +270,23 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                 )
             }
             Spacer(modifier = Modifier.height(14.dp))
-            ClickableText(
-                text = AnnotatedString("Hubungi Admin Untuk Mereset Password"),
+            ClickableText(text = AnnotatedString("Hubungi Admin Untuk Mereset Password"),
                 style = TextStyle(
                     fontSize = 12.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_regular)),
                     fontWeight = FontWeight(400),
                     color = Color(0xFF262626),
                     textAlign = TextAlign.Center,
-                ), onClick = {
-                })
+                ),
+                onClick = {})
             Spacer(modifier = Modifier.height(48.dp))
             ClickableText(
-                text = AnnotatedString("Daftarkan dulu boothmu!"),
-                style = TextStyle(
+                text = AnnotatedString("Daftarkan dulu boothmu!"), style = TextStyle(
                     fontSize = 14.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_medium)),
                     color = primaryColorOrg,
                     textAlign = TextAlign.Left
-                ),
-                modifier = Modifier.padding(top = 48.dp)
+                ), modifier = Modifier.padding(top = 48.dp)
             ) {
                 navController.navigate("register")
             }

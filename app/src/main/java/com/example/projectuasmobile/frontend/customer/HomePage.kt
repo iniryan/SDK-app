@@ -84,11 +84,11 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
         ) {
             if (response.isSuccessful) {
                 listBooth.clear()
-    println("sampai jumpa")
+                println("sampai jumpa")
                 val resp = response.body()?.data
                 println(resp)
                 println("sanpai disini")
-                response.body()?.data!!.forEach{ booth : BoothResponse ->
+                response.body()?.data!!.forEach { booth: BoothResponse ->
                     listBooth.add(booth)
 //                    val x = userRespon.prodi?.namaProdi
 //                    val y = ""
@@ -212,7 +212,8 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                                         )
                                     )
                                     Text(
-                                        text = "Status Kios: "+ if (booth.attributes.open) "Buka" else "Tutup", style = TextStyle(
+                                        text = "Status Kios: " + if (booth.attributes.open) "Buka" else "Tutup",
+                                        style = TextStyle(
                                             fontSize = 12.sp,
                                             lineHeight = 17.64.sp,
                                             fontFamily = FontFamily(Font(R.font.poppins_medium)),

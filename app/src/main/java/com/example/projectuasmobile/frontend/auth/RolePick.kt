@@ -103,7 +103,8 @@ fun RolePick(navController: NavController, context: Context = LocalContext.curre
             )
         }
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .padding(start = 220.dp, top = 220.dp, end = 0.dp, bottom = 0.dp),
         ) {
             Text(
@@ -118,7 +119,8 @@ fun RolePick(navController: NavController, context: Context = LocalContext.curre
             )
         }
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .padding(start = 140.dp, top = 250.dp, end = 0.dp, bottom = 0.dp),
         ) {
             Text(
@@ -134,7 +136,8 @@ fun RolePick(navController: NavController, context: Context = LocalContext.curre
             )
         }
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .padding(start = 76.dp, top = 470.dp, end = 0.dp, bottom = 0.dp),
         ) {
             Text(
@@ -149,7 +152,8 @@ fun RolePick(navController: NavController, context: Context = LocalContext.curre
             )
         }
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .padding(start = 20.dp, top = 500.dp, end = 160.dp, bottom = 0.dp),
         ) {
             Text(
@@ -163,23 +167,23 @@ fun RolePick(navController: NavController, context: Context = LocalContext.curre
                 )
             )
         }
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(24.dp),
-                verticalArrangement = Arrangement.Bottom,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Ayo pilih role kamu sebelum menggunakan aplikasi. Pilih Pembeli jika kamu ingin memesan makanan. Pilih Penjual jika kamu adalah pemilik booth.",
-                    style = TextStyle(
-                        fontSize = 10.sp,
-                        fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                        fontWeight = FontWeight(400),
-                        color = Color(0xFF1E1E1E),
-                        textAlign = TextAlign.Center,
-                    )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Ayo pilih role kamu sebelum menggunakan aplikasi. Pilih Pembeli jika kamu ingin memesan makanan. Pilih Penjual jika kamu adalah pemilik booth.",
+                style = TextStyle(
+                    fontSize = 10.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                    fontWeight = FontWeight(400),
+                    color = Color(0xFF1E1E1E),
+                    textAlign = TextAlign.Center,
                 )
+            )
 
         }
     }

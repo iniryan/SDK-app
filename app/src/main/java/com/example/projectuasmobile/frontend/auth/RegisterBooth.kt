@@ -258,7 +258,10 @@ fun RegisterBooth(navController: NavController, context: Context = LocalContext.
                                 val boothResponse = response.body()
                                 if (boothResponse != null) {
                                     preferencesManager.saveData("boothName", boothName.value.text)
-                                    preferencesManager.saveData("boothDescription", boothDescription.value.text)
+                                    preferencesManager.saveData(
+                                        "boothDescription",
+                                        boothDescription.value.text
+                                    )
                                     preferencesManager.saveData("owner", userID)
                                     print("Successful register")
                                     navController.navigate("boothHome")

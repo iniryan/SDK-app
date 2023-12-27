@@ -15,7 +15,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -35,15 +38,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.projectuasmobile.R
 import com.example.projectuasmobile.response.ApiResponse
-import com.example.projectuasmobile.response.BoothResponse
-import com.example.projectuasmobile.response.DataWrapper
 import com.example.projectuasmobile.response.FoodResponse
-import com.example.projectuasmobile.service.BoothService
 import com.example.projectuasmobile.service.FoodService
 import retrofit2.Call
 import retrofit2.Callback
@@ -53,14 +54,19 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 @Composable
-fun BoothDetail(navController: NavController,  boothID : String?, boothName: String?, boothDescription: String?, context: Context = LocalContext.current) {
+fun BoothDetail(
+    navController: NavController,
+    boothID: String?,
+    boothName: String?,
+    boothDescription: String?,
+    context: Context = LocalContext.current
+) {
     val notesField = remember {
         mutableStateOf("")
     }
-    var quantity by remember { mutableIntStateOf(1) }
-    var title by remember { mutableStateOf(boothName?: "") }
-    var desc by remember { mutableStateOf(boothDescription?: "") }
-    var boothID by remember { mutableStateOf(boothID?: "") }
+    var title by remember { mutableStateOf(boothName ?: "") }
+    var desc by remember { mutableStateOf(boothDescription ?: "") }
+    var boothID by remember { mutableStateOf(boothID ?: "") }
 
     val listMenu = remember { mutableStateListOf<FoodResponse>() }
     val baseUrl = "http://10.0.2.2:1337/api/"
@@ -70,10 +76,12 @@ fun BoothDetail(navController: NavController,  boothID : String?, boothName: Str
     val call = retrofit.getAllFood(boothID, "*")
     call.enqueue(object : Callback<ApiResponse<List<FoodResponse>>> {
         override fun onResponse(
-            call: Call<ApiResponse<List<FoodResponse>>>, response: Response<ApiResponse<List<FoodResponse>>>
+            call: Call<ApiResponse<List<FoodResponse>>>,
+            response: Response<ApiResponse<List<FoodResponse>>>
         ) {
             if (response.code() == 200) {
                 listMenu.clear()
+                val booth = response.body()?.data
                 response.body()?.data!!.forEach { menuResponse ->
                     listMenu.add(menuResponse)
                 }
@@ -94,7 +102,6 @@ fun BoothDetail(navController: NavController,  boothID : String?, boothName: Str
         Column(
             modifier = Modifier
                 .fillMaxSize()
-//                .verticalScroll(rememberScrollState())
                 .background(color = Color(0xFFFFFFFF))
         ) {
             Image(
@@ -237,7 +244,8 @@ fun BoothDetail(navController: NavController,  boothID : String?, boothName: Str
                                                         )
                                                     )
                                                     Text(
-                                                        text = menuResponse.attributes.foodPrice.toString(), style = TextStyle(
+                                                        text = menuResponse.attributes.foodPrice.toString(),
+                                                        style = TextStyle(
                                                             fontSize = 12.sp,
                                                             lineHeight = 20.sp,
                                                             fontFamily = FontFamily(Font(R.font.poppins_medium)),
@@ -261,15 +269,23 @@ fun BoothDetail(navController: NavController,  boothID : String?, boothName: Str
                                                             ),
                                                             verticalAlignment = Alignment.CenterVertically,
                                                         ) {
-                                                            IconButton(onClick = {
-                                                                if (quantity > 1) {
-                                                                    quantity--
-                                                                }
-                                                            }) {
-                                                                Icon(
-                                                                    painter = painterResource(id = R.drawable.minus_icon),
-                                                                    contentDescription = "Minus"
+                                                            var quantity by remember {
+                                                                mutableIntStateOf(
+                                                                    0
                                                                 )
+                                                            }
+
+                                                            if (quantity != 0) {
+                                                                IconButton(onClick = {
+                                                                    if (quantity > 0) {
+                                                                        quantity--
+                                                                    }
+                                                                }) {
+                                                                    Icon(
+                                                                        painter = painterResource(id = R.drawable.minus_icon),
+                                                                        contentDescription = "Minus"
+                                                                    )
+                                                                }
                                                             }
                                                             Text(
                                                                 text = "$quantity",
@@ -310,7 +326,31 @@ fun BoothDetail(navController: NavController,  boothID : String?, boothName: Str
                                         }
                                     }
                                 }
+                            }
+                            ElevatedButton(
+                                modifier = Modifier
+                                    .align(Alignment.Start)
+                                    .fillMaxWidth()
+                                    .padding(2.dp)
+                                    .height(48.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    contentColor = Color.White,
+                                ),
+                                shape = RoundedCornerShape(8.dp),
+                                onClick = {
+                                }
+                            )
 
+                            {
+                                Text(
+                                    text = "Tambah Pesanan",
+                                    style = TextStyle(
+                                        fontSize = 16.sp,
+                                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+                                        color = Color.White,
+                                        textAlign = TextAlign.Center,
+                                    )
+                                )
                             }
                         }
                         //notes

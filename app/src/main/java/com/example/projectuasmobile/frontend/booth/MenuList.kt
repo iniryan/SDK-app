@@ -5,6 +5,7 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,8 +17,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Divider
@@ -58,14 +57,16 @@ import retrofit2.converter.gson.GsonConverterFactory
 fun MenuList(navController: NavController, context: Context = LocalContext.current) {
     val preferencesManager = remember { PreferencesManager(context = context) }
     val listMenu = remember { mutableStateListOf<FoodResponse>() }
+    val boothId = preferencesManager.getData("boothID")
     val baseUrl = "http://10.0.2.2:1337/api/"
     val retrofit =
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
             .build().create(FoodService::class.java)
-    val call = retrofit.getAllFood("1", "*")
+    val call = retrofit.getAllFood(boothId, "*")
     call.enqueue(object : Callback<ApiResponse<List<FoodResponse>>> {
         override fun onResponse(
-            call: Call<ApiResponse<List<FoodResponse>>>, response: Response<ApiResponse<List<FoodResponse>>>
+            call: Call<ApiResponse<List<FoodResponse>>>,
+            response: Response<ApiResponse<List<FoodResponse>>>
         ) {
             if (response.code() == 200) {
                 listMenu.clear()
@@ -103,7 +104,7 @@ fun MenuList(navController: NavController, context: Context = LocalContext.curre
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 24.dp, vertical = 14.dp),
-                    verticalArrangement = Arrangement.Top,
+                verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Spacer(modifier = Modifier.padding(top = 14.dp, bottom = 14.dp))
@@ -129,6 +130,7 @@ fun MenuList(navController: NavController, context: Context = LocalContext.curre
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(top = 14.dp)
+                                    .clickable { navController.navigate("editMenu/" + menu.id + "/" + menu.attributes.foodName + "/" + menu.attributes.foodDescription + "/" + menu.attributes.foodPrice) }
                             ) {
                                 Image(
                                     painter = painterResource(id = R.drawable.dummy),
@@ -152,7 +154,8 @@ fun MenuList(navController: NavController, context: Context = LocalContext.curre
                                         )
                                     )
                                     Text(
-                                        text = menu.attributes.foodPrice.toString(), style = TextStyle(
+                                        text = menu.attributes.foodPrice.toString(),
+                                        style = TextStyle(
                                             fontSize = 12.sp,
                                             lineHeight = 17.64.sp,
                                             fontFamily = FontFamily(Font(R.font.poppins_medium)),
