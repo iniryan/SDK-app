@@ -106,7 +106,7 @@ fun BoothHomePage(navController: NavController, context: Context = LocalContext.
                 )
                 Divider(
                     modifier = Modifier
-                        .border(width = 1.dp, color = Color(0xFFFF5F00))
+                        .border(width = 1.dp, color = primaryColorOrg)
                         .fillMaxSize()
                         .height(3.dp)
                 )
@@ -160,7 +160,7 @@ fun BoothHomePage(navController: NavController, context: Context = LocalContext.
                                     lineHeight = 14.sp,
                                     fontFamily = FontFamily(Font(R.font.poppins_medium)),
                                     textAlign = TextAlign.End,
-                                    color = Color(0xFFFF5F00)
+                                    color = primaryColorOrg
                                 )
                             )
                         }

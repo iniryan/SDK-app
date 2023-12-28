@@ -1,6 +1,5 @@
 package com.example.projectuasmobile.frontend.customer
 
-import android.content.Context
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,7 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -44,7 +42,7 @@ import androidx.navigation.NavController
 import com.example.projectuasmobile.R
 
 @Composable
-fun CheckOutPage(navController: NavController, context: Context = LocalContext.current) {
+fun CheckOutPage(navController: NavController) {
     val nameField = remember { mutableStateOf(TextFieldValue("")) }
     val notesField = remember { mutableStateOf(TextFieldValue("")) }
     val tableField = remember { mutableStateOf(TextFieldValue("")) }

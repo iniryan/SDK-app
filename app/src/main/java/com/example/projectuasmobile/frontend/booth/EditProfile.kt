@@ -53,7 +53,7 @@ import coil.transform.CircleCropTransformation
 import com.example.projectuasmobile.R
 
 @Composable
-fun EditProfile(navController: NavController, context: Context = LocalContext.current) {
+fun EditProfile(navController: NavController) {
     val boothNameField = remember { mutableStateOf(TextFieldValue("")) }
     val boothDescriptionField = remember { mutableStateOf(TextFieldValue("")) }
     val boothProfileField = remember { mutableStateOf(TextFieldValue("")) }

@@ -15,5 +15,8 @@ interface BoothService {
 
     @GET("booths")
     fun getAllBooth(@Query("filters[boothName][\$contains]") search: String?, @Query("populate") populate: String?): Call<ApiResponse<List<BoothResponse>>>
+
+    @GET("booths")
+    fun getProfile(@Query("filters[owner]") owner: String?, @Query("populate") populate: String?): Call<ApiResponse<List<BoothResponse>>>
 }
 

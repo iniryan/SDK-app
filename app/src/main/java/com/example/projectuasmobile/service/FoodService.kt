@@ -1,12 +1,8 @@
 package com.example.projectuasmobile.service
 
-import com.example.projectuasmobile.data.FoodData
 import com.example.projectuasmobile.data.FoodDataWrapper
-import com.example.projectuasmobile.data.UpdateData
 import com.example.projectuasmobile.response.ApiResponse
-import com.example.projectuasmobile.response.AuthResponse
 import com.example.projectuasmobile.response.FoodResponse
-import com.example.projectuasmobile.response.UserResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE

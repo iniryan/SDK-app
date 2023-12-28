@@ -70,7 +70,6 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
     )
 
     val listBooth = remember { mutableStateListOf<BoothResponse>() }
-    println(listBooth)
 
     val baseUrl = "http://10.0.2.2:1337/api/"
     val retrofit =
@@ -84,14 +83,8 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
         ) {
             if (response.isSuccessful) {
                 listBooth.clear()
-                println("sampai jumpa")
-                val resp = response.body()?.data
-                println(resp)
-                println("sanpai disini")
                 response.body()?.data!!.forEach { booth: BoothResponse ->
                     listBooth.add(booth)
-//                    val x = userRespon.prodi?.namaProdi
-//                    val y = ""
                 }
             } else {
                 Toast.makeText(

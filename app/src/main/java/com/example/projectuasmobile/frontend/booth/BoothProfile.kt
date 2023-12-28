@@ -2,6 +2,7 @@ package com.example.projectuasmobile.frontend.booth
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,6 +21,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,27 +41,80 @@ import androidx.navigation.NavController
 import com.example.projectuasmobile.BottomNavigation
 import com.example.projectuasmobile.PreferencesManager
 import com.example.projectuasmobile.R
+import com.example.projectuasmobile.response.ApiResponse
+import com.example.projectuasmobile.response.BoothResponse
+import com.example.projectuasmobile.service.BoothService
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun BoothProfile (navController: NavController, context: Context = LocalContext.current) {
+fun BoothProfile(navController: NavController, context: Context = LocalContext.current) {
     val preferencesManager = remember { PreferencesManager(context = context) }
+    val username = preferencesManager.getData("username")
+    val owner = preferencesManager.getData("userID")
+
+    val boothName = remember { mutableStateOf("") }
+    val boothDesc = remember { mutableStateOf("") }
+    val open = remember { mutableStateOf(true) }
+    val boothID = remember { mutableIntStateOf(0) }
+
+    val baseUrl = "http://10.0.2.2:1337/api/"
+    val retrofit =
+        Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
+            .build().create(BoothService::class.java)
+    val call = retrofit.getProfile(owner, "*")
+    call.enqueue(object : Callback<ApiResponse<List<BoothResponse>>> {
+        override fun onResponse(
+            call: Call<ApiResponse<List<BoothResponse>>>,
+            response: Response<ApiResponse<List<BoothResponse>>>
+        ) {
+            if (response.isSuccessful) {
+                val resp = response.body()?.data
+                resp?.let { dataList ->
+                    if (dataList.isNotEmpty()) {
+                        val id = dataList[0].id
+                        boothID.intValue = id
+                        val boothNames = dataList[0].attributes.boothName
+                        boothName.value = boothNames
+                        val boothDescription = dataList[0].attributes.boothDescription
+                        boothDesc.value = boothDescription
+                        val openBooth = dataList[0].attributes.open
+                        open.value = openBooth
+                    }
+                }
+
+            } else {
+                Toast.makeText(
+                    context, "Error: ${response.code()} - ${response.message()}", Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+        override fun onFailure(call: Call<ApiResponse<List<BoothResponse>>>, t: Throwable) {
+            print(t.message)
+        }
+    })
 
     Scaffold(
         floatingActionButton = {
-        FloatingActionButton(onClick = {
-            navController.navigate("EditBooth")
-        }) {
-            Icon(Icons.Default.Edit, contentDescription = "Edit")
-        }
-    },
+            FloatingActionButton(onClick = {
+                navController.navigate("EditBooth")
+            }) {
+                Icon(Icons.Default.Edit, contentDescription = "Edit")
+            }
+        },
         bottomBar = {
             BottomNavigation(navController = navController)
         },
 
         ) {
-        Box (modifier = Modifier.fillMaxSize()
-            ){
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
 
             Image(
                 modifier = Modifier
@@ -71,32 +127,32 @@ fun BoothProfile (navController: NavController, context: Context = LocalContext.
             )
 
         }
-            Column(
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 42.dp),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+
+            Image(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 42.dp),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally) {
-
-
-                Image(
-                    modifier = Modifier
-                        .width(114.dp)
-                        .height(114.dp),
-                    painter = painterResource(id = R.drawable.profilepict),
-                    contentDescription = "image description",
-                    contentScale = ContentScale.FillBounds
+                    .width(114.dp)
+                    .height(114.dp),
+                painter = painterResource(id = R.drawable.profilepict),
+                contentDescription = "image description",
+                contentScale = ContentScale.FillBounds
+            )
+            Text(
+                text = username, style = TextStyle(
+                    fontSize = 24.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+                    fontWeight = FontWeight(600),
+                    color = Color(0xFF000000),
                 )
-                Text(
-                    text = "Halimah",
-                    style = TextStyle(
-                        fontSize = 24.sp,
-                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                        fontWeight = FontWeight(600),
-                        color = Color(0xFF000000),
-                    )
-                )
-            }
+            )
+        }
 
         Column(
             modifier = Modifier
@@ -108,9 +164,8 @@ fun BoothProfile (navController: NavController, context: Context = LocalContext.
 
             ) {
             Text(
-                text = "Profile",
-                style = TextStyle(
-                    fontSize =28.sp,
+                text = "Profile", style = TextStyle(
+                    fontSize = 28.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_semibold)),
                     fontWeight = FontWeight(600),
                     color = Color(0xFFFF5F00),
@@ -118,8 +173,7 @@ fun BoothProfile (navController: NavController, context: Context = LocalContext.
             )
             Spacer(modifier = Modifier.padding(top = 20.dp))
             Text(
-                text = "Nama Booth",
-                style = TextStyle(
+                text = "Nama Kios", style = TextStyle(
                     fontSize = 20.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_medium)),
                     fontWeight = FontWeight(400),
@@ -127,21 +181,19 @@ fun BoothProfile (navController: NavController, context: Context = LocalContext.
                 )
             )
             Text(
-                text = "Warung Nikmat Bu Halima",
-                style = TextStyle(
+                text = boothName.value, style = TextStyle(
                     fontSize = 20.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_light)),
                     fontWeight = FontWeight(400),
                     color = Color(0xFFFF5F00),
                 )
             )
-            Spacer(modifier = Modifier.padding(top =20.dp))
+            Spacer(modifier = Modifier.padding(top = 20.dp))
             Divider(color = Color.Gray, thickness = 1.dp)
-            Spacer(modifier = Modifier.padding(top =20.dp))
+            Spacer(modifier = Modifier.padding(top = 20.dp))
 
             Text(
-                text = "Deskripsi Booth",
-                style = TextStyle(
+                text = "Deskripsi Booth", style = TextStyle(
                     fontSize = 20.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_medium)),
                     fontWeight = FontWeight(400),
@@ -149,8 +201,26 @@ fun BoothProfile (navController: NavController, context: Context = LocalContext.
                 )
             )
             Text(
-                text = "Menjual berbagai penyetan ayam, ikan, dan nasi campur",
-                style = TextStyle(
+                text = boothDesc.value, style = TextStyle(
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins_light)),
+                    fontWeight = FontWeight(400),
+                    color = Color(0xFFFF5F00),
+                )
+            )
+
+            Spacer(modifier = Modifier.padding(top = 20.dp))
+
+            Text(
+                text = "Status Booth", style = TextStyle(
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                    fontWeight = FontWeight(400),
+                    color = Color(0xFFFF5F00),
+                )
+            )
+            Text(
+                text = if (open.value) "Buka" else "Tutup", style = TextStyle(
                     fontSize = 20.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_light)),
                     fontWeight = FontWeight(400),
@@ -160,11 +230,14 @@ fun BoothProfile (navController: NavController, context: Context = LocalContext.
 
 
         }
-    Button(onClick = {
-        preferencesManager.clearData()
-        navController.navigate("login") },
-        modifier = Modifier.padding(start = 300.dp, top = 12.dp)) {
-        Text(text = "Logout")
-    }
+        Button(
+            onClick = {
+                preferencesManager.clearData()
+                navController.navigate("login")
+            }, modifier = Modifier.padding(start = 300.dp, top = 12.dp)
+        ) {
+            Text(text = "Logout")
+        }
     }
 }
+

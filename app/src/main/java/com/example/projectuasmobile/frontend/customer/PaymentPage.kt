@@ -30,7 +30,7 @@ import androidx.navigation.NavController
 import com.example.projectuasmobile.R
 
 @Composable
-fun PaymentPage(navController: NavController, context: Context = LocalContext.current){
+fun PaymentPage(navController: NavController){
 Surface(modifier = Modifier
     .fillMaxSize()
     .padding(12.dp)) {
