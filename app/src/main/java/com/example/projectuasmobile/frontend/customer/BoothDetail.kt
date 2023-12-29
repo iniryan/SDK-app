@@ -13,14 +13,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,9 +49,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.projectuasmobile.R
+import com.example.projectuasmobile.data.OrderDetailsData
+import com.example.projectuasmobile.data.OrderDetailsDataWrapper
 import com.example.projectuasmobile.response.ApiResponse
 import com.example.projectuasmobile.response.FoodResponse
+import com.example.projectuasmobile.response.OrderDetailsResponse
 import com.example.projectuasmobile.service.FoodService
+import com.example.projectuasmobile.service.OrderDetailsService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -187,6 +197,8 @@ fun BoothDetail(
                                     )
                                 )
                             }
+                            val orderItems =
+                                remember { mutableStateListOf<OrderDetailsDataWrapper>() }
                             LazyColumn {
                                 listMenu.forEach { menuResponse ->
                                     item {
@@ -274,11 +286,24 @@ fun BoothDetail(
                                                                     0
                                                                 )
                                                             }
+                                                            var orderItem by remember {
+                                                                mutableStateOf<OrderDetailsDataWrapper?>(
+                                                                    null
+                                                                )
+                                                            }
+                                                            val existingItemIndex =
+                                                                orderItems.indexOf(orderItem)
 
                                                             if (quantity != 0) {
                                                                 IconButton(onClick = {
                                                                     if (quantity > 0) {
                                                                         quantity--
+                                                                        if (quantity == 0 && orderItem != null) {
+                                                                            orderItems.remove(
+                                                                                orderItem!!
+                                                                            )
+                                                                            orderItem = null
+                                                                        }
                                                                     }
                                                                 }) {
                                                                     Icon(
@@ -299,6 +324,36 @@ fun BoothDetail(
                                                             )
                                                             IconButton(onClick = {
                                                                 quantity++
+                                                                if (orderItem == null) {
+                                                                    val newOrderItem =
+                                                                        OrderDetailsDataWrapper(
+                                                                            OrderDetailsData(
+                                                                                orderID = "1",
+                                                                                foods = menuResponse.id.toString(),
+                                                                                qty = quantity
+                                                                            )
+                                                                        )
+                                                                    if (!orderItems.contains(
+                                                                            newOrderItem
+                                                                        )
+                                                                    ) {
+                                                                        orderItems.add(newOrderItem)
+                                                                        orderItem = newOrderItem
+                                                                    }
+                                                                } else {
+
+                                                                    if (existingItemIndex != null) {
+                                                                        orderItems[existingItemIndex] =
+                                                                            orderItem!!.copy(
+                                                                                orderDetailsData = orderItem!!.orderDetailsData.copy(
+                                                                                    qty = quantity
+                                                                                )
+                                                                            )
+                                                                        orderItem =
+                                                                            orderItems[existingItemIndex]
+                                                                    }
+                                                                }
+
                                                             }) {
                                                                 Icon(
                                                                     painter = painterResource(id = R.drawable.plus_icon),
@@ -338,6 +393,39 @@ fun BoothDetail(
                                 ),
                                 shape = RoundedCornerShape(8.dp),
                                 onClick = {
+                                    println(orderItems)
+                                    val retrofit =
+                                        Retrofit.Builder().baseUrl(baseUrl)
+                                            .addConverterFactory(GsonConverterFactory.create())
+                                            .build().create(OrderDetailsService::class.java)
+                                    val call = retrofit.addOrderDetails(orderItems)
+                                    call.enqueue(object : Callback<OrderDetailsResponse> {
+                                        override fun onResponse(
+                                            call: Call<OrderDetailsResponse>,
+                                            response: Response<OrderDetailsResponse>
+                                        ) {
+                                            if (response.code() == 200) {
+//                                                listMenu.clear()
+//                                                val booth = response.body()?.data
+                                                print(response.body()!!)
+                                            } else if (response.code() == 400) {
+                                                print("error login")
+                                                Toast.makeText(
+                                                    context,
+                                                    "Username atau password salah",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                        }
+
+                                        override fun onFailure(
+                                            call: Call<OrderDetailsResponse>,
+                                            t: Throwable
+                                        ) {
+                                            print(t.message)
+                                        }
+
+                                    })
                                 }
                             )
 

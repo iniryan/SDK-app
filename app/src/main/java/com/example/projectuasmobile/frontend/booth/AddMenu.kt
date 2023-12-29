@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,11 +17,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -81,15 +87,22 @@ fun AddMenu(navController: NavController, context: Context = LocalContext.curren
                 .fillMaxSize()
                 .padding(14.dp)
         ) {
-            Image(
+            IconButton(
                 modifier = Modifier
-                    .width(36.dp)
-                    .height(36.dp)
-                    .clickable { navController.navigate("menu") },
-                painter = painterResource(id = R.drawable.backwhite),
-                contentDescription = "image description",
-                contentScale = ContentScale.None
-            )
+                    .padding(top = 12.dp, end = 12.dp)
+                    .background(
+                        color = Color(0xFFFF5F00),
+                        shape = RoundedCornerShape(100.dp)
+                    ),
+                onClick = { navController.navigate("menu") }
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "Kembali",
+                    modifier = Modifier.size(25.dp),
+                    tint = Color.White
+                )
+            }
         }
         Column(
             modifier = Modifier

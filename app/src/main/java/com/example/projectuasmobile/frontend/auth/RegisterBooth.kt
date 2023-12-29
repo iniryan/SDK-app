@@ -76,22 +76,6 @@ fun RegisterBooth(navController: NavController, context: Context = LocalContext.
             modifier = Modifier.matchParentSize()
         )
         Column(
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.Start,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(14.dp)
-        ) {
-            Image(
-                modifier = Modifier
-                    .width(36.dp)
-                    .height(36.dp),
-                painter = painterResource(id = R.drawable.backwhite),
-                contentDescription = "image description",
-                contentScale = ContentScale.None
-            )
-        }
-        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = 50.dp),
@@ -131,7 +115,7 @@ fun RegisterBooth(navController: NavController, context: Context = LocalContext.
             modifier = Modifier
                 .fillMaxSize()
                 .padding(32.dp),
-            verticalArrangement = Arrangement.Bottom,
+            verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             OutlinedTextField(value = boothName.value,
@@ -143,10 +127,10 @@ fun RegisterBooth(navController: NavController, context: Context = LocalContext.
                     .align(Alignment.Start)
                     .fillMaxWidth()
                     .width(340.dp)
-                    .height(54.dp)
+                    .height(64.dp)
                     .padding(2.dp)
                     .border(
-                        width = 1.5.dp, color = Color(0xFFFF5F00), shape = RoundedCornerShape(24.dp)
+                        width = 1.5.dp, color = Color(0xFFFF5F00)
                     ),
                 leadingIcon = {
                     Image(
@@ -174,10 +158,10 @@ fun RegisterBooth(navController: NavController, context: Context = LocalContext.
                     .align(Alignment.Start)
                     .fillMaxWidth()
                     .width(340.dp)
-                    .height(54.dp)
+                    .height(64.dp)
                     .padding(2.dp)
                     .border(
-                        width = 1.5.dp, color = Color(0xFFFF5F00), shape = RoundedCornerShape(24.dp)
+                        width = 1.5.dp, color = Color(0xFFFF5F00)
                     ),
                 leadingIcon = {
                     Image(
@@ -207,10 +191,10 @@ fun RegisterBooth(navController: NavController, context: Context = LocalContext.
                     .align(Alignment.Start)
                     .fillMaxWidth()
                     .width(340.dp)
-                    .height(54.dp)
+                    .height(120.dp)
                     .padding(2.dp)
                     .border(
-                        width = 1.5.dp, color = Color(0xFFFF5F00), shape = RoundedCornerShape(24.dp)
+                        width = 1.5.dp, color = Color(0xFFFF5F00)
                     ),
                 leadingIcon = {
                     Image(
@@ -286,8 +270,8 @@ fun RegisterBooth(navController: NavController, context: Context = LocalContext.
                         }
                     })
                 }, modifier = Modifier
-                    .width(217.dp)
-                    .height(64.dp)
+                    .width(327.dp)
+                    .height(72.dp)
                     .padding(start = 10.dp, top = 12.dp, end = 10.dp, bottom = 12.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = primaryColorOrg)
             ) {

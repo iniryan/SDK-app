@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
@@ -110,19 +111,18 @@ fun BoothHomePage(navController: NavController, context: Context = LocalContext.
                         .fillMaxSize()
                         .height(3.dp)
                 )
-                Spacer(modifier = Modifier.padding(top = 8.dp))
-
+                Spacer(modifier = Modifier.padding(top = 18.dp))
                 ElevatedCard(
                     elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
                     modifier = Modifier
-                        .size(width = 440.dp, height = 120.dp)
+                        .width(440.dp)
                         .clickable { navController.navigate("detailpesanan") },
                     colors = CardDefaults.cardColors(containerColor = Color(0xFFFFFFFF))
                 ) {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(8.dp),
+                            .padding(12.dp),
                         horizontalAlignment = Alignment.Start,
                         verticalArrangement = Arrangement.Top
                     ) {
@@ -169,12 +169,7 @@ fun BoothHomePage(navController: NavController, context: Context = LocalContext.
                 Spacer(modifier = Modifier.padding(top = 12.dp))
             }
         }
-
-
-//            nanti bakal loop row dengan data dari api
-
     }
-
 }
 
 

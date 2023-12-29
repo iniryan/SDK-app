@@ -1,10 +1,12 @@
 package com.example.projectuasmobile.frontend.auth
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,10 +15,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -88,15 +93,22 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                 .fillMaxSize()
                 .padding(14.dp)
         ) {
-            Image(
+            IconButton(
                 modifier = Modifier
-                    .width(36.dp)
-                    .height(36.dp)
-                    .clickable { navController.navigate("rolepick") },
-                painter = painterResource(id = R.drawable.backwhite),
-                contentDescription = "image description",
-                contentScale = ContentScale.None
-            )
+                    .padding(top = 12.dp, end = 12.dp)
+                    .background(
+                        color = Color(0xFFFF5F00),
+                        shape = RoundedCornerShape(100.dp)
+                    ),
+                onClick = { navController.navigate("rolepick") }
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "Kembali",
+                    modifier = Modifier.size(25.dp),
+                    tint = Color.White
+                )
+            }
         }
         Column(
             modifier = Modifier
@@ -148,10 +160,10 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                     .align(Alignment.Start)
                     .fillMaxWidth()
                     .width(340.dp)
-                    .height(54.dp)
+                    .height(64.dp)
                     .padding(2.dp)
                     .border(
-                        width = 1.5.dp, color = Color(0xFFFF5F00), shape = RoundedCornerShape(24.dp)
+                        width = 1.5.dp, color = Color(0xFFFF5F00)
                     ),
                 leadingIcon = {
                     Image(
@@ -180,11 +192,12 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                     .align(Alignment.Start)
                     .fillMaxWidth()
                     .width(340.dp)
-                    .height(54.dp)
+                    .height(64.dp)
                     .padding(2.dp)
                     .border(
-                        width = 1.5.dp, color = Color(0xFFFF5F00), shape = RoundedCornerShape(24.dp)
-                    ),
+                        width = 1.5.dp, color = Color(0xFFFF5F00)
+                    )
+                ,
                 leadingIcon = {
                     Image(
                         painter = painterResource(id = R.drawable.password),
@@ -254,8 +267,8 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                     })
                 },
                 modifier = Modifier
-                    .width(217.dp)
-                    .height(64.dp)
+                    .width(327.dp)
+                    .height(72.dp)
                     .padding(start = 10.dp, top = 12.dp, end = 10.dp, bottom = 12.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = primaryColorOrg)
             ) {
@@ -270,6 +283,7 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                 )
             }
             Spacer(modifier = Modifier.height(14.dp))
+            val intent = remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://wa.me/6282266095743"))}
             ClickableText(text = AnnotatedString("Hubungi Admin Untuk Mereset Password"),
                 style = TextStyle(
                     fontSize = 12.sp,
@@ -278,7 +292,9 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                     color = Color(0xFF262626),
                     textAlign = TextAlign.Center,
                 ),
-                onClick = {})
+                onClick = {
+                    context.startActivity(intent)
+                })
             Spacer(modifier = Modifier.height(48.dp))
             ClickableText(
                 text = AnnotatedString("Daftarkan dulu boothmu!"), style = TextStyle(

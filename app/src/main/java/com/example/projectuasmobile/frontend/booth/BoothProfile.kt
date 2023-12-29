@@ -233,8 +233,8 @@ fun BoothProfile(navController: NavController, context: Context = LocalContext.c
         Button(
             onClick = {
                 preferencesManager.clearData()
-                navController.navigate("login")
-            }, modifier = Modifier.padding(start = 300.dp, top = 12.dp)
+                navController.navigate("rolepick")
+            }, modifier = Modifier.padding(start = 280.dp, top = 12.dp)
         ) {
             Text(text = "Logout")
         }
