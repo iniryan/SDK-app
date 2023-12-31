@@ -251,6 +251,7 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                                 preferencesManager.saveData("jwt", jwt)
                                 val userID = response.body()?.user?.id.toString()
                                 preferencesManager.saveData("userID", userID)
+                                preferencesManager.saveData("fullname", response.body()?.user?.fullname.toString())
                                 preferencesManager.saveData("username", usernameField.value.text)
                                 navController.navigate("boothHome")
                             } else if (response.code() == 400) {

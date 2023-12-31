@@ -8,6 +8,25 @@ class User {
     @SerializedName("attributes")
     var attributes: UserAttributes = UserAttributes()
 }
+class UserAttributes {
+    @SerializedName("username")
+    val username: String = ""
+    @SerializedName("email")
+    val email: String = ""
+    @SerializedName("provider")
+    val provider: String = ""
+    @SerializedName("confirmed")
+    val confirmed: Boolean = false
+    @SerializedName("blocked")
+    val blocked: Boolean = false
+    @SerializedName("createdAt")
+    val createdAt: String = ""
+    @SerializedName("updatedAt")
+    val updatedAt: String = ""
+    @SerializedName("fullname")
+    val fullname: String = ""
+}
+
 class UserResponse {
     @SerializedName("id")
     val id: Int = 0
@@ -31,21 +50,4 @@ class UserResponse {
     val booth: BoothResponse? = null
 }
 
-class UserAttributes {
-    @SerializedName("username")
-    val username: String = ""
-    @SerializedName("email")
-    val email: String = ""
-    @SerializedName("provider")
-    val provider: String = ""
-    @SerializedName("confirmed")
-    val confirmed: Boolean = false
-    @SerializedName("blocked")
-    val blocked: Boolean = false
-    @SerializedName("createdAt")
-    val createdAt: String = ""
-    @SerializedName("updatedAt")
-    val updatedAt: String = ""
-    @SerializedName("fullname")
-    val fullname: String = ""
-}
+

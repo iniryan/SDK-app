@@ -227,7 +227,8 @@ fun RegisterBooth(navController: NavController, context: Context = LocalContext.
                         RegisterBoothData(
                             boothName = boothName.value.text,
                             boothDescription = boothDescription.value.text,
-                            owner = userID.toInt()
+                            open = true,
+                            owner = userID.toInt(),
                         )
                     )
                     val json = Gson().toJson(createBooth)

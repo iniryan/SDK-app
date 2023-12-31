@@ -1,14 +1,16 @@
 package com.example.projectuasmobile.frontend.auth
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -48,7 +50,6 @@ fun RolePick(navController: NavController) {
 
                     )
             )
-
             Text(
                 text = "DIGITAL",
                 style = TextStyle(
@@ -84,87 +85,45 @@ fun RolePick(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally
+                .padding(2.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.padding(top = 132.dp))
-            Image(
-                painter = painterResource(id = R.drawable.pembeli),
-                contentDescription = "image description",
-                contentScale = ContentScale.Fit,
-                modifier = Modifier.clickable { navController.navigate("homepage") }
-            )
-            Spacer(modifier = Modifier.padding(top = 12.dp))
-            Image(
-                painter = painterResource(id = R.drawable.penjual),
-                contentDescription = "image description",
-                contentScale = ContentScale.Fit,
-                modifier = Modifier.clickable { navController.navigate("login") }
-            )
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 220.dp, top = 220.dp, end = 0.dp, bottom = 0.dp),
-        ) {
-            Text(
-                text = "PEMBELI ",
-                style = TextStyle(
-                    fontSize = 20.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                    fontWeight = FontWeight(600),
-                    color = Color(0xFFFF5F00),
-                    textAlign = TextAlign.Center,
-                )
-            )
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 140.dp, top = 250.dp, end = 0.dp, bottom = 0.dp),
-        ) {
-            Text(
-                text = "Lakukan Pemesanan Melalui " +
-                        "Handphonemu",
-                style = TextStyle(
-                    fontSize = 13.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                    fontWeight = FontWeight(400),
-                    color = Color(0xE51E1E1E),
-                    textAlign = TextAlign.Center,
-                )
-            )
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 76.dp, top = 470.dp, end = 0.dp, bottom = 0.dp),
-        ) {
-            Text(
-                text = "PENJUAL ",
-                style = TextStyle(
-                    fontSize = 20.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                    fontWeight = FontWeight(600),
-                    color = Color(0xFFFF5F00),
-                    textAlign = TextAlign.Center,
-                )
-            )
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 20.dp, top = 500.dp, end = 160.dp, bottom = 0.dp),
-        ) {
-            Text(
-                text = "Terima Pesanan dan Manage Menu dengan Praktis ",
-                style = TextStyle(
-                    fontSize = 13.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                    fontWeight = FontWeight(400),
-                    color = Color(0xE51E1E1E),
-                    textAlign = TextAlign.Center,
-                )
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize().padding(vertical = 160.dp)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    IconButton(
+                        onClick = { navController.navigate("homepage") },
+                        modifier = Modifier
+                            .weight(1f).fillMaxWidth()
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.pembeli),
+                            contentDescription = "image description",
+                            contentScale = ContentScale.FillBounds,
+                            modifier = Modifier.width(300.dp)
+                                .height(180.dp)
+                        )
+                    }
+                    IconButton(
+                        onClick = { navController.navigate("login")},
+                        modifier = Modifier
+                            .weight(1f).fillMaxWidth()
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.penjual),
+                            contentDescription = "image description",
+                            contentScale = ContentScale.Fit,
+                            modifier = Modifier.width(300.dp)
+                                .height(180.dp)
+                        )
+                    }
+                }
+            }
         }
         Column(
             modifier = Modifier

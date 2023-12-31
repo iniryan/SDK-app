@@ -13,6 +13,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,7 +24,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
@@ -37,6 +40,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -49,6 +53,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
+import coil.transform.CircleCropTransformation
 import com.example.projectuasmobile.PreferencesManager
 import com.example.projectuasmobile.R
 import com.example.projectuasmobile.data.FoodData
@@ -61,7 +67,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
 
 @Composable
 fun EditMenu(
@@ -128,7 +133,7 @@ fun EditMenu(
                 ), modifier = Modifier.align(Alignment.Start)
             )
             Text(
-                text = "Nama Makanan", style = TextStyle(
+                text = "Nama Menu", style = TextStyle(
                     fontSize = 14.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_regular)),
                     color = Color(0xFF1E1E1E),
@@ -151,7 +156,7 @@ fun EditMenu(
                     ),
                 placeholder = { Text(text = "Contoh: Penyetan Ayam") })
             Text(
-                text = "Deskripsi Makanan", style = TextStyle(
+                text = "Deskripsi Menu", style = TextStyle(
                     fontSize = 14.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_regular)),
                     color = Color(0xFF1E1E1E),
@@ -174,7 +179,7 @@ fun EditMenu(
                     ),
                 placeholder = { Text(text = "Contoh: Isian menu adalah Nasi + Ayam + Terong + Tahu + Tempe + Sambal") })
             Text(
-                text = "Harga Makanan", style = TextStyle(
+                text = "Harga Menu", style = TextStyle(
                     fontSize = 14.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_regular)),
                     color = Color(0xFF1E1E1E),
@@ -197,8 +202,66 @@ fun EditMenu(
                         width = 1.5.dp, color = primaryColorOrg, shape = RoundedCornerShape(8.dp)
                     ),
                 placeholder = { Text(text = "Contoh: 10000") })
-            Spacer(modifier = Modifier.padding(10.dp))
+            Text(
+                text = "Foto Menu", style = TextStyle(
+                    fontSize = 14.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                    color = Color(0xFF1E1E1E),
+                    textAlign = TextAlign.Center,
+                ), modifier = Modifier
+                    .align(Alignment.Start)
+                    .padding(top = 14.dp)
+            )
+            Row(
+                modifier = Modifier
+                    .align(Alignment.Start)
+                    .padding(top = 8.dp)
+            ) {
+                Box(modifier = Modifier
+                    .width(48.dp)
+                    .height(48.dp)
+                    .clickable { pickImageLauncher.launch("image/*") }
+                    .border(
+                        width = 1.5.dp,
+                        color = primaryColorOrg,
+                        shape = RoundedCornerShape(8.dp)
+                    ), contentAlignment = Alignment.Center) {
+                    // Display the selected image or an icon if no image is selected
+                    if (selectedImageUri != null) {
+                        // Display the selected image using rememberImagePainter from Coil
+                        Image(
+                            painter = rememberImagePainter(data = selectedImageUri, builder = {
+                                // Optional: Apply transformations, e.g., CircleCropTransformation
+                                transformations(CircleCropTransformation())
+                            }),
+                            contentDescription = "Selected Image",
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(shape = RoundedCornerShape(8.dp))
+                        )
+                    } else {
+                        // Display an icon to prompt the user to select an image
+                        Icon(
+                            imageVector = Icons.Default.AddCircle,
+                            contentDescription = "Add Photo",
+                            tint = primaryColorOrg
+                        )
+                    }
+                }
 
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                // Clear button to remove the selected image
+                if (selectedImageUri != null) {
+                    IconButton(
+                        onClick = { selectedImageUri = null }, modifier = Modifier.size(48.dp)
+                    ) {
+                        Icon(imageVector = Icons.Default.Clear, contentDescription = "Clear Image")
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.padding(10.dp))
             ElevatedButton(modifier = Modifier
                 .align(Alignment.Start)
                 .fillMaxWidth()
@@ -308,29 +371,6 @@ fun EditMenu(
                         fontSize = 16.sp,
                         fontFamily = FontFamily(Font(R.font.poppins_semibold)),
                         color = Color.White,
-                        textAlign = TextAlign.Center,
-                    )
-                )
-            }
-            Spacer(modifier = Modifier.padding(14.dp))
-            ElevatedButton(modifier = Modifier
-                .align(Alignment.Start)
-                .fillMaxWidth()
-                .padding(2.dp)
-                .height(48.dp),
-                border = BorderStroke(2.dp, Color(0xFF6650a4)),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                ),
-                shape = RoundedCornerShape(8.dp),
-                onClick = {
-                    navController.navigate("menu")
-                }) {
-                Text(
-                    text = "Kembali", style = TextStyle(
-                        fontSize = 16.sp,
-                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                        color = Color(0xFF6650a4),
                         textAlign = TextAlign.Center,
                     )
                 )

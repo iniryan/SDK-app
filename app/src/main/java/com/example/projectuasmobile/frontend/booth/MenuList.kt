@@ -117,7 +117,6 @@ fun MenuList(navController: NavController, context: Context = LocalContext.curre
                         color = Color(0xFFFF5F00),
                     ), modifier = Modifier.align(Alignment.Start)
                 )
-//            nanti bakal loop row dengan data dari api
                 LazyColumn {
                     listMenu.forEach { menu ->
                         item {
@@ -154,7 +153,7 @@ fun MenuList(navController: NavController, context: Context = LocalContext.curre
                                         )
                                     )
                                     Text(
-                                        text = menu.attributes.foodPrice.toString(),
+                                        text = "Rp"+menu.attributes.foodPrice.toString(),
                                         style = TextStyle(
                                             fontSize = 12.sp,
                                             lineHeight = 17.64.sp,

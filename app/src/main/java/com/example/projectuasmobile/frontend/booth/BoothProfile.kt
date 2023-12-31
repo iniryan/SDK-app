@@ -54,7 +54,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 @Composable
 fun BoothProfile(navController: NavController, context: Context = LocalContext.current) {
     val preferencesManager = remember { PreferencesManager(context = context) }
-    val username = preferencesManager.getData("username")
+    val fullname = preferencesManager.getData("fullname")
     val owner = preferencesManager.getData("userID")
 
     val boothName = remember { mutableStateOf("") }
@@ -102,7 +102,7 @@ fun BoothProfile(navController: NavController, context: Context = LocalContext.c
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                navController.navigate("EditBooth")
+                navController.navigate("editProfile/" + boothID.intValue + "/" + boothName.value + "/" + boothDesc.value + "/" + open.value)
             }) {
                 Icon(Icons.Default.Edit, contentDescription = "Edit")
             }
@@ -145,7 +145,7 @@ fun BoothProfile(navController: NavController, context: Context = LocalContext.c
                 contentScale = ContentScale.FillBounds
             )
             Text(
-                text = username, style = TextStyle(
+                text = fullname, style = TextStyle(
                     fontSize = 24.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_semibold)),
                     fontWeight = FontWeight(600),

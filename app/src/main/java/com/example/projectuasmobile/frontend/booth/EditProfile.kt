@@ -2,9 +2,11 @@ package com.example.projectuasmobile.frontend.booth
 
 import android.content.Context
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,12 +23,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,35 +41,52 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
+import com.example.projectuasmobile.PreferencesManager
 import com.example.projectuasmobile.R
+import com.example.projectuasmobile.data.BoothDataWrapper
+import com.example.projectuasmobile.data.RegisterBoothData
+import com.example.projectuasmobile.response.BoothResponse
+import com.example.projectuasmobile.service.BoothService
+import com.google.gson.Gson
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 @Composable
-fun EditProfile(navController: NavController) {
-    val boothNameField = remember { mutableStateOf(TextFieldValue("")) }
-    val boothDescriptionField = remember { mutableStateOf(TextFieldValue("")) }
-    val boothProfileField = remember { mutableStateOf(TextFieldValue("")) }
+fun EditProfile(
+    navController: NavController,
+    boothID: Int?,
+    boothName: String?,
+    boothDesc: String?,
+    open: Boolean?,
+    context: Context = LocalContext.current
+) {
+    val preferencesManager = remember { PreferencesManager(context = context) }
+    val baseUrl = "http://10.0.2.2:1337/api/"
+    val boothNameField = remember { mutableStateOf(boothName ?: "") }
+    val boothDescriptionField = remember { mutableStateOf(boothDesc ?: "") }
+    val openToggle = remember { mutableStateOf(open ?: false) }
+    println("hahahah: " + openToggle.value.toString())
+    println("hahahah221212: " + open.toString())
     val primaryColorOrg = Color(0xFFFF5F00)
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
-    val pickImageLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
-        onResult = { uri: Uri? -> uri?.let { selectedImageUri = it } }
-    )
+    val pickImageLauncher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent(),
+            onResult = { uri: Uri? -> uri?.let { selectedImageUri = it } })
 
     Box(modifier = Modifier.fillMaxSize()) {
-
         Column(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start,
@@ -73,15 +94,18 @@ fun EditProfile(navController: NavController) {
                 .fillMaxSize()
                 .padding(14.dp)
         ) {
-            Image(
-                modifier = Modifier
-                    .width(36.dp)
-                    .height(36.dp)
-                    .clickable { navController.navigate("boothHome") },
-                painter = painterResource(id = R.drawable.backwhite),
-                contentDescription = "image description",
-                contentScale = ContentScale.None
-            )
+            IconButton(modifier = Modifier
+                .padding(top = 12.dp, end = 12.dp)
+                .background(
+                    color = Color(0xFFFF5F00), shape = RoundedCornerShape(100.dp)
+                ), onClick = { navController.navigate("boothprofile") }) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "Kembali",
+                    modifier = Modifier.size(25.dp),
+                    tint = Color.White
+                )
+            }
         }
         Column(
             modifier = Modifier
@@ -91,24 +115,20 @@ fun EditProfile(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = "Form Edit Booth",
-                style = TextStyle(
+                text = "Form Edit Booth", style = TextStyle(
                     fontSize = 36.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_medium)),
                     color = primaryColorOrg,
                     textAlign = TextAlign.Left
-                ),
-                modifier = Modifier.align(Alignment.Start)
+                ), modifier = Modifier.align(Alignment.Start)
             )
             Text(
-                text = "Nama Booth",
-                style = TextStyle(
+                text = "Nama Booth", style = TextStyle(
                     fontSize = 14.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_regular)),
                     color = Color(0xFF1E1E1E),
                     textAlign = TextAlign.Center,
-                ),
-                modifier = Modifier
+                ), modifier = Modifier
                     .align(Alignment.Start)
                     .padding(top = 14.dp)
             )
@@ -116,26 +136,23 @@ fun EditProfile(navController: NavController) {
                 value = boothNameField.value,
                 onValueChange = {
                     boothNameField.value = it
-                },singleLine = true,
+                },
+                singleLine = true,
                 modifier = Modifier
                     .align(Alignment.Start)
                     .fillMaxWidth()
                     .padding(2.dp)
                     .border(
-                        width = 1.5.dp,
-                        color = primaryColorOrg,
-                        shape = RoundedCornerShape(8.dp)
+                        width = 1.5.dp, color = primaryColorOrg, shape = RoundedCornerShape(8.dp)
                     )
             )
             Text(
-                text = "Deskripsi Booth",
-                style = TextStyle(
+                text = "Deskripsi Booth", style = TextStyle(
                     fontSize = 14.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_regular)),
                     color = Color(0xFF1E1E1E),
                     textAlign = TextAlign.Center,
-                ),
-                modifier = Modifier
+                ), modifier = Modifier
                     .align(Alignment.Start)
                     .padding(top = 14.dp)
             )
@@ -150,20 +167,33 @@ fun EditProfile(navController: NavController) {
                     .fillMaxWidth()
                     .padding(2.dp)
                     .border(
-                        width = 1.5.dp,
-                        color = primaryColorOrg,
-                        shape = RoundedCornerShape(8.dp)
+                        width = 1.5.dp, color = primaryColorOrg, shape = RoundedCornerShape(8.dp)
                     )
             )
             Text(
-                text = "Foto Booth",
-                style = TextStyle(
+                text = "Status Booth", style = TextStyle(
                     fontSize = 14.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_regular)),
                     color = Color(0xFF1E1E1E),
                     textAlign = TextAlign.Center,
-                ),
+                ), modifier = Modifier
+                    .align(Alignment.Start)
+                    .padding(top = 14.dp)
+            )
+            Switch(
+                checked = openToggle.value,
+                onCheckedChange = { openToggle.value = it },
                 modifier = Modifier
+                    .align(Alignment.Start)
+                    .padding(top = 8.dp)
+            )
+            Text(
+                text = "Foto Booth", style = TextStyle(
+                    fontSize = 14.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                    color = Color(0xFF1E1E1E),
+                    textAlign = TextAlign.Center,
+                ), modifier = Modifier
                     .align(Alignment.Start)
                     .padding(top = 14.dp)
             )
@@ -172,29 +202,23 @@ fun EditProfile(navController: NavController) {
                     .align(Alignment.Start)
                     .padding(top = 8.dp)
             ) {
-                Box(
-                    modifier = Modifier
-                        .width(48.dp)
-                        .height(48.dp)
-                        .clickable { pickImageLauncher.launch("image/*") }
-                        .border(
-                            width = 1.5.dp,
-                            color = primaryColorOrg,
-                            shape = RoundedCornerShape(8.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
+                Box(modifier = Modifier
+                    .width(48.dp)
+                    .height(48.dp)
+                    .clickable { pickImageLauncher.launch("image/*") }
+                    .border(
+                        width = 1.5.dp,
+                        color = primaryColorOrg,
+                        shape = RoundedCornerShape(8.dp)
+                    ), contentAlignment = Alignment.Center) {
                     // Display the selected image or an icon if no image is selected
                     if (selectedImageUri != null) {
                         // Display the selected image using rememberImagePainter from Coil
                         Image(
-                            painter = rememberImagePainter(
-                                data = selectedImageUri,
-                                builder = {
-                                    // Optional: Apply transformations, e.g., CircleCropTransformation
-                                    transformations(CircleCropTransformation())
-                                }
-                            ),
+                            painter = rememberImagePainter(data = selectedImageUri, builder = {
+                                // Optional: Apply transformations, e.g., CircleCropTransformation
+                                transformations(CircleCropTransformation())
+                            }),
                             contentDescription = "Selected Image",
                             modifier = Modifier
                                 .fillMaxSize()
@@ -216,8 +240,7 @@ fun EditProfile(navController: NavController) {
                 // Clear button to remove the selected image
                 if (selectedImageUri != null) {
                     IconButton(
-                        onClick = { selectedImageUri = null },
-                        modifier = Modifier.size(48.dp)
+                        onClick = { selectedImageUri = null }, modifier = Modifier.size(48.dp)
                     ) {
                         Icon(imageVector = Icons.Default.Clear, contentDescription = "Clear Image")
                     }
@@ -225,23 +248,59 @@ fun EditProfile(navController: NavController) {
             }
 
             Spacer(modifier = Modifier.padding(10.dp))
-            ElevatedButton(
-                modifier = Modifier
-                    .align(Alignment.Start)
-                    .fillMaxWidth()
-                    .padding(2.dp)
-                    .height(48.dp),
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = Color.White,
-                ),
-                shape = RoundedCornerShape(8.dp),
-                onClick = {
-                }
-            )
-            {
+            ElevatedButton(modifier = Modifier
+                .align(Alignment.Start)
+                .fillMaxWidth()
+                .padding(2.dp)
+                .height(48.dp), colors = ButtonDefaults.buttonColors(
+                contentColor = Color.White,
+            ), shape = RoundedCornerShape(8.dp), onClick = {
+                val retrofit = Retrofit.Builder().baseUrl(baseUrl)
+                    .addConverterFactory(GsonConverterFactory.create()).build()
+                    .create(BoothService::class.java)
+                val boothData = BoothDataWrapper(
+                    RegisterBoothData(
+                        boothNameField.value,
+                        boothDescriptionField.value,
+                        openToggle.value,
+                        preferencesManager.getData("userID").toInt(),
+                    )
+                )
+                val json = Gson().toJson(boothData)
+                println("Request JSON: $json")
+                val call = retrofit.updateBooth(boothID, boothData)
+
+                call.enqueue(object : Callback<BoothResponse> {
+                    override fun onResponse(
+                        call: Call<BoothResponse>, response: Response<BoothResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            println("ahahahahah")
+                            val resp = response.body()
+                            println("yeyeyeyaaadyasdasdak")
+                            if (resp != null) {
+                                navController.navigate("boothprofile")
+                            } else {
+                                Toast.makeText(
+                                    context, "Error: Response body is null", Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Error: ${response.code()} hahahaha",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<BoothResponse>, t: Throwable) {
+                        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }) {
                 Text(
-                    text = "Edit Booth",
-                    style = TextStyle(
+                    text = "Edit Booth", style = TextStyle(
                         fontSize = 16.sp,
                         fontFamily = FontFamily(Font(R.font.poppins_semibold)),
                         color = Color.White,

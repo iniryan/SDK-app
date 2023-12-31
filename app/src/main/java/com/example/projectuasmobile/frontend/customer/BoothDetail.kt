@@ -386,7 +386,7 @@ fun BoothDetail(
                                 modifier = Modifier
                                     .align(Alignment.Start)
                                     .fillMaxWidth()
-                                    .padding(2.dp)
+                                    .padding(vertical = 2.dp, horizontal = 16.dp)
                                     .height(48.dp),
                                 colors = ButtonDefaults.buttonColors(
                                     contentColor = Color.White,

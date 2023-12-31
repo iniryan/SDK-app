@@ -31,13 +31,15 @@ import com.example.projectuasmobile.frontend.auth.RolePick
 import com.example.projectuasmobile.frontend.booth.AddMenu
 import com.example.projectuasmobile.frontend.booth.BoothHomePage
 import com.example.projectuasmobile.frontend.booth.BoothProfile
+import com.example.projectuasmobile.frontend.booth.DetailTransaction
 import com.example.projectuasmobile.frontend.booth.EditMenu
 import com.example.projectuasmobile.frontend.booth.EditProfile
 import com.example.projectuasmobile.frontend.booth.MenuList
+import com.example.projectuasmobile.frontend.booth.TransactionPage
+import com.example.projectuasmobile.frontend.customer.CustomerTransaction
 import com.example.projectuasmobile.frontend.customer.BoothDetail
 import com.example.projectuasmobile.frontend.customer.CheckOutPage
 import com.example.projectuasmobile.frontend.customer.HomePage
-import com.example.projectuasmobile.frontend.customer.Kios
 import com.example.projectuasmobile.frontend.customer.PaymentPage
 import com.example.projectuasmobile.ui.theme.ProjectUASMobileTheme
 
@@ -58,7 +60,7 @@ class MainActivity : ComponentActivity() {
                     val startD: String = if (jwt.equals("")) {
                         "onboarding"
                     } else {
-                        "boothHome"
+                        "boothprofile"
                     }
 
                     NavHost(navController = navController, startDestination = startD) {
@@ -106,20 +108,32 @@ class MainActivity : ComponentActivity() {
                         composable("addmenu") {
                             AddMenu(navController)
                         }
-                        composable("kios") {
-                            Kios(navController)
-                        }
                         composable("boothprofile") {
                             BoothProfile(navController)
                         }
-                        composable("editProfile") {
-                            EditProfile(navController)
+                        composable("editProfile/{boothID}/{boothName}/{boothDesc}/{open}") { backStackEntry ->
+                            EditProfile(
+                                navController,
+                                backStackEntry.arguments?.getInt("boothID"),
+                                backStackEntry.arguments?.getString("boothName"),
+                                backStackEntry.arguments?.getString("boothDesc"),
+                                backStackEntry.arguments?.getBoolean("open"),
+                            )
                         }
                         composable("checkout") {
                             CheckOutPage(navController)
                         }
                         composable("payment") {
                             PaymentPage(navController)
+                        }
+                        composable("detailTransaction") {
+                            DetailTransaction()
+                        }
+                        composable("customerTransaction") {
+                            CustomerTransaction(navController)
+                        }
+                        composable("transaction") {
+                            TransactionPage(navController)
                         }
                     }
                 }
@@ -136,7 +150,7 @@ fun BottomNavCustomer(navController: NavController) {
                 label = "Beranda", iconResId = R.drawable.home, destination = "homepage"
             ),
             BottomNavItem(
-                label = "Transaksi", iconResId = R.drawable.transaksi, destination = "transaksi"
+                label = "Transaksi", iconResId = R.drawable.transaksi, destination = "customerTransaction"
             ),
         )
         bottomNavigation.map {
@@ -169,7 +183,7 @@ fun BottomNavigation(navController: NavController) {
                 label = "Menu", iconResId = R.drawable.booth, destination = "menu"
             ),
             BottomNavItem(
-                label = "Transaksi", iconResId = R.drawable.transaksi, destination = "transaksi"
+                label = "Transaksi", iconResId = R.drawable.transaksi, destination = "transaction"
             ),
             BottomNavItem(
                 label = "Profil", iconResId = R.drawable.profilee, destination = "boothprofile"
