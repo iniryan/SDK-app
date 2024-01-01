@@ -65,9 +65,10 @@ fun TransactionPage(navController: NavController, context: Context = LocalContex
                     preferencesManager.saveData("boothID", booth.id.toString())
                 }
             } else if (response.code() == 400) {
-                print("error login")
                 Toast.makeText(
-                    context, "Username atau password salah", Toast.LENGTH_SHORT
+                    context,
+                    "Error: ${response.code()} - ${response.message()}",
+                    Toast.LENGTH_SHORT
                 ).show()
             }
         }

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,16 +11,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,7 +33,10 @@ import androidx.navigation.NavController
 import com.example.projectuasmobile.BottomNavigation
 import com.example.projectuasmobile.PreferencesManager
 import com.example.projectuasmobile.R
+import com.example.projectuasmobile.response.ApiResponse
+import com.example.projectuasmobile.response.OrderResponse
 import com.example.projectuasmobile.response.UserResponse
+import com.example.projectuasmobile.service.OrderService
 import com.example.projectuasmobile.service.UserService
 import retrofit2.Call
 import retrofit2.Callback
@@ -50,6 +49,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 fun BoothHomePage(navController: NavController, context: Context = LocalContext.current) {
     val preferencesManager = remember { PreferencesManager(context = context) }
     val userID = preferencesManager.getData("userID")
+    val listOrder = remember { mutableStateListOf<OrderResponse>() }
 
     val baseUrl = "http://10.0.2.2:1337/api/"
     val retrofit =
@@ -66,14 +66,42 @@ fun BoothHomePage(navController: NavController, context: Context = LocalContext.
                     preferencesManager.saveData("boothID", booth.id.toString())
                 }
             } else if (response.code() == 400) {
-                print("error login")
                 Toast.makeText(
-                    context, "Username atau password salah", Toast.LENGTH_SHORT
+                    context, "Error: ${response.code()} - ${response.message()}",
+                    Toast.LENGTH_SHORT
                 ).show()
             }
         }
 
         override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+            print(t.message)
+        }
+
+    })
+
+    val retrofit2 =
+        Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
+            .build().create(OrderService::class.java)
+    val call2 = retrofit2.getAllOrder("*")
+    call2.enqueue(object : Callback<ApiResponse<List<OrderResponse>>> {
+        override fun onResponse(
+            call: Call<ApiResponse<List<OrderResponse>>>,
+            response: Response<ApiResponse<List<OrderResponse>>>
+        ) {
+            if (response.code() == 200) {
+                listOrder.clear()
+                response.body()?.data!!.forEach { orderResponse ->
+                    listOrder.add(orderResponse)
+                }
+            } else if (response.code() == 400) {
+                Toast.makeText(
+                    context, "Error: ${response.code()} - ${response.message()}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+        override fun onFailure(call: Call<ApiResponse<List<OrderResponse>>>, t: Throwable) {
             print(t.message)
         }
 
@@ -112,61 +140,67 @@ fun BoothHomePage(navController: NavController, context: Context = LocalContext.
                         .height(3.dp)
                 )
                 Spacer(modifier = Modifier.padding(top = 18.dp))
-                ElevatedCard(
-                    elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-                    modifier = Modifier
-                        .width(440.dp)
-                        .clickable { navController.navigate("detailpesanan") },
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFFFFFFFF))
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(12.dp),
-                        horizontalAlignment = Alignment.Start,
-                        verticalArrangement = Arrangement.Top
-                    ) {
-                        Text(
-                            text = "Pesanan Dari : ",
-                            style = TextStyle(
-                                fontSize = 16.sp,
-                                lineHeight = 14.sp,
-                                fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                                textAlign = TextAlign.Center,
-                                color = Color.Black
-                            )
-                        )
-                        Text(
-                            text = "Nomor Meja :",
-                            style = TextStyle(
-                                fontSize = 16.sp,
-                                lineHeight = 14.sp,
-                                fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                                textAlign = TextAlign.Center,
-                                color = Color.Black
-                            )
-                        )
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(8.dp),
-                            horizontalAlignment = Alignment.End,
-                            verticalArrangement = Arrangement.Bottom
-                        ) {
-                            Text(
-                                text = "Cek Selengkapnya",
-                                style = TextStyle(
-                                    fontSize = 16.sp,
-                                    lineHeight = 14.sp,
-                                    fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                                    textAlign = TextAlign.End,
-                                    color = primaryColorOrg
-                                )
-                            )
-                        }
-                    }
-                }
-                Spacer(modifier = Modifier.padding(top = 12.dp))
+//                LazyColumn {
+//                    listOrder.forEach { orderResponse ->
+//                        item {
+//                            ElevatedCard(
+//                                elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+//                                modifier = Modifier
+//                                    .width(440.dp)
+//                                    .clickable { navController.navigate("detailpesanan") },
+//                                colors = CardDefaults.cardColors(containerColor = Color(0xFFFFFFFF))
+//                            ) {
+//                                Column(
+//                                    modifier = Modifier
+//                                        .fillMaxSize()
+//                                        .padding(12.dp),
+//                                    horizontalAlignment = Alignment.Start,
+//                                    verticalArrangement = Arrangement.Top
+//                                ) {
+//                                    Text(
+//                                        text = "Pesanan Dari : "+orderResponse.attributes.customerName,
+//                                        style = TextStyle(
+//                                            fontSize = 16.sp,
+//                                            lineHeight = 14.sp,
+//                                            fontFamily = FontFamily(Font(R.font.poppins_medium)),
+//                                            textAlign = TextAlign.Center,
+//                                            color = Color.Black
+//                                        )
+//                                    )
+//                                    Text(
+//                                        text = "Nomor Meja :"+orderResponse.attributes.tableNumber,
+//                                        style = TextStyle(
+//                                            fontSize = 16.sp,
+//                                            lineHeight = 14.sp,
+//                                            fontFamily = FontFamily(Font(R.font.poppins_medium)),
+//                                            textAlign = TextAlign.Center,
+//                                            color = Color.Black
+//                                        )
+//                                    )
+//                                    Column(
+//                                        modifier = Modifier
+//                                            .fillMaxSize()
+//                                            .padding(8.dp),
+//                                        horizontalAlignment = Alignment.End,
+//                                        verticalArrangement = Arrangement.Bottom
+//                                    ) {
+//                                        Text(
+//                                            text = "Cek Selengkapnya",
+//                                            style = TextStyle(
+//                                                fontSize = 16.sp,
+//                                                lineHeight = 14.sp,
+//                                                fontFamily = FontFamily(Font(R.font.poppins_medium)),
+//                                                textAlign = TextAlign.End,
+//                                                color = primaryColorOrg
+//                                            )
+//                                        )
+//                                    }
+//                                }
+//                            }
+//                            Spacer(modifier = Modifier.padding(top = 12.dp))
+//                        }
+//                    }
+//                }
             }
         }
     }

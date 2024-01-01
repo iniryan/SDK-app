@@ -75,7 +75,6 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
     )
 
     val listBooth = remember { mutableStateListOf<BoothResponse>() }
-
     val baseUrl = "http://10.0.2.2:1337/api/"
     val retrofit =
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
@@ -132,7 +131,7 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                                 color = Color(0xFFFF5F00),
                                 shape = RoundedCornerShape(100.dp)
                             ),
-                        onClick = { navController.navigate("rolepick") }
+                        onClick = { navController.navigateUp() }
                     ) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,

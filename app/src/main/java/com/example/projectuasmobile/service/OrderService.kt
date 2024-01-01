@@ -19,7 +19,7 @@ import retrofit2.http.Query
 
 interface OrderService {
     @POST("orders")
-    fun addOrder(@Body orderData: OrderDataWrapper): Call<OrderResponse>
+    fun addOrder(@Body orderData: OrderDataWrapper): Call<ApiResponse<OrderResponse>>
 
     @GET("orders/{id}")
     fun getOrderById(
@@ -29,12 +29,12 @@ interface OrderService {
 
     @GET("orders")
     fun getAllOrder(
-        @Query("filters[booth]") booth: String?,
+//        @Query("filters[booth]") booth: String?,
         @Query("populate") populate: String?
     ): Call<ApiResponse<List<OrderResponse>>>
 
     @PUT("orders/{id}")
-    fun update(@Path("id") id: String?, @Body foodData: OrderDataWrapper): Call<OrderResponse>
+    fun update(@Path("id") id: String?, @Body foodData: OrderDataWrapper): Call<ApiResponse<OrderResponse>>
 
     @DELETE("orders/{id}")
     fun delete(@Path("id") id: Int): Call<OrderResponse>
@@ -42,7 +42,7 @@ interface OrderService {
 
 interface OrderDetailsService {
     @POST("order-details")
-    fun addOrderDetails(@Body orderData: List<OrderDetailsDataWrapper>): Call<OrderDetailsResponse>
+    fun addOrderDetails(@Body orderData: OrderDetailsDataWrapper): Call<ApiResponse<OrderDetailsResponse>>
 
     @GET("order-details/{id}")
     fun getOrderDetailsById(

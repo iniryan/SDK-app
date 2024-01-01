@@ -47,7 +47,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.bundleOf
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import com.example.projectuasmobile.R
 import com.example.projectuasmobile.data.OrderDetailsData
 import com.example.projectuasmobile.data.OrderDetailsDataWrapper
@@ -56,6 +58,7 @@ import com.example.projectuasmobile.response.FoodResponse
 import com.example.projectuasmobile.response.OrderDetailsResponse
 import com.example.projectuasmobile.service.FoodService
 import com.example.projectuasmobile.service.OrderDetailsService
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -96,9 +99,10 @@ fun BoothDetail(
                     listMenu.add(menuResponse)
                 }
             } else if (response.code() == 400) {
-                print("error login")
                 Toast.makeText(
-                    context, "Username atau password salah", Toast.LENGTH_SHORT
+                    context,
+                    "Error: ${response.code()} - ${response.message()}",
+                    Toast.LENGTH_SHORT
                 ).show()
             }
         }
@@ -329,7 +333,7 @@ fun BoothDetail(
                                                                         OrderDetailsDataWrapper(
                                                                             OrderDetailsData(
                                                                                 orderID = "1",
-                                                                                foods = menuResponse.id.toString(),
+                                                                                foods = menuResponse,
                                                                                 qty = quantity
                                                                             )
                                                                         )
@@ -363,14 +367,16 @@ fun BoothDetail(
                                                         }
                                                     }
                                                 }
+                                                val imgurl = menuResponse.attributes.foodImg?.data?.attributes!!.url
                                                 Image(
                                                     modifier = Modifier
                                                         .width(100.dp)
                                                         .height(100.dp),
-                                                    painter = painterResource(id = R.drawable.imgplaceholder),
-                                                    contentDescription = "image description",
-                                                    contentScale = ContentScale.Crop
+                                                    contentScale = ContentScale.Crop,
+                                                    painter = rememberAsyncImagePainter("http://10.0.2.2:1337" +imgurl),
+                                                    contentDescription = "image description"
                                                 )
+
                                             }
                                             Divider(
                                                 modifier = Modifier
@@ -393,39 +399,12 @@ fun BoothDetail(
                                 ),
                                 shape = RoundedCornerShape(8.dp),
                                 onClick = {
-                                    println(orderItems)
-                                    val retrofit =
-                                        Retrofit.Builder().baseUrl(baseUrl)
-                                            .addConverterFactory(GsonConverterFactory.create())
-                                            .build().create(OrderDetailsService::class.java)
-                                    val call = retrofit.addOrderDetails(orderItems)
-                                    call.enqueue(object : Callback<OrderDetailsResponse> {
-                                        override fun onResponse(
-                                            call: Call<OrderDetailsResponse>,
-                                            response: Response<OrderDetailsResponse>
-                                        ) {
-                                            if (response.code() == 200) {
-//                                                listMenu.clear()
-//                                                val booth = response.body()?.data
-                                                print(response.body()!!)
-                                            } else if (response.code() == 400) {
-                                                print("error login")
-                                                Toast.makeText(
-                                                    context,
-                                                    "Username atau password salah",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                            }
-                                        }
+//                                    println(orderItems)
 
-                                        override fun onFailure(
-                                            call: Call<OrderDetailsResponse>,
-                                            t: Throwable
-                                        ) {
-                                            print(t.message)
-                                        }
-
-                                    })
+                                    val objectArrayParameterString = Gson().toJson(orderItems)
+                                    val listReplace = objectArrayParameterString.replace("/uploads/", "::uploads::")
+                                    println(listReplace)
+                                    navController.navigate("checkout/" + listReplace)
                                 }
                             )
 

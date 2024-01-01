@@ -100,7 +100,7 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                         color = Color(0xFFFF5F00),
                         shape = RoundedCornerShape(100.dp)
                     ),
-                onClick = { navController.navigate("rolepick") }
+                onClick = { navController.navigateUp() }
             ) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
@@ -253,9 +253,9 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                                 preferencesManager.saveData("userID", userID)
                                 preferencesManager.saveData("fullname", response.body()?.user?.fullname.toString())
                                 preferencesManager.saveData("username", usernameField.value.text)
+                                preferencesManager.saveData("email", response.body()?.user?.email.toString())
                                 navController.navigate("boothHome")
                             } else if (response.code() == 400) {
-                                print("bad request 400")
                                 Toast.makeText(
                                     context, "Username atau password salah", Toast.LENGTH_SHORT
                                 ).show()

@@ -56,6 +56,7 @@ fun BoothProfile(navController: NavController, context: Context = LocalContext.c
     val preferencesManager = remember { PreferencesManager(context = context) }
     val fullname = preferencesManager.getData("fullname")
     val owner = preferencesManager.getData("userID")
+    val email = preferencesManager.getData("email")
 
     val boothName = remember { mutableStateOf("") }
     val boothDesc = remember { mutableStateOf("") }
@@ -89,7 +90,9 @@ fun BoothProfile(navController: NavController, context: Context = LocalContext.c
 
             } else {
                 Toast.makeText(
-                    context, "Error: ${response.code()} - ${response.message()}", Toast.LENGTH_SHORT
+                    context,
+                    "Error: ${response.code()} - ${response.message()}",
+                    Toast.LENGTH_SHORT
                 ).show()
             }
         }
@@ -102,7 +105,7 @@ fun BoothProfile(navController: NavController, context: Context = LocalContext.c
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                navController.navigate("editProfile/" + boothID.intValue + "/" + boothName.value + "/" + boothDesc.value + "/" + open.value)
+                navController.navigate("editProfile/" + boothID.intValue + "/" + boothName.value + "/" + boothDesc.value + "/" + open.value.toString())
             }) {
                 Icon(Icons.Default.Edit, contentDescription = "Edit")
             }
@@ -115,7 +118,6 @@ fun BoothProfile(navController: NavController, context: Context = LocalContext.c
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-
             Image(
                 modifier = Modifier
                     .width(430.dp)
@@ -125,7 +127,6 @@ fun BoothProfile(navController: NavController, context: Context = LocalContext.c
                 contentDescription = "image description",
                 contentScale = ContentScale.FillBounds,
             )
-
         }
         Column(
             modifier = Modifier
@@ -134,8 +135,6 @@ fun BoothProfile(navController: NavController, context: Context = LocalContext.c
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-
             Image(
                 modifier = Modifier
                     .width(114.dp)
@@ -152,19 +151,25 @@ fun BoothProfile(navController: NavController, context: Context = LocalContext.c
                     color = Color(0xFF000000),
                 )
             )
+            Text(
+                text = email, style = TextStyle(
+                    fontSize = 16.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                    fontWeight = FontWeight(400),
+                    color = Color(0xFF000000),
+                )
+            )
         }
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 280.dp, start = 12.dp, end = 12.dp),
-
+                .padding(top = 300.dp, start = 20.dp, end = 20.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start,
-
-            ) {
+        ) {
             Text(
-                text = "Profile", style = TextStyle(
+                text = "Profile Booth", style = TextStyle(
                     fontSize = 28.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_semibold)),
                     fontWeight = FontWeight(600),
@@ -174,17 +179,15 @@ fun BoothProfile(navController: NavController, context: Context = LocalContext.c
             Spacer(modifier = Modifier.padding(top = 20.dp))
             Text(
                 text = "Nama Kios", style = TextStyle(
-                    fontSize = 20.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFFFF5F00),
+                    fontSize = 16.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                    color = Color(0xFF1E1E1E),
                 )
             )
             Text(
                 text = boothName.value, style = TextStyle(
                     fontSize = 20.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_light)),
-                    fontWeight = FontWeight(400),
+                    fontFamily = FontFamily(Font(R.font.poppins_medium)),
                     color = Color(0xFFFF5F00),
                 )
             )
@@ -194,17 +197,15 @@ fun BoothProfile(navController: NavController, context: Context = LocalContext.c
 
             Text(
                 text = "Deskripsi Booth", style = TextStyle(
-                    fontSize = 20.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFFFF5F00),
+                    fontSize = 16.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                    color = Color(0xFF1E1E1E),
                 )
             )
             Text(
                 text = boothDesc.value, style = TextStyle(
                     fontSize = 20.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_light)),
-                    fontWeight = FontWeight(400),
+                    fontFamily = FontFamily(Font(R.font.poppins_medium)),
                     color = Color(0xFFFF5F00),
                 )
             )
@@ -213,16 +214,15 @@ fun BoothProfile(navController: NavController, context: Context = LocalContext.c
 
             Text(
                 text = "Status Booth", style = TextStyle(
-                    fontSize = 20.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFFFF5F00),
+                    fontSize = 16.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                    color = Color(0xFF1E1E1E),
                 )
             )
             Text(
                 text = if (open.value) "Buka" else "Tutup", style = TextStyle(
                     fontSize = 20.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_light)),
+                    fontFamily = FontFamily(Font(R.font.poppins_medium)),
                     fontWeight = FontWeight(400),
                     color = Color(0xFFFF5F00),
                 )
@@ -234,7 +234,7 @@ fun BoothProfile(navController: NavController, context: Context = LocalContext.c
             onClick = {
                 preferencesManager.clearData()
                 navController.navigate("rolepick")
-            }, modifier = Modifier.padding(start = 280.dp, top = 12.dp)
+            }, modifier = Modifier.padding(start = 320.dp, top = 12.dp)
         ) {
             Text(text = "Logout")
         }

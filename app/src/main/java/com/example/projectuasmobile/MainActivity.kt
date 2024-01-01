@@ -23,6 +23,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.projectuasmobile.data.OrderDetailsDataWrapper
 import com.example.projectuasmobile.frontend.auth.Login
 import com.example.projectuasmobile.frontend.auth.OnboardingScreen
 import com.example.projectuasmobile.frontend.auth.Register
@@ -42,6 +43,8 @@ import com.example.projectuasmobile.frontend.customer.CheckOutPage
 import com.example.projectuasmobile.frontend.customer.HomePage
 import com.example.projectuasmobile.frontend.customer.PaymentPage
 import com.example.projectuasmobile.ui.theme.ProjectUASMobileTheme
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +63,7 @@ class MainActivity : ComponentActivity() {
                     val startD: String = if (jwt.equals("")) {
                         "onboarding"
                     } else {
-                        "boothprofile"
+                        "boothHome"
                     }
 
                     NavHost(navController = navController, startDestination = startD) {
@@ -114,20 +117,28 @@ class MainActivity : ComponentActivity() {
                         composable("editProfile/{boothID}/{boothName}/{boothDesc}/{open}") { backStackEntry ->
                             EditProfile(
                                 navController,
-                                backStackEntry.arguments?.getInt("boothID"),
+                                backStackEntry.arguments?.getString("boothID"),
                                 backStackEntry.arguments?.getString("boothName"),
                                 backStackEntry.arguments?.getString("boothDesc"),
-                                backStackEntry.arguments?.getBoolean("open"),
+                                backStackEntry.arguments?.getString("open"),
                             )
                         }
-                        composable("checkout") {
-                            CheckOutPage(navController)
+                        composable("checkout/{orderList}") {
+                            val orderList = it.arguments?.getString("orderList")
+                            println(orderList)
+                            val listReplace = orderList?.replace("::uploads::", "/uploads/")
+                            val objectArrayParameter = Gson().fromJson(
+                                listReplace,
+                                object : TypeToken<List<OrderDetailsDataWrapper>>() {}.type
+                            ) as List<OrderDetailsDataWrapper>
+
+                            CheckOutPage(objectArrayParameter, navController)
                         }
                         composable("payment") {
                             PaymentPage(navController)
                         }
                         composable("detailTransaction") {
-                            DetailTransaction()
+                            DetailTransaction(navController)
                         }
                         composable("customerTransaction") {
                             CustomerTransaction(navController)

@@ -20,4 +20,33 @@ class FoodAttributes {
     var createdAt: String = ""
     @SerializedName("updatedAt")
     var updatedAt: String = ""
+    @SerializedName("foodImg")
+    var foodImg: ApiResponse<FoodImgResponse>? = null
+}
+
+class FoodImgResponse {
+    @SerializedName("id")
+    var id: Int = 0
+
+    @SerializedName("attributes")
+    var attributes: FoodImgAttributes = FoodImgAttributes()
+}
+
+class FoodImgAttributes {
+    @SerializedName("name")
+    var name: String = ""
+    @SerializedName("url")
+    var url : String = ""
+//    @SerializedName("formats")
+//    var formats : ImgFormat = ImgFormat()
+}
+
+class ImgFormat {
+    @SerializedName("thumbnail")
+    var thumbnail : ImgThumbnail = ImgThumbnail()
+}
+
+class ImgThumbnail {
+//    @SerializedName("url")
+//    var url : String = ""
 }

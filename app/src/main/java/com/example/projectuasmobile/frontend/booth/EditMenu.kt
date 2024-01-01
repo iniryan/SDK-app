@@ -107,7 +107,7 @@ fun EditMenu(
                         color = Color(0xFFFF5F00),
                         shape = RoundedCornerShape(100.dp)
                     ),
-                onClick = { navController.navigate("menu") }
+                onClick = { navController.navigateUp() }
             ) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
@@ -297,7 +297,7 @@ fun EditMenu(
                                 } else {
                                     Toast.makeText(
                                         context,
-                                        "Error: Response body is null",
+                                        "Error: ${response.code()} - ${response.message()}",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
@@ -350,9 +350,10 @@ fun EditMenu(
                         if (response.code() == 200) {
                             navController.navigate("menu")
                         } else if (response.code() == 400) {
-                            print("error login")
                             Toast.makeText(
-                                context, "Username atau password salah", Toast.LENGTH_SHORT
+                                context,
+                                "Error: ${response.code()} - ${response.message()}",
+                                Toast.LENGTH_SHORT
                             ).show()
 
                         }

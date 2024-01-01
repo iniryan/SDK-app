@@ -45,6 +45,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -67,19 +68,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 @Composable
 fun EditProfile(
     navController: NavController,
-    boothID: Int?,
+    boothID: String?,
     boothName: String?,
     boothDesc: String?,
-    open: Boolean?,
+    open: String?,
     context: Context = LocalContext.current
 ) {
     val preferencesManager = remember { PreferencesManager(context = context) }
     val baseUrl = "http://10.0.2.2:1337/api/"
     val boothNameField = remember { mutableStateOf(boothName ?: "") }
     val boothDescriptionField = remember { mutableStateOf(boothDesc ?: "") }
-    val openToggle = remember { mutableStateOf(open ?: false) }
-    println("hahahah: " + openToggle.value.toString())
-    println("hahahah221212: " + open.toString())
+    val openToggle = remember { mutableStateOf(open?.toBoolean() ?: true) }
     val primaryColorOrg = Color(0xFFFF5F00)
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     val pickImageLauncher =
@@ -92,13 +91,13 @@ fun EditProfile(
             horizontalAlignment = Alignment.Start,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(14.dp)
+                .padding(16.dp)
         ) {
             IconButton(modifier = Modifier
                 .padding(top = 12.dp, end = 12.dp)
                 .background(
                     color = Color(0xFFFF5F00), shape = RoundedCornerShape(100.dp)
-                ), onClick = { navController.navigate("boothprofile") }) {
+                ), onClick = { navController.navigateUp() }) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
                     contentDescription = "Kembali",
@@ -117,7 +116,8 @@ fun EditProfile(
             Text(
                 text = "Form Edit Booth", style = TextStyle(
                     fontSize = 36.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+                    fontWeight = FontWeight(600),
                     color = primaryColorOrg,
                     textAlign = TextAlign.Left
                 ), modifier = Modifier.align(Alignment.Start)
@@ -275,14 +275,14 @@ fun EditProfile(
                         call: Call<BoothResponse>, response: Response<BoothResponse>
                     ) {
                         if (response.isSuccessful) {
-                            println("ahahahahah")
                             val resp = response.body()
-                            println("yeyeyeyaaadyasdasdak")
                             if (resp != null) {
                                 navController.navigate("boothprofile")
                             } else {
                                 Toast.makeText(
-                                    context, "Error: Response body is null", Toast.LENGTH_SHORT
+                                    context,
+                                    "Error: ${response.code()} - ${response.message()}",
+                                    Toast.LENGTH_SHORT
                                 ).show()
                             }
                         } else {
@@ -295,12 +295,12 @@ fun EditProfile(
                     }
 
                     override fun onFailure(call: Call<BoothResponse>, t: Throwable) {
-                        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                        print(t.message)
                     }
                 })
             }) {
                 Text(
-                    text = "Edit Booth", style = TextStyle(
+                    text = "Edit Data Booth", style = TextStyle(
                         fontSize = 16.sp,
                         fontFamily = FontFamily(Font(R.font.poppins_semibold)),
                         color = Color.White,

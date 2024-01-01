@@ -253,7 +253,7 @@ fun RegisterBooth(navController: NavController, context: Context = LocalContext.
                                 } else {
                                     Toast.makeText(
                                         context,
-                                        "Error: Response body is null",
+                                        "Error: ${response.code()} - ${response.message()}",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }

@@ -1,6 +1,7 @@
 package com.example.projectuasmobile.frontend.auth
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -101,7 +102,7 @@ fun Register(navController: NavController, context: Context = LocalContext.curre
                         color = Color(0xFFFF5F00),
                         shape = RoundedCornerShape(100.dp)
                     ),
-                onClick = { navController.navigate("login") }
+                onClick = { navController.navigateUp() }
             ) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
@@ -337,7 +338,11 @@ fun Register(navController: NavController, context: Context = LocalContext.curre
                                 print("Successful register")
                                 navController.navigate("registerBooth")
                             } else if (response.code() == 400) {
-                                print("bad request 400")
+                                Toast.makeText(
+                                    context,
+                                    "Error: ${response.code()} - ${response.message()}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
 

@@ -105,8 +105,8 @@ fun RolePick(navController: NavController) {
                             painter = painterResource(id = R.drawable.pembeli),
                             contentDescription = "image description",
                             contentScale = ContentScale.FillBounds,
-                            modifier = Modifier.width(300.dp)
-                                .height(180.dp)
+                            modifier = Modifier.width(320.dp)
+                                .height(200.dp)
                         )
                     }
                     IconButton(
@@ -118,8 +118,8 @@ fun RolePick(navController: NavController) {
                             painter = painterResource(id = R.drawable.penjual),
                             contentDescription = "image description",
                             contentScale = ContentScale.Fit,
-                            modifier = Modifier.width(300.dp)
-                                .height(180.dp)
+                            modifier = Modifier.width(320.dp)
+                                .height(200.dp)
                         )
                     }
                 }
