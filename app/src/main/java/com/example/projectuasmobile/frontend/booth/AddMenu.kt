@@ -356,18 +356,15 @@ fun AddMenu(navController: NavController, context: Context = LocalContext.curren
                                         response12: Response<UploadResponseList>
                                     ) {
                                         if (response12.isSuccessful) {
-                                            println("kepanggil ${response12.body()} ")
                                             Toast.makeText(
                                                 context,
                                                 "Berhasil menambahkan menu",
                                                 Toast.LENGTH_SHORT
                                             ).show()
                                         } else {
-                                            println("kepanggil tapi tolol ${response12.body()} ")
-//                                            "Error: ${response.code()} - ${response.message()}",
                                             Toast.makeText(
                                                 context,
-                                                "Error kepanggil tapi tolol: ${response12.body()}",
+                                            "Error: ${response.code()} - ${response.message()}",
                                                 Toast.LENGTH_SHORT
                                             ).show()
                                         }
@@ -376,11 +373,9 @@ fun AddMenu(navController: NavController, context: Context = LocalContext.curren
                                     override fun onFailure(
                                         call12: Call<UploadResponseList>, t: Throwable
                                     ) {
-                                        println("Gak kepanggil ${t.message} ")
                                         Toast.makeText(
                                             context,
-                                            "Error Gak kepanggil: ${t.message}",
-//                                            "Error: ${response.code()} - ${response.message()}",
+                                            "Error: ${response.code()} - ${response.message()}",
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     }
