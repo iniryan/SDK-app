@@ -90,7 +90,8 @@ fun RolePick(navController: NavController) {
         ) {
             Box(
                 modifier = Modifier
-                    .fillMaxSize().padding(vertical = 160.dp)
+                    .fillMaxSize()
+                    .padding(vertical = 160.dp)
             ) {
                 Column(
                     modifier = Modifier
@@ -99,26 +100,30 @@ fun RolePick(navController: NavController) {
                     IconButton(
                         onClick = { navController.navigate("homepage") },
                         modifier = Modifier
-                            .weight(1f).fillMaxWidth()
+                            .weight(1f)
+                            .fillMaxWidth()
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.pembeli),
                             contentDescription = "image description",
                             contentScale = ContentScale.FillBounds,
-                            modifier = Modifier.width(320.dp)
+                            modifier = Modifier
+                                .width(320.dp)
                                 .height(200.dp)
                         )
                     }
                     IconButton(
-                        onClick = { navController.navigate("login")},
+                        onClick = { navController.navigate("login") },
                         modifier = Modifier
-                            .weight(1f).fillMaxWidth()
+                            .weight(1f)
+                            .fillMaxWidth()
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.penjual),
                             contentDescription = "image description",
                             contentScale = ContentScale.Fit,
-                            modifier = Modifier.width(320.dp)
+                            modifier = Modifier
+                                .width(320.dp)
                                 .height(200.dp)
                         )
                     }
@@ -128,14 +133,14 @@ fun RolePick(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(24.dp),
+                .padding(bottom = 72.dp, start = 60.dp, end = 60.dp),
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = "Ayo pilih role kamu sebelum menggunakan aplikasi. Pilih Pembeli jika kamu ingin memesan makanan. Pilih Penjual jika kamu adalah pemilik booth.",
                 style = TextStyle(
-                    fontSize = 10.sp,
+                    fontSize = 12.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_regular)),
                     fontWeight = FontWeight(400),
                     color = Color(0xFF1E1E1E),

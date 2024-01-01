@@ -76,10 +76,12 @@ fun EditProfile(
 ) {
     val preferencesManager = remember { PreferencesManager(context = context) }
     val baseUrl = "http://10.0.2.2:1337/api/"
+
     val boothNameField = remember { mutableStateOf(boothName ?: "") }
     val boothDescriptionField = remember { mutableStateOf(boothDesc ?: "") }
     val openToggle = remember { mutableStateOf(open?.toBoolean() ?: true) }
     val primaryColorOrg = Color(0xFFFF5F00)
+
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     val pickImageLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent(),
@@ -211,12 +213,9 @@ fun EditProfile(
                         color = primaryColorOrg,
                         shape = RoundedCornerShape(8.dp)
                     ), contentAlignment = Alignment.Center) {
-                    // Display the selected image or an icon if no image is selected
                     if (selectedImageUri != null) {
-                        // Display the selected image using rememberImagePainter from Coil
                         Image(
                             painter = rememberImagePainter(data = selectedImageUri, builder = {
-                                // Optional: Apply transformations, e.g., CircleCropTransformation
                                 transformations(CircleCropTransformation())
                             }),
                             contentDescription = "Selected Image",
@@ -225,7 +224,6 @@ fun EditProfile(
                                 .clip(shape = RoundedCornerShape(8.dp))
                         )
                     } else {
-                        // Display an icon to prompt the user to select an image
                         Icon(
                             imageVector = Icons.Default.AddCircle,
                             contentDescription = "Add Photo",
@@ -234,10 +232,8 @@ fun EditProfile(
                     }
                 }
 
-
                 Spacer(modifier = Modifier.width(8.dp))
 
-                // Clear button to remove the selected image
                 if (selectedImageUri != null) {
                     IconButton(
                         onClick = { selectedImageUri = null }, modifier = Modifier.size(48.dp)
@@ -275,16 +271,7 @@ fun EditProfile(
                         call: Call<BoothResponse>, response: Response<BoothResponse>
                     ) {
                         if (response.isSuccessful) {
-                            val resp = response.body()
-                            if (resp != null) {
-                                navController.navigate("boothprofile")
-                            } else {
-                                Toast.makeText(
-                                    context,
-                                    "Error: ${response.code()} - ${response.message()}",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+                            navController.navigate("boothprofile")
                         } else {
                             Toast.makeText(
                                 context,

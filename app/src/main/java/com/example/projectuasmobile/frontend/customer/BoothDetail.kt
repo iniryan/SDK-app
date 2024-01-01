@@ -13,20 +13,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -47,7 +41,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.projectuasmobile.R
@@ -55,9 +48,7 @@ import com.example.projectuasmobile.data.OrderDetailsData
 import com.example.projectuasmobile.data.OrderDetailsDataWrapper
 import com.example.projectuasmobile.response.ApiResponse
 import com.example.projectuasmobile.response.FoodResponse
-import com.example.projectuasmobile.response.OrderDetailsResponse
 import com.example.projectuasmobile.service.FoodService
-import com.example.projectuasmobile.service.OrderDetailsService
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
@@ -74,31 +65,27 @@ fun BoothDetail(
     boothDescription: String?,
     context: Context = LocalContext.current
 ) {
-    val notesField = remember {
-        mutableStateOf("")
-    }
-    var title by remember { mutableStateOf(boothName ?: "") }
-    var desc by remember { mutableStateOf(boothDescription ?: "") }
-    var boothID by remember { mutableStateOf(boothID ?: "") }
+    val title = remember { mutableStateOf(boothName ?: "") }
+    val desc = remember { mutableStateOf(boothDescription ?: "") }
+    val boothID = remember { mutableStateOf(boothID ?: "") }
 
     val listMenu = remember { mutableStateListOf<FoodResponse>() }
     val baseUrl = "http://10.0.2.2:1337/api/"
     val retrofit =
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
             .build().create(FoodService::class.java)
-    val call = retrofit.getAllFood(boothID, "*")
+    val call = retrofit.getAllFood(boothID.value, "*")
     call.enqueue(object : Callback<ApiResponse<List<FoodResponse>>> {
         override fun onResponse(
             call: Call<ApiResponse<List<FoodResponse>>>,
             response: Response<ApiResponse<List<FoodResponse>>>
         ) {
-            if (response.code() == 200) {
+            if (response.isSuccessful) {
                 listMenu.clear()
-                val booth = response.body()?.data
                 response.body()?.data!!.forEach { menuResponse ->
                     listMenu.add(menuResponse)
                 }
-            } else if (response.code() == 400) {
+            } else {
                 Toast.makeText(
                     context,
                     "Error: ${response.code()} - ${response.message()}",
@@ -137,14 +124,13 @@ fun BoothDetail(
                     verticalArrangement = Arrangement.spacedBy(9.dp, Alignment.Top),
                     horizontalAlignment = Alignment.Start,
                 ) {
-                    //kolom untuk judul
                     Column(
                         modifier = Modifier.padding(12.dp),
                         verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
                         horizontalAlignment = Alignment.Start,
                     ) {
                         Text(
-                            text = title, style = TextStyle(
+                            text = title.value, style = TextStyle(
                                 fontSize = 24.sp,
                                 lineHeight = 36.sp,
                                 fontFamily = FontFamily(Font(R.font.poppins_semibold)),
@@ -152,7 +138,7 @@ fun BoothDetail(
                             )
                         )
                         Text(
-                            text = desc,
+                            text = desc.value,
                             style = TextStyle(
                                 fontSize = 14.sp,
                                 lineHeight = 18.sp,
@@ -367,13 +353,14 @@ fun BoothDetail(
                                                         }
                                                     }
                                                 }
-                                                val imgurl = menuResponse.attributes.foodImg?.data?.attributes!!.url
+                                                val imgurl =
+                                                    menuResponse.attributes.foodImg?.data?.attributes!!.url
                                                 Image(
                                                     modifier = Modifier
                                                         .width(100.dp)
                                                         .height(100.dp),
                                                     contentScale = ContentScale.Crop,
-                                                    painter = rememberAsyncImagePainter("http://10.0.2.2:1337" +imgurl),
+                                                    painter = rememberAsyncImagePainter("http://10.0.2.2:1337" + imgurl),
                                                     contentDescription = "image description"
                                                 )
 
@@ -399,11 +386,11 @@ fun BoothDetail(
                                 ),
                                 shape = RoundedCornerShape(8.dp),
                                 onClick = {
-//                                    println(orderItems)
-
                                     val objectArrayParameterString = Gson().toJson(orderItems)
-                                    val listReplace = objectArrayParameterString.replace("/uploads/", "::uploads::")
-                                    println(listReplace)
+                                    val listReplace = objectArrayParameterString.replace(
+                                        "/uploads/",
+                                        "::uploads::"
+                                    )
                                     navController.navigate("checkout/" + listReplace)
                                 }
                             )
@@ -420,62 +407,6 @@ fun BoothDetail(
                                 )
                             }
                         }
-                        //notes
-//                        Column(
-//                            verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
-//                            horizontalAlignment = Alignment.Start,
-//                        ) {
-//                            Row(
-//                                modifier = Modifier
-//                                    .width(390.dp)
-//                                    .height(62.dp)
-//                                    .padding(
-//                                        start = 16.dp, top = 18.dp, end = 10.dp, bottom = 18.dp
-//                                    ),
-//                                horizontalArrangement = Arrangement.spacedBy(
-//                                    10.dp, Alignment.Start
-//                                ),
-//                                verticalAlignment = Alignment.CenterVertically,
-//                            ) {
-//                                Text(
-//                                    text = "Catatan", style = TextStyle(
-//                                        fontSize = 18.sp,
-//                                        lineHeight = 26.sp,
-//                                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-//                                        color = Color(0xFF333333),
-//                                    )
-//                                )
-//                            }
-//                            Column(
-//                                modifier = Modifier
-//                                    .width(390.dp)
-//                                    .background(color = Color(0xFFFFFFFF))
-//                                    .padding(start = 16.dp, end = 16.dp),
-//                                verticalArrangement = Arrangement.spacedBy(
-//                                    16.dp, Alignment.CenterVertically
-//                                ),
-//                                horizontalAlignment = Alignment.CenterHorizontally,
-//                            ) {
-//                                OutlinedTextField(
-//                                    value = notesField.value,
-//                                    onValueChange = {
-//                                        notesField.value = it
-//                                    },
-//                                    singleLine = false,
-//                                    modifier = Modifier
-//                                        .fillMaxWidth()
-//                                        .height(100.dp)
-//                                        .padding(2.dp)
-//                                        .border(
-//                                            width = 1.5.dp,
-//                                            color = Color(0xFFFF5F00),
-//                                            shape = RoundedCornerShape(8.dp)
-//                                        ),
-//                                    placeholder = { Text(text = "Contoh: pakai sambel ya...") },
-//                                    maxLines = 4
-//                                )
-//                            }
-//                        }
                     }
                 }
             }

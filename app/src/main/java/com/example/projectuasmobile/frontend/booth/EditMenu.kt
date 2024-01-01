@@ -5,7 +5,6 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -42,9 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -226,12 +223,9 @@ fun EditMenu(
                         color = primaryColorOrg,
                         shape = RoundedCornerShape(8.dp)
                     ), contentAlignment = Alignment.Center) {
-                    // Display the selected image or an icon if no image is selected
                     if (selectedImageUri != null) {
-                        // Display the selected image using rememberImagePainter from Coil
                         Image(
                             painter = rememberImagePainter(data = selectedImageUri, builder = {
-                                // Optional: Apply transformations, e.g., CircleCropTransformation
                                 transformations(CircleCropTransformation())
                             }),
                             contentDescription = "Selected Image",
@@ -240,7 +234,6 @@ fun EditMenu(
                                 .clip(shape = RoundedCornerShape(8.dp))
                         )
                     } else {
-                        // Display an icon to prompt the user to select an image
                         Icon(
                             imageVector = Icons.Default.AddCircle,
                             contentDescription = "Add Photo",
@@ -249,10 +242,8 @@ fun EditMenu(
                     }
                 }
 
-
                 Spacer(modifier = Modifier.width(8.dp))
 
-                // Clear button to remove the selected image
                 if (selectedImageUri != null) {
                     IconButton(
                         onClick = { selectedImageUri = null }, modifier = Modifier.size(48.dp)
@@ -291,16 +282,7 @@ fun EditMenu(
                             call: Call<FoodResponse>, response: Response<FoodResponse>
                         ) {
                             if (response.isSuccessful) {
-                                val foodResponse = response.body()
-                                if (foodResponse != null) {
-                                    navController.navigate("menu")
-                                } else {
-                                    Toast.makeText(
-                                        context,
-                                        "Error: ${response.code()} - ${response.message()}",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+                                navController.navigate("menu")
                             } else {
                                 Toast.makeText(
                                     context, "Error: ${response.code()}", Toast.LENGTH_SHORT
@@ -329,7 +311,6 @@ fun EditMenu(
                 )
             }
 
-
             Spacer(modifier = Modifier.padding(10.dp))
             ElevatedButton(modifier = Modifier
                 .align(Alignment.Start)
@@ -346,10 +327,9 @@ fun EditMenu(
                     override fun onResponse(
                         call: Call<FoodResponse>, response: Response<FoodResponse>
                     ) {
-                        print(response.code())
-                        if (response.code() == 200) {
+                        if (response.isSuccessful) {
                             navController.navigate("menu")
-                        } else if (response.code() == 400) {
+                        } else {
                             Toast.makeText(
                                 context,
                                 "Error: ${response.code()} - ${response.message()}",

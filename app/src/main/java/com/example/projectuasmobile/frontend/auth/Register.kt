@@ -21,7 +21,6 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -36,7 +35,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -75,9 +73,6 @@ fun Register(navController: NavController, context: Context = LocalContext.curre
     val passwordVisible = remember { mutableStateOf(false) }
 
     val baseUrl = "http://10.0.2.2:1337/api/"
-    //KALAU TIDAK DI EMULATOR
-    //val baseUrl = "http://10.217.17.11:1337/api/"
-
     var jwt by remember { mutableStateOf("") }
     jwt = preferencesManager.getData("jwt")
 
@@ -178,7 +173,7 @@ fun Register(navController: NavController, context: Context = LocalContext.curre
                 },
                 placeholder = {
                     Text(
-                        text = "Fullname",
+                        text = "Full Name",
                         style = TextStyle(
                             fontSize = 13.sp,
                             fontFamily = FontFamily(Font(R.font.poppins_regular)),
@@ -324,8 +319,7 @@ fun Register(navController: NavController, context: Context = LocalContext.curre
                             call: Call<AuthResponse>,
                             response: Response<AuthResponse>
                         ) {
-                            print(response.code())
-                            if (response.code() == 200) {
+                            if (response.isSuccessful) {
                                 jwt = response.body()?.jwt!!
                                 val respUser = response.body()?.user!!
                                 val userID = respUser.id.toString()
@@ -337,7 +331,7 @@ fun Register(navController: NavController, context: Context = LocalContext.curre
                                 preferencesManager.saveData("password", passwordField.value.text)
                                 print("Successful register")
                                 navController.navigate("registerBooth")
-                            } else if (response.code() == 400) {
+                            } else {
                                 Toast.makeText(
                                     context,
                                     "Error: ${response.code()} - ${response.message()}",

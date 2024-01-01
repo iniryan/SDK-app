@@ -59,12 +59,12 @@ fun TransactionPage(navController: NavController, context: Context = LocalContex
         override fun onResponse(
             call: Call<UserResponse>, response: Response<UserResponse>
         ) {
-            if (response.code() == 200) {
+            if (response.isSuccessful) {
                 val booth = response.body()?.booth
                 if (booth != null) {
                     preferencesManager.saveData("boothID", booth.id.toString())
                 }
-            } else if (response.code() == 400) {
+            } else {
                 Toast.makeText(
                     context,
                     "Error: ${response.code()} - ${response.message()}",

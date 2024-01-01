@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
@@ -60,9 +59,6 @@ fun RegisterBooth(navController: NavController, context: Context = LocalContext.
     val boothDescription = remember { mutableStateOf(TextFieldValue("")) }
 
     val baseUrl = "http://10.0.2.2:1337/api/"
-    //KALAU TIDAK DI EMULATOR
-    //val baseUrl = "http://10.217.17.11:1337/api/"
-
     var jwt by remember { mutableStateOf("") }
     jwt = preferencesManager.getData("jwt")
     val userName = preferencesManager.getData("username")

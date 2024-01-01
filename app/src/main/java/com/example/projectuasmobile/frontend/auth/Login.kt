@@ -196,8 +196,7 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                     .padding(2.dp)
                     .border(
                         width = 1.5.dp, color = Color(0xFFFF5F00)
-                    )
-                ,
+                    ),
                 leadingIcon = {
                     Image(
                         painter = painterResource(id = R.drawable.password),
@@ -246,16 +245,22 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                         override fun onResponse(
                             call: Call<AuthResponse>, response: Response<AuthResponse>
                         ) {
-                            if (response.code() == 200) {
+                            if (response.isSuccessful) {
                                 jwt = response.body()?.jwt!!
                                 preferencesManager.saveData("jwt", jwt)
                                 val userID = response.body()?.user?.id.toString()
                                 preferencesManager.saveData("userID", userID)
-                                preferencesManager.saveData("fullname", response.body()?.user?.fullname.toString())
+                                preferencesManager.saveData(
+                                    "fullname",
+                                    response.body()?.user?.fullname.toString()
+                                )
                                 preferencesManager.saveData("username", usernameField.value.text)
-                                preferencesManager.saveData("email", response.body()?.user?.email.toString())
+                                preferencesManager.saveData(
+                                    "email",
+                                    response.body()?.user?.email.toString()
+                                )
                                 navController.navigate("boothHome")
-                            } else if (response.code() == 400) {
+                            } else {
                                 Toast.makeText(
                                     context, "Username atau password salah", Toast.LENGTH_SHORT
                                 ).show()
@@ -284,7 +289,8 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                 )
             }
             Spacer(modifier = Modifier.height(14.dp))
-            val intent = remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://wa.me/6282266095743"))}
+            val intent =
+                remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://wa.me/6282266095743")) }
             ClickableText(text = AnnotatedString("Hubungi Admin Untuk Mereset Password"),
                 style = TextStyle(
                     fontSize = 12.sp,

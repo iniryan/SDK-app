@@ -68,7 +68,6 @@ fun CheckOutPage(
     navController: NavController,
     context: Context = LocalContext.current
 ) {
-    println(orderItems)
     val baseUrl = "http://10.0.2.2:1337/api/"
 
     var total = 0
@@ -78,10 +77,9 @@ fun CheckOutPage(
     val tableField = remember { mutableStateOf(TextFieldValue("")) }
     val primaryColorOrg = Color(0xFFFF5F00)
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
-    val pickImageLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
-        onResult = { uri: Uri? -> uri?.let { selectedImageUri = it } }
-    )
+    val pickImageLauncher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent(),
+            onResult = { uri: Uri? -> uri?.let { selectedImageUri = it } })
 
     Box(modifier = Modifier.fillMaxSize()) {
 
@@ -110,8 +108,7 @@ fun CheckOutPage(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = "Lengkapi Datamu",
-                style = TextStyle(
+                text = "Lengkapi Datamu", style = TextStyle(
                     fontSize = 20.sp,
                     lineHeight = 17.64.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_semibold)),
@@ -120,19 +117,16 @@ fun CheckOutPage(
                 )
             )
             Text(
-                text = "Nama",
-                style = TextStyle(
+                text = "Nama", style = TextStyle(
                     fontSize = 14.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_regular)),
                     color = Color(0xFF1E1E1E),
                     textAlign = TextAlign.Center,
-                ),
-                modifier = Modifier
+                ), modifier = Modifier
                     .align(Alignment.Start)
                     .padding(top = 14.dp)
             )
-            OutlinedTextField(
-                value = nameField.value,
+            OutlinedTextField(value = nameField.value,
                 onValueChange = {
                     nameField.value = it
                 },
@@ -142,26 +136,20 @@ fun CheckOutPage(
                     .fillMaxWidth()
                     .padding(2.dp)
                     .border(
-                        width = 1.5.dp,
-                        color = primaryColorOrg,
-                        shape = RoundedCornerShape(8.dp)
+                        width = 1.5.dp, color = primaryColorOrg, shape = RoundedCornerShape(8.dp)
                     ),
-                placeholder = { Text(text = "Isikan namamu disini") }
-            )
+                placeholder = { Text(text = "Isikan namamu disini") })
             Text(
-                text = "Catatan",
-                style = TextStyle(
+                text = "Catatan", style = TextStyle(
                     fontSize = 14.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_regular)),
                     color = Color(0xFF1E1E1E),
                     textAlign = TextAlign.Center,
-                ),
-                modifier = Modifier
+                ), modifier = Modifier
                     .align(Alignment.Start)
                     .padding(top = 14.dp)
             )
-            OutlinedTextField(
-                value = notesField.value,
+            OutlinedTextField(value = notesField.value,
                 onValueChange = {
                     notesField.value = it
                 },
@@ -171,26 +159,20 @@ fun CheckOutPage(
                     .fillMaxWidth()
                     .padding(2.dp)
                     .border(
-                        width = 1.5.dp,
-                        color = primaryColorOrg,
-                        shape = RoundedCornerShape(8.dp)
+                        width = 1.5.dp, color = primaryColorOrg, shape = RoundedCornerShape(8.dp)
                     ),
-                placeholder = { Text(text = "Tulis catatan untuk penjual jika ada") }
-            )
+                placeholder = { Text(text = "Tulis catatan untuk penjual jika ada") })
             Text(
-                text = "Nomor Meja",
-                style = TextStyle(
+                text = "Nomor Meja", style = TextStyle(
                     fontSize = 14.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_regular)),
                     color = Color(0xFF1E1E1E),
                     textAlign = TextAlign.Center,
-                ),
-                modifier = Modifier
+                ), modifier = Modifier
                     .align(Alignment.Start)
                     .padding(top = 14.dp)
             )
-            OutlinedTextField(
-                value = tableField.value,
+            OutlinedTextField(value = tableField.value,
                 onValueChange = {
                     tableField.value = it
                 },
@@ -200,12 +182,9 @@ fun CheckOutPage(
                     .fillMaxWidth()
                     .padding(2.dp)
                     .border(
-                        width = 1.5.dp,
-                        color = primaryColorOrg,
-                        shape = RoundedCornerShape(8.dp)
+                        width = 1.5.dp, color = primaryColorOrg, shape = RoundedCornerShape(8.dp)
                     ),
-                placeholder = { Text(text = "Isi nomor meja atau dibungkus") }
-            )
+                placeholder = { Text(text = "Isi nomor meja atau dibungkus") })
             Spacer(modifier = Modifier.padding(10.dp))
 
             LazyColumn {
@@ -244,11 +223,6 @@ fun CheckOutPage(
                                     ),
                                     horizontalAlignment = Alignment.Start,
                                 ) {
-//                                                    val img = menuResponse.attributes.foodImg?.data!!.forEach { img ->
-//                                                        println(img.attributes.url)
-//                                                    }
-//                                                    Text(text = menuResponse.attributes.foodImg?.data?.get(0)?.attributes?.formats?.thumbnail?.url.toString())
-//                                                    Text(text = menuResponse.attributes.foodImg?.data?.get(0)?.attributes?.url.toString())
                                     Text(
                                         text = menuResponse.orderDetailsData.foods.attributes.foodName,
 
@@ -309,14 +283,14 @@ fun CheckOutPage(
                                         }
                                     }
                                 }
-//                                println(menuResponse.orderDetailsData.foods)
-                                val imgurl = menuResponse.orderDetailsData.foods.attributes.foodImg?.data?.attributes!!.url
+                                val imgurl =
+                                    menuResponse.orderDetailsData.foods.attributes.foodImg?.data?.attributes!!.url
                                 Image(
                                     modifier = Modifier
                                         .width(100.dp)
                                         .height(100.dp),
                                     contentScale = ContentScale.Crop,
-                                    painter = rememberAsyncImagePainter("http://10.0.2.2:1337" +imgurl),
+                                    painter = rememberAsyncImagePainter("http://10.0.2.2:1337" + imgurl),
                                     contentDescription = "image description"
                                 )
 //                                Image(
@@ -343,8 +317,7 @@ fun CheckOutPage(
 
             Row {
                 Text(
-                    text = "Total harga : ",
-                    style = TextStyle(
+                    text = "Total harga : ", style = TextStyle(
                         fontSize = 16.sp,
                         lineHeight = 14.sp,
                         fontFamily = FontFamily(Font(R.font.poppins_medium)),
@@ -360,8 +333,7 @@ fun CheckOutPage(
 //                    }
 //                }
                 Text(
-                    text = "Rp"+convertedTotal.value,
-                    style = TextStyle(
+                    text = "Rp" + convertedTotal.value, style = TextStyle(
                         fontSize = 16.sp,
                         lineHeight = 14.sp,
                         fontFamily = FontFamily(Font(R.font.poppins_medium)),
@@ -372,150 +344,103 @@ fun CheckOutPage(
             }
 
             Spacer(modifier = Modifier.padding(10.dp))
-            ElevatedButton(
-                modifier = Modifier
-                    .align(Alignment.Start)
-                    .fillMaxWidth()
-                    .padding(2.dp)
-                    .height(48.dp),
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = Color.White,
-                ),
-                shape = RoundedCornerShape(8.dp),
-                onClick = {
-                    if (nameField.value.text.isEmpty() || tableField.value.text.isEmpty()) {
-                        Toast.makeText(
-                            context,
-                            "Field tidak boleh kosong",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        return@ElevatedButton
-                    } else {
-                        val retrofit = Retrofit.Builder()
-                            .baseUrl(baseUrl)
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build().create(OrderService::class.java)
-                        val call = retrofit.addOrder(
-                            OrderDataWrapper(
-                                OrderData(
-                                    customerName = nameField.value.text,
-                                    tableNumber = tableField.value.text,
-                                    notes = notesField.value.text,
-                                    total = total,
-                                    status = "pending"
-                                )
+            ElevatedButton(modifier = Modifier
+                .align(Alignment.Start)
+                .fillMaxWidth()
+                .padding(2.dp)
+                .height(48.dp), colors = ButtonDefaults.buttonColors(
+                contentColor = Color.White,
+            ), shape = RoundedCornerShape(8.dp), onClick = {
+                if (nameField.value.text.isEmpty() || tableField.value.text.isEmpty()) {
+                    Toast.makeText(
+                        context, "Field tidak boleh kosong", Toast.LENGTH_SHORT
+                    ).show()
+                    return@ElevatedButton
+                } else {
+                    val retrofit = Retrofit.Builder().baseUrl(baseUrl)
+                        .addConverterFactory(GsonConverterFactory.create()).build()
+                        .create(OrderService::class.java)
+                    val call = retrofit.addOrder(
+                        OrderDataWrapper(
+                            OrderData(
+                                customerName = nameField.value.text,
+                                tableNumber = tableField.value.text,
+                                notes = notesField.value.text,
+                                total = total,
+                                status = "pending"
                             )
                         )
-                        call.enqueue(object : Callback<ApiResponse<OrderResponse>> {
-                            override fun onResponse(
-                                call: Call<ApiResponse<OrderResponse>>,
-                                response: Response<ApiResponse<OrderResponse>>
-                            ) {
-                                if (response.code() == 200) {
-                                    val retrofit2 =
-                                        Retrofit.Builder().baseUrl(baseUrl)
-                                            .addConverterFactory(GsonConverterFactory.create())
-                                            .build().create(OrderDetailsService::class.java)
-                                    orderItems?.forEach {
-                                        it.orderDetailsData.orderID = response.body()?.data?.id.toString()
-                                        val call2 = retrofit2.addOrderDetails(it)
-                                        call2.enqueue(object : Callback<ApiResponse<OrderDetailsResponse>> {
-                                            override fun onResponse(
-                                                call: Call<ApiResponse<OrderDetailsResponse>>,
-                                                response: Response<ApiResponse<OrderDetailsResponse>>
-                                            ) {
-                                                if (response.code() == 200) {
-                                                    Toast.makeText(
-                                                        context,
-                                                        "Berhasil menambahkan pesanan",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
+                    )
+                    call.enqueue(object : Callback<ApiResponse<OrderResponse>> {
+                        override fun onResponse(
+                            call: Call<ApiResponse<OrderResponse>>,
+                            response: Response<ApiResponse<OrderResponse>>
+                        ) {
+                            if (response.isSuccessful) {
+                                val retrofit2 = Retrofit.Builder().baseUrl(baseUrl)
+                                    .addConverterFactory(GsonConverterFactory.create()).build()
+                                    .create(OrderDetailsService::class.java)
+                                orderItems?.forEach {
+                                    it.orderDetailsData.orderID =
+                                        response.body()?.data?.id.toString()
+                                    val call2 = retrofit2.addOrderDetails(it)
+                                    call2.enqueue(object :
+                                        Callback<ApiResponse<OrderDetailsResponse>> {
+                                        override fun onResponse(
+                                            call: Call<ApiResponse<OrderDetailsResponse>>,
+                                            response: Response<ApiResponse<OrderDetailsResponse>>
+                                        ) {
+                                            if (response.isSuccessful) {
+                                                Toast.makeText(
+                                                    context,
+                                                    "Berhasil menambahkan pesanan",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
 //                                                    navController.navigate("homepage") {
 //                                                        popUpTo("homepage") {
 //                                                            inclusive = true
 //                                                        }
 //                                                    }
-                                                } else if (response.code() == 400) {
-                                                    Toast.makeText(
-                                                        context,
-                                                        "Error: ${response.code()} - ${response.message()}",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                }
+                                            } else {
+                                                Toast.makeText(
+                                                    context,
+                                                    "Error: ${response.code()} - ${response.message()}",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
                                             }
+                                        }
 
-                                            override fun onFailure(
-                                                call: Call<ApiResponse<OrderDetailsResponse>>,
-                                                t: Throwable
-                                            ) {
-                                                print(t.message)
-                                            }
+                                        override fun onFailure(
+                                            call: Call<ApiResponse<OrderDetailsResponse>>,
+                                            t: Throwable
+                                        ) {
+                                            print(t.message)
+                                        }
 
-                                        })
-                                    }
-                                } else if (response.code() == 400) {
-                                    Toast.makeText(
-                                        context,
-                                        "Error: ${response.code()} - ${response.message()}",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    })
                                 }
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Error: ${response.code()} - ${response.message()}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
+                        }
 
-                            override fun onFailure(
-                                call: Call<ApiResponse<OrderResponse>>,
-                                t: Throwable
-                            ) {
-                                print(t.message)
-                            }
+                        override fun onFailure(
+                            call: Call<ApiResponse<OrderResponse>>, t: Throwable
+                        ) {
+                            print(t.message)
+                        }
 
-                        })
-                    }
-
-
-//                    val retrofit =
-//                        Retrofit.Builder().baseUrl(baseUrl)
-//                            .addConverterFactory(GsonConverterFactory.create())
-//                            .build().create(OrderDetailsService::class.java)
-//                    orderItems?.forEach {
-//                        val call = retrofit.addOrderDetails(it)
-//                        call.enqueue(object : Callback<OrderDetailsResponse> {
-//                            override fun onResponse(
-//                                call: Call<OrderDetailsResponse>,
-//                                response: Response<OrderDetailsResponse>
-//                            ) {
-//                                if (response.code() == 200) {
-//                                    Toast.makeText(
-//                                        context,
-//                                        "Berhasil menambahkan pesanan",
-//                                        Toast.LENGTH_SHORT
-//                                    ).show()
-//                                } else if (response.code() == 400) {
-//                                    Toast.makeText(
-//                                        context,
-//                                        "Error: ${response.code()} - ${response.message()}",
-//                                        Toast.LENGTH_SHORT
-//                                    ).show()
-//                                }
-//                            }
-//
-//                            override fun onFailure(
-//                                call: Call<OrderDetailsResponse>,
-//                                t: Throwable
-//                            ) {
-//                                print(t.message)
-//                            }
-//
-//                        })
-//                    }
-
+                    })
                 }
-            )
+            })
 
             {
                 Text(
-                    text = "Pesan Menu",
-                    style = TextStyle(
+                    text = "Pesan Menu", style = TextStyle(
                         fontSize = 16.sp,
                         fontFamily = FontFamily(Font(R.font.poppins_semibold)),
                         color = Color.White,

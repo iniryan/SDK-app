@@ -64,12 +64,12 @@ fun MenuList(navController: NavController, context: Context = LocalContext.curre
             call: Call<ApiResponse<List<FoodResponse>>>,
             response: Response<ApiResponse<List<FoodResponse>>>
         ) {
-            if (response.code() == 200) {
+            if (response.isSuccessful) {
                 listMenu.clear()
                 response.body()?.data!!.forEach { menuResponse ->
                     listMenu.add(menuResponse)
                 }
-            } else if (response.code() == 400) {
+            } else {
                 Toast.makeText(
                     context,
                     "Error: ${response.code()} - ${response.message()}",
@@ -153,7 +153,6 @@ fun MenuList(navController: NavController, context: Context = LocalContext.curre
                                     horizontalAlignment = Alignment.Start,
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
-//                                    Text(text = menu.attributes.foodImg?.data?.get(0)?.attributes?.formats?.thumbnail?.url.toString())
                                     Text(
                                         text = menu.attributes.foodName, style = TextStyle(
                                             fontSize = 16.sp,
@@ -163,7 +162,7 @@ fun MenuList(navController: NavController, context: Context = LocalContext.curre
                                         )
                                     )
                                     Text(
-                                        text = "Rp"+menu.attributes.foodPrice.toString(),
+                                        text = "Rp" + menu.attributes.foodPrice.toString(),
                                         style = TextStyle(
                                             fontSize = 12.sp,
                                             lineHeight = 17.64.sp,

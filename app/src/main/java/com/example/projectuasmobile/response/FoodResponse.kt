@@ -37,16 +37,4 @@ class FoodImgAttributes {
     var name: String = ""
     @SerializedName("url")
     var url : String = ""
-//    @SerializedName("formats")
-//    var formats : ImgFormat = ImgFormat()
-}
-
-class ImgFormat {
-    @SerializedName("thumbnail")
-    var thumbnail : ImgThumbnail = ImgThumbnail()
-}
-
-class ImgThumbnail {
-//    @SerializedName("url")
-//    var url : String = ""
 }

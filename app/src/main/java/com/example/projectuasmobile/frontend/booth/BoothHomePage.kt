@@ -60,12 +60,12 @@ fun BoothHomePage(navController: NavController, context: Context = LocalContext.
         override fun onResponse(
             call: Call<UserResponse>, response: Response<UserResponse>
         ) {
-            if (response.code() == 200) {
+            if (response.isSuccessful) {
                 val booth = response.body()?.booth
                 if (booth != null) {
                     preferencesManager.saveData("boothID", booth.id.toString())
                 }
-            } else if (response.code() == 400) {
+            } else {
                 Toast.makeText(
                     context, "Error: ${response.code()} - ${response.message()}",
                     Toast.LENGTH_SHORT
@@ -88,12 +88,12 @@ fun BoothHomePage(navController: NavController, context: Context = LocalContext.
             call: Call<ApiResponse<List<OrderResponse>>>,
             response: Response<ApiResponse<List<OrderResponse>>>
         ) {
-            if (response.code() == 200) {
+            if (response.isSuccessful) {
                 listOrder.clear()
                 response.body()?.data!!.forEach { orderResponse ->
                     listOrder.add(orderResponse)
                 }
-            } else if (response.code() == 400) {
+            } else {
                 Toast.makeText(
                     context, "Error: ${response.code()} - ${response.message()}",
                     Toast.LENGTH_SHORT

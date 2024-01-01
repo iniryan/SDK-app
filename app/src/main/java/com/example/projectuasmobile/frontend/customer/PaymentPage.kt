@@ -1,6 +1,5 @@
 package com.example.projectuasmobile.frontend.customer
 
-import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -30,56 +28,64 @@ import androidx.navigation.NavController
 import com.example.projectuasmobile.R
 
 @Composable
-fun PaymentPage(navController: NavController){
-Surface(modifier = Modifier
-    .fillMaxSize()
-    .padding(12.dp)) {
+fun PaymentPage(navController: NavController) {
+    Surface(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(12.dp)
+    ) {
 
-    Column (horizontalAlignment = Alignment.CenterHorizontally){
-        Text(
-            text = "Pilih Pembayaran",
-            style = TextStyle(
-                fontSize = 24.sp,
-                fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                fontWeight = FontWeight(600),
-                color = Color(0xCCFF5F00),
-                textAlign = TextAlign.Center,
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = "Pilih Pembayaran",
+                style = TextStyle(
+                    fontSize = 24.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+                    fontWeight = FontWeight(600),
+                    color = Color(0xCCFF5F00),
+                    textAlign = TextAlign.Center,
+                )
             )
-        )
 
-        Text(
-            text = " Metode pembayaran ",
-            style = TextStyle(
-                fontSize = 16.sp,
-                fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                fontWeight = FontWeight(400),
-                color = Color(0xFF1E1E1E),
-                textAlign = TextAlign.Center,
+            Text(
+                text = " Metode pembayaran ",
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                    fontWeight = FontWeight(400),
+                    color = Color(0xFF1E1E1E),
+                    textAlign = TextAlign.Center,
+                )
             )
-        )
-        Column (modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment =
-        Alignment.CenterHorizontally){
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment =
+                Alignment.CenterHorizontally
+            ) {
 
-        Image(
-            modifier = Modifier.width(362.dp)
-                .height(222.dp)
-                .clickable { navController.navigate("") },
-            painter = painterResource(id = R.drawable.tunai),
-            contentDescription = "image description",
-            contentScale = ContentScale.Fit
-        )
-        Spacer(modifier = Modifier.padding(top =20.dp))
-        Image(
-            modifier = Modifier.width(362.dp)
-                .height(222.dp)
-                .clickable { navController.navigate("") },
-            painter = painterResource(id = R.drawable.cashless),
-            contentDescription = "image description",
-            contentScale = ContentScale.Fit,
-            )
+                Image(
+                    modifier = Modifier
+                        .width(362.dp)
+                        .height(222.dp)
+                        .clickable { navController.navigate("") },
+                    painter = painterResource(id = R.drawable.tunai),
+                    contentDescription = "image description",
+                    contentScale = ContentScale.Fit
+                )
+                Spacer(modifier = Modifier.padding(top = 20.dp))
+                Image(
+                    modifier = Modifier
+                        .width(362.dp)
+                        .height(222.dp)
+                        .clickable { navController.navigate("") },
+                    painter = painterResource(id = R.drawable.cashless),
+                    contentDescription = "image description",
+                    contentScale = ContentScale.Fit,
+                )
+
+            }
 
         }
-
     }
-}
 }
