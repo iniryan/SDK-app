@@ -300,50 +300,65 @@ fun Register(navController: NavController, context: Context = LocalContext.curre
             Spacer(modifier = Modifier.height(16.dp))
             Button(
                 onClick = {
-                    val retrofit =
-                        Retrofit.Builder()
-                            .baseUrl(baseUrl)
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build()
-                            .create(AuthService::class.java)
-                    val call = retrofit.saveData(
-                        RegisterData(
-                            fullname = fullnameField.value.text,
-                            email = emailField.value.text,
-                            username = usernameField.value.text,
-                            password = passwordField.value.text
+                    if (fullnameField.value.text.isEmpty() || usernameField.value.text.isEmpty() || emailField.value.text.isEmpty() || passwordField.value.text.isEmpty()) {
+                        Toast.makeText(context, "Error: Field is required", Toast.LENGTH_SHORT)
+                            .show()
+                        return@Button
+                    } else {
+                        val retrofit =
+                            Retrofit.Builder()
+                                .baseUrl(baseUrl)
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .build()
+                                .create(AuthService::class.java)
+                        val call = retrofit.saveData(
+                            RegisterData(
+                                fullname = fullnameField.value.text,
+                                email = emailField.value.text,
+                                username = usernameField.value.text,
+                                password = passwordField.value.text
+                            )
                         )
-                    )
-                    call.enqueue(object : Callback<AuthResponse> {
-                        override fun onResponse(
-                            call: Call<AuthResponse>,
-                            response: Response<AuthResponse>
-                        ) {
-                            if (response.isSuccessful) {
-                                jwt = response.body()?.jwt!!
-                                val respUser = response.body()?.user!!
-                                val userID = respUser.id.toString()
-                                preferencesManager.saveData("jwt", jwt)
-                                preferencesManager.saveData("userID", userID)
-                                preferencesManager.saveData("fullname", fullnameField.value.text)
-                                preferencesManager.saveData("username", usernameField.value.text)
-                                preferencesManager.saveData("email", emailField.value.text)
-                                preferencesManager.saveData("password", passwordField.value.text)
-                                print("Successful register")
-                                navController.navigate("registerBooth")
-                            } else {
-                                Toast.makeText(
-                                    context,
-                                    "Error: ${response.code()} - ${response.message()}",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                        call.enqueue(object : Callback<AuthResponse> {
+                            override fun onResponse(
+                                call: Call<AuthResponse>,
+                                response: Response<AuthResponse>
+                            ) {
+                                if (response.isSuccessful) {
+                                    jwt = response.body()?.jwt!!
+                                    val respUser = response.body()?.user!!
+                                    val userID = respUser.id.toString()
+                                    preferencesManager.saveData("jwt", jwt)
+                                    preferencesManager.saveData("userID", userID)
+                                    preferencesManager.saveData(
+                                        "fullname",
+                                        fullnameField.value.text
+                                    )
+                                    preferencesManager.saveData(
+                                        "username",
+                                        usernameField.value.text
+                                    )
+                                    preferencesManager.saveData("email", emailField.value.text)
+                                    preferencesManager.saveData(
+                                        "password",
+                                        passwordField.value.text
+                                    )
+                                    print("Successful register")
+                                    navController.navigate("registerBooth")
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        "Error: ${response.code()} - ${response.message()}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
-                        }
 
-                        override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
-                            print(t.message)
-                        }
-                    })
+                            override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
+                                print(t.message)
+                            }
+                        })
+                    }
                 }, modifier = Modifier
                     .width(327.dp)
                     .height(72.dp)

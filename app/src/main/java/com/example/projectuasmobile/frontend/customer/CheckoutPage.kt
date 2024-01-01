@@ -8,7 +8,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,12 +17,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,10 +37,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -90,15 +94,22 @@ fun CheckOutPage(
                 .fillMaxSize()
                 .padding(14.dp)
         ) {
-            Image(
+            IconButton(
                 modifier = Modifier
-                    .width(36.dp)
-                    .height(36.dp)
-                    .clickable { navController.navigate("boothHome") },
-                painter = painterResource(id = R.drawable.backwhite),
-                contentDescription = "image description",
-                contentScale = ContentScale.None
-            )
+                    .padding(top = 12.dp, end = 12.dp)
+                    .background(
+                        color = Color(0xFFFF5F00),
+                        shape = RoundedCornerShape(100.dp)
+                    ),
+                onClick = { navController.navigateUp() }
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "Kembali",
+                    modifier = Modifier.size(25.dp),
+                    tint = Color.White
+                )
+            }
         }
         Column(
             modifier = Modifier
@@ -244,7 +255,7 @@ fun CheckOutPage(
                                         )
                                     )
                                     Text(
-                                        text = menuResponse.orderDetailsData.foods.attributes.foodPrice.toString(),
+                                        text = "Rp" + menuResponse.orderDetailsData.foods.attributes.foodPrice.toString(),
                                         style = TextStyle(
                                             fontSize = 12.sp,
                                             lineHeight = 20.sp,
@@ -266,12 +277,20 @@ fun CheckOutPage(
                                         convertedTotal.value = total.toString()
                                         Row(
                                             horizontalArrangement = Arrangement.spacedBy(
-                                                12.dp, Alignment.CenterHorizontally
+                                                8.dp, Alignment.CenterHorizontally
                                             ),
                                             verticalAlignment = Alignment.CenterVertically,
                                         ) {
                                             Text(
-                                                text = "Jumlah pesanan: " + menuResponse.orderDetailsData.qty.toString() + " porsi",
+                                                text = "Jumlah Pesanan:", style = TextStyle(
+                                                    fontSize = 16.sp,
+                                                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                                                    color = Color(0xFF1E1E1E),
+                                                )
+                                            )
+                                            Spacer(modifier = Modifier.padding(top = 20.dp))
+                                            Text(
+                                                text = menuResponse.orderDetailsData.qty.toString() + " porsi",
 
                                                 style = TextStyle(
                                                     fontSize = 14.sp,
@@ -288,7 +307,8 @@ fun CheckOutPage(
                                 Image(
                                     modifier = Modifier
                                         .width(100.dp)
-                                        .height(100.dp),
+                                        .height(100.dp)
+                                        .clip(RoundedCornerShape(8.dp)),
                                     contentScale = ContentScale.Crop,
                                     painter = rememberAsyncImagePainter("http://10.0.2.2:1337" + imgurl),
                                     contentDescription = "image description"
@@ -315,7 +335,10 @@ fun CheckOutPage(
             }
             Spacer(modifier = Modifier.padding(10.dp))
 
-            Row {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(start = 16.dp),
+                horizontalArrangement = Arrangement.Start
+            ) {
                 Text(
                     text = "Total harga : ", style = TextStyle(
                         fontSize = 16.sp,

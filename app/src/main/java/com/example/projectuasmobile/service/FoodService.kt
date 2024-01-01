@@ -14,7 +14,7 @@ import retrofit2.http.Query
 
 interface FoodService {
     @POST("foods")
-    fun addFood(@Body foodData: FoodDataWrapper): Call<FoodResponse>
+    fun addFood(@Body foodData: FoodDataWrapper): Call<ApiResponse<FoodResponse>>
 
     @GET("foods/{id}")
     fun getFoodById(@Path("id") id: Int, @Query("populate") populate: String?): Call<ApiResponse<List<FoodResponse>>>

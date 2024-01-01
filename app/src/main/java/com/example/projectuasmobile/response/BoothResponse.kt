@@ -20,4 +20,21 @@ class BoothAttributes{
     val owner: ApiResponse<User>? = null
     @SerializedName("foods")
     val foods: ApiResponse<List<FoodResponse>>? = null
+    @SerializedName("boothImg")
+    var boothImg: ApiResponse<BoothImgResponse>? = null
+}
+
+class BoothImgResponse {
+    @SerializedName("id")
+    var id: Int = 0
+
+    @SerializedName("attributes")
+    var attributes: BoothImgAttributes = BoothImgAttributes()
+}
+
+class BoothImgAttributes {
+    @SerializedName("name")
+    var name: String = ""
+    @SerializedName("url")
+    var url : String = ""
 }

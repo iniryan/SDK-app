@@ -3,6 +3,7 @@ package com.example.projectuasmobile.frontend.booth
 import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,7 +15,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Divider
@@ -27,7 +30,9 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -36,6 +41,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import com.example.projectuasmobile.BottomNavigation
 import com.example.projectuasmobile.PreferencesManager
 import com.example.projectuasmobile.R
@@ -128,26 +134,16 @@ fun MenuList(navController: NavController, context: Context = LocalContext.curre
                                     .padding(top = 14.dp)
                                     .clickable { navController.navigate("editMenu/" + menu.id + "/" + menu.attributes.foodName + "/" + menu.attributes.foodDescription + "/" + menu.attributes.foodPrice) }
                             ) {
-//                                if (menu.attributes.foodImg != null) {
-//                                    val imgurl = menu.attributes.foodImg?.data?.attributes!!.url
-//                                    Image(
-//                                        modifier = Modifier
-//                                            .width(100.dp)
-//                                            .height(100.dp),
-//                                        contentScale = ContentScale.Crop,
-//                                        painter = rememberAsyncImagePainter("http://10.0.2.2:1337" +imgurl),
-//                                        contentDescription = "image description"
-//                                    )
-//                                } else {
-//                                    Image(
-//                                        modifier = Modifier
-//                                            .width(100.dp)
-//                                            .height(100.dp),
-//                                        contentScale = ContentScale.Crop,
-//                                        painter = painterResource(id = R.drawable.dummy),
-//                                        contentDescription = "image description"
-//                                    )
-//                                }
+                                val imgurl = menu.attributes.foodImg?.data?.attributes!!.url
+                                Image(
+                                    modifier = Modifier
+                                        .width(100.dp)
+                                        .height(100.dp)
+                                        .clip(RoundedCornerShape(8.dp)),
+                                    contentScale = ContentScale.Crop,
+                                    painter = rememberAsyncImagePainter("http://10.0.2.2:1337" + imgurl),
+                                    contentDescription = "image description"
+                                )
                                 Column(
                                     verticalArrangement = Arrangement.spacedBy(1.dp, Alignment.Top),
                                     horizontalAlignment = Alignment.Start,

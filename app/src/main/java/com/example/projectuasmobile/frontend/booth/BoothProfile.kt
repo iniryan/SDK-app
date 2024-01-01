@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
@@ -27,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -38,6 +40,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import com.example.projectuasmobile.BottomNavigation
 import com.example.projectuasmobile.PreferencesManager
 import com.example.projectuasmobile.R
@@ -62,6 +65,7 @@ fun BoothProfile(navController: NavController, context: Context = LocalContext.c
     val boothDesc = remember { mutableStateOf("") }
     val open = remember { mutableStateOf(true) }
     val boothID = remember { mutableIntStateOf(0) }
+    val urlImg = remember { mutableStateOf("") }
 
     val baseUrl = "http://10.0.2.2:1337/api/"
     val retrofit =
@@ -85,6 +89,8 @@ fun BoothProfile(navController: NavController, context: Context = LocalContext.c
                         boothDesc.value = boothDescription
                         val openBooth = dataList[0].attributes.open
                         open.value = openBooth
+                        val imgUrl = dataList[0].attributes.boothImg?.data?.attributes!!.url
+                        urlImg.value = imgUrl
                     }
                 }
 
@@ -135,11 +141,14 @@ fun BoothProfile(navController: NavController, context: Context = LocalContext.c
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            println(urlImg.value)
+            println("HAHAHHAHHAHHA")
             Image(
                 modifier = Modifier
                     .width(114.dp)
-                    .height(114.dp),
-                painter = painterResource(id = R.drawable.profilepict),
+                    .height(114.dp)
+                    .clip(RoundedCornerShape(100.dp)),
+                painter = rememberAsyncImagePainter("http://10.0.2.2:1337"+urlImg.value),
                 contentDescription = "image description",
                 contentScale = ContentScale.FillBounds
             )

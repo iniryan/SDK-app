@@ -31,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -246,7 +247,7 @@ fun BoothDetail(
                                                         )
                                                     )
                                                     Text(
-                                                        text = menuResponse.attributes.foodPrice.toString(),
+                                                        text = "Rp" + menuResponse.attributes.foodPrice.toString(),
                                                         style = TextStyle(
                                                             fontSize = 12.sp,
                                                             lineHeight = 20.sp,
@@ -358,7 +359,8 @@ fun BoothDetail(
                                                 Image(
                                                     modifier = Modifier
                                                         .width(100.dp)
-                                                        .height(100.dp),
+                                                        .height(100.dp)
+                                                        .clip(RoundedCornerShape(8.dp)),
                                                     contentScale = ContentScale.Crop,
                                                     painter = rememberAsyncImagePainter("http://10.0.2.2:1337" + imgurl),
                                                     contentDescription = "image description"

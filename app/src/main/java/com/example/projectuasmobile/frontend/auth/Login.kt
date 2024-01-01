@@ -233,6 +233,11 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
             Spacer(modifier = Modifier.height(16.dp))
             Button(
                 onClick = {
+                    if (usernameField.value.text.isEmpty() || passwordField.value.text.isEmpty()) {
+                        Toast.makeText(context, "Error: Field is required", Toast.LENGTH_SHORT)
+                            .show()
+                        return@Button
+                    } else {
                     val retrofit = Retrofit.Builder().baseUrl(baseUrl)
                         .addConverterFactory(GsonConverterFactory.create()).build()
                         .create(AuthService::class.java)
@@ -271,6 +276,7 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                             print(t.message)
                         }
                     })
+                }
                 },
                 modifier = Modifier
                     .width(327.dp)

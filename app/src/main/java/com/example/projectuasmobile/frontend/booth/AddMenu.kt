@@ -59,6 +59,7 @@ import com.example.projectuasmobile.PreferencesManager
 import com.example.projectuasmobile.R
 import com.example.projectuasmobile.data.FoodData
 import com.example.projectuasmobile.data.FoodDataWrapper
+import com.example.projectuasmobile.response.ApiResponse
 import com.example.projectuasmobile.response.FoodResponse
 import com.example.projectuasmobile.service.FoodService
 import com.example.projectuasmobile.service.ImgService
@@ -249,7 +250,9 @@ fun AddMenu(navController: NavController, context: Context = LocalContext.curren
                     .height(48.dp)
                     .clickable { pickImageLauncher.launch("image/*") }
                     .border(
-                        width = 1.5.dp, color = primaryColorOrg, shape = RoundedCornerShape(8.dp)
+                        width = 1.5.dp,
+                        color = primaryColorOrg,
+                        shape = RoundedCornerShape(8.dp)
                     ), contentAlignment = Alignment.Center) {
                     if (selectedImageUri != null) {
                         Image(
@@ -289,112 +292,123 @@ fun AddMenu(navController: NavController, context: Context = LocalContext.curren
                 .height(48.dp), colors = ButtonDefaults.buttonColors(
                 contentColor = Color.White,
             ), shape = RoundedCornerShape(8.dp), onClick = {
-                val retrofit = Retrofit.Builder().baseUrl(baseUrl)
-                    .addConverterFactory(GsonConverterFactory.create()).build()
-                    .create(FoodService::class.java)
-                try {
-                    val price = foodPriceField.value.text.toInt()
-                    val foodData = FoodDataWrapper(
-                        FoodData(
-                            foodNameField.value.text,
-                            foodDescriptionField.value.text,
-                            price,
-                            boothId.toInt()
+                if (selectedImageFile == null) {
+                    Toast.makeText(context, "Error: Image is required", Toast.LENGTH_SHORT).show()
+                    return@ElevatedButton
+                } else if(foodNameField.value.text.isEmpty() || foodDescriptionField.value.text.isEmpty() || foodPriceField.value.text.isEmpty()) {
+                    Toast.makeText(context, "Error: Field is required", Toast.LENGTH_SHORT).show()
+                    return@ElevatedButton
+                } else {
+                    val retrofit = Retrofit.Builder().baseUrl(baseUrl)
+                        .addConverterFactory(GsonConverterFactory.create()).build()
+                        .create(FoodService::class.java)
+                    try {
+                        val price = foodPriceField.value.text.toInt()
+                        val foodData = FoodDataWrapper(
+                            FoodData(
+                                foodNameField.value.text,
+                                foodDescriptionField.value.text,
+                                price,
+                                boothId.toInt()
+                            )
                         )
-                    )
-                    val json = Gson().toJson(foodData)
-                    println("Request JSON: $json")
-                    val call = retrofit.addFood(foodData)
+                        val json = Gson().toJson(foodData)
+                        println("Request JSON: $json")
+                        val call = retrofit.addFood(foodData)
 
-                    call.enqueue(object : Callback<FoodResponse> {
-                        override fun onResponse(
-                            call: Call<FoodResponse>, response: Response<FoodResponse>
-                        ) {
-                            if (response.isSuccessful) {
-                                val foodResponse = response.body()
-                                val id = foodResponse?.id
-                                val file = selectedImageFile
-                                val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-                                    MimeTypeMap.getFileExtensionFromUrl(file?.name)
-                                )
-                                if (!file!!.exists()) {
-                                    println("Failed")
-                                    Toast.makeText(
-                                        context, "File not found", Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                                val refRequestBody =
-                                    "api::food.food".toRequestBody("multipart/form-data".toMediaTypeOrNull())
-                                val refIdRequestBody = id.toString()
-                                    .toRequestBody("multipart/form-data".toMediaTypeOrNull())
-                                val fieldRequestBody =
-                                    "foodImg".toRequestBody("multipart/form-data".toMediaTypeOrNull())
-                                val fileRequestBody = MultipartBody.Part.createFormData(
-                                    "files",
-                                    file.name,
-                                    file.asRequestBody(mimeType?.toMediaTypeOrNull())
-                                )
-
-                                val retrofit2 = Retrofit.Builder().baseUrl(baseUrl)
-                                    .addConverterFactory(GsonConverterFactory.create()).client(
-                                        OkHttpClient.Builder().addInterceptor(
-                                            HttpLoggingInterceptor().setLevel(
-                                                HttpLoggingInterceptor.Level.BODY
-                                            )
-                                        ).build()
+                        call.enqueue(object : Callback<ApiResponse<FoodResponse>> {
+                            override fun onResponse(
+                                call: Call<ApiResponse<FoodResponse>>,
+                                response: Response<ApiResponse<FoodResponse>>
+                            ) {
+                                if (response.isSuccessful) {
+                                    val id = response.body()!!.data!!.id
+                                    val file = selectedImageFile
+                                    val mimeType =
+                                        MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                                            file!!.extension
+                                        )
+                                    val refRequestBody =
+                                        "api::food.food".toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                                    val refIdRequestBody = id.toString()
+                                        .toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                                    val fieldRequestBody =
+                                        "foodImg".toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                                    val fileRequestBody = MultipartBody.Part.createFormData(
+                                        "files",
+                                        file.name,
+                                        file.asRequestBody(mimeType?.toMediaTypeOrNull())
                                     )
-                                    .build().create(ImgService::class.java)
-                                val call2 = retrofit2.uploadImage(
-                                    refRequestBody,
-                                    refIdRequestBody,
-                                    fieldRequestBody,
-                                    fileRequestBody
-                                )
-                                call2.enqueue(object : Callback<UploadResponseList> {
-                                    override fun onResponse(
-                                        call12: Call<UploadResponseList>,
-                                        response12: Response<UploadResponseList>
-                                    ) {
-                                        if (response12.isSuccessful) {
+
+                                    val retrofit2 = Retrofit.Builder().baseUrl(baseUrl)
+                                        .addConverterFactory(GsonConverterFactory.create()).client(
+                                            OkHttpClient.Builder().addInterceptor(
+                                                HttpLoggingInterceptor().setLevel(
+                                                    HttpLoggingInterceptor.Level.BODY
+                                                )
+                                            ).build()
+                                        )
+                                        .build().create(ImgService::class.java)
+                                    val call2 = retrofit2.uploadImage(
+                                        refRequestBody,
+                                        refIdRequestBody,
+                                        fieldRequestBody,
+                                        fileRequestBody
+                                    )
+                                    call2.enqueue(object : Callback<UploadResponseList> {
+                                        override fun onResponse(
+                                            call12: Call<UploadResponseList>,
+                                            response12: Response<UploadResponseList>
+                                        ) {
+                                            if (response12.isSuccessful) {
+//                                            navController.navigate("menu")
+                                                Toast.makeText(
+                                                    context,
+                                                    "Berhasil menambahkan menu",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            } else {
+                                                Toast.makeText(
+                                                    context,
+                                                    "Error: ${response.code()} - ${response.message()}",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                        }
+
+                                        override fun onFailure(
+                                            call12: Call<UploadResponseList>, t: Throwable
+                                        ) {
                                             Toast.makeText(
                                                 context,
-                                                "Berhasil menambahkan menu",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                        } else {
-                                            Toast.makeText(
-                                                context,
-                                            "Error: ${response.code()} - ${response.message()}",
+                                                "Error: ${response.code()} - ${response.message()}",
                                                 Toast.LENGTH_SHORT
                                             ).show()
                                         }
-                                    }
-
-                                    override fun onFailure(
-                                        call12: Call<UploadResponseList>, t: Throwable
-                                    ) {
-                                        Toast.makeText(
-                                            context,
-                                            "Error: ${response.code()} - ${response.message()}",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                })
-                            } else {
-                                Toast.makeText(
-                                    context, "Error: ${response.code()}", Toast.LENGTH_SHORT
-                                ).show()
+                                    })
+                                } else {
+                                    Toast.makeText(
+                                        context, "Error: ${response.code()}", Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
-                        }
 
-                        override fun onFailure(call: Call<FoodResponse>, t: Throwable) {
-                            print(t.message)
-                        }
+                            override fun onFailure(
+                                call: Call<ApiResponse<FoodResponse>>,
+                                t: Throwable
+                            ) {
+                                print(t.message)
+                            }
 
-                    })
-                } catch (e: NumberFormatException) {
-                    Toast.makeText(context, "Error: Invalid price format", Toast.LENGTH_SHORT)
-                        .show()
+                        })
+                    } catch (e: NumberFormatException) {
+                        Toast.makeText(
+                            context,
+                            "Error: Invalid price format",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    }
                 }
             })
 

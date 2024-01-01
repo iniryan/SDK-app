@@ -28,13 +28,13 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -79,7 +79,7 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
     val retrofit =
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
             .build().create(BoothService::class.java)
-    val call = retrofit.getAllBooth(searchField.value.text, "*")
+    val call = retrofit.getAllBooth(searchField.value.text, true,"*")
     call.enqueue(object : Callback<ApiResponse<List<BoothResponse>>> {
         override fun onResponse(
             call: Call<ApiResponse<List<BoothResponse>>>,
@@ -189,7 +189,7 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                     }
                 }
                 Text(
-                    text = "Rekomendasi Makanan", style = TextStyle(
+                    text = "Booth Tersedia", style = TextStyle(
                         fontSize = 18.sp,
                         lineHeight = 14.sp,
                         fontFamily = FontFamily(Font(R.font.poppins_semibold)),
@@ -212,12 +212,13 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                                     .clickable { navController.navigate("detailBooth/" + booth.id + "/" + booth.attributes.boothName + "/" + booth.attributes.boothDescription) }
                             ) {
                                 Image(
-                                    painter = painterResource(id = R.drawable.dummy),
+                                    painter = painterResource(id = R.drawable.logo),
                                     contentDescription = "image description",
                                     contentScale = ContentScale.FillBounds,
                                     modifier = Modifier
                                         .width(80.dp)
                                         .height(84.dp)
+                                        .clip(RoundedCornerShape(8.dp)),
                                 )
                                 Column(
                                     verticalArrangement = Arrangement.spacedBy(1.dp, Alignment.Top),
