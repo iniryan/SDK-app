@@ -77,9 +77,7 @@ fun MenuList(navController: NavController, context: Context = LocalContext.curre
                 }
             } else {
                 Toast.makeText(
-                    context,
-                    "Error: ${response.code()} - ${response.message()}",
-                    Toast.LENGTH_SHORT
+                    context, "Error: ${response.code()} - ${response.message()}", Toast.LENGTH_SHORT
                 ).show()
             }
         }
@@ -123,17 +121,16 @@ fun MenuList(navController: NavController, context: Context = LocalContext.curre
                 LazyColumn {
                     listMenu.forEach { menu ->
                         item {
-                            Row(
-                                horizontalArrangement = Arrangement.spacedBy(
-                                    12.dp,
-                                    Alignment.Start
-                                ),
+                            val currentValue = menu.attributes.foodImg?.data?.attributes!!.url
+                            val newUrl = currentValue.replace("/uploads/", "::uploads::")
+                            Row(horizontalArrangement = Arrangement.spacedBy(
+                                12.dp, Alignment.Start
+                            ),
                                 verticalAlignment = Alignment.Top,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(top = 14.dp)
-                                    .clickable { navController.navigate("editMenu/" + menu.id + "/" + menu.attributes.foodName + "/" + menu.attributes.foodDescription + "/" + menu.attributes.foodPrice) }
-                            ) {
+                                    .clickable { navController.navigate("editMenu/" + menu.id + "/" + menu.attributes.foodName + "/" + menu.attributes.foodDescription + "/" + menu.attributes.foodPrice + "/" + newUrl) }) {
                                 val imgurl = menu.attributes.foodImg?.data?.attributes!!.url
                                 Image(
                                     modifier = Modifier
@@ -169,14 +166,15 @@ fun MenuList(navController: NavController, context: Context = LocalContext.curre
                                     Spacer(modifier = Modifier.padding(top = 2.dp))
                                     Divider(
                                         modifier = Modifier
-                                            .border(width = 1.dp, color = Color(0xFFE0E0E0))
+                                            .border(
+                                                width = 1.dp, color = Color(0xFFE0E0E0)
+                                            )
                                             .fillMaxSize()
                                             .height(0.2.dp)
                                     )
                                     Spacer(modifier = Modifier.padding(top = 2.dp))
                                     Text(
-                                        text = menu.attributes.foodDescription,
-                                        style = TextStyle(
+                                        text = menu.attributes.foodDescription, style = TextStyle(
                                             fontSize = 12.sp,
                                             lineHeight = 17.64.sp,
                                             fontFamily = FontFamily(Font(R.font.poppins_regular)),

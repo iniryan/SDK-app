@@ -48,6 +48,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import com.example.projectuasmobile.BottomNavCustomer
 import com.example.projectuasmobile.R
 import com.example.projectuasmobile.response.ApiResponse
@@ -212,7 +213,7 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                                     .clickable { navController.navigate("detailBooth/" + booth.id + "/" + booth.attributes.boothName + "/" + booth.attributes.boothDescription) }
                             ) {
                                 Image(
-                                    painter = painterResource(id = R.drawable.logo),
+                                    painter = rememberAsyncImagePainter("http://10.0.2.2:1337"+booth.attributes.boothImg?.data?.attributes!!.url),
                                     contentDescription = "image description",
                                     contentScale = ContentScale.FillBounds,
                                     modifier = Modifier

@@ -388,12 +388,18 @@ fun BoothDetail(
                                 ),
                                 shape = RoundedCornerShape(8.dp),
                                 onClick = {
-                                    val objectArrayParameterString = Gson().toJson(orderItems)
-                                    val listReplace = objectArrayParameterString.replace(
-                                        "/uploads/",
-                                        "::uploads::"
-                                    )
-                                    navController.navigate("checkout/" + listReplace)
+                                    if (orderItems.isEmpty()) {
+                                            Toast.makeText(context, "Error: No item added", Toast.LENGTH_SHORT)
+                                                .show()
+                                            return@ElevatedButton
+                                    } else {
+                                        val objectArrayParameterString = Gson().toJson(orderItems)
+                                        val listReplace = objectArrayParameterString.replace(
+                                            "/uploads/",
+                                            "::uploads::"
+                                        )
+                                        navController.navigate("checkout/" + listReplace)
+                                    }
                                 }
                             )
 

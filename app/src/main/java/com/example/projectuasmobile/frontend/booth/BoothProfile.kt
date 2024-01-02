@@ -108,10 +108,13 @@ fun BoothProfile(navController: NavController, context: Context = LocalContext.c
         }
     })
 
+    val currentValue = urlImg.value
+    val newUrl = currentValue.replace("/uploads/", "::uploads::")
+
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                navController.navigate("editProfile/" + boothID.intValue + "/" + boothName.value + "/" + boothDesc.value + "/" + open.value.toString())
+                navController.navigate("editProfile/" + boothID.intValue + "/" + boothName.value + "/" + boothDesc.value + "/" + open.value.toString() + "/" + newUrl)
             }) {
                 Icon(Icons.Default.Edit, contentDescription = "Edit")
             }

@@ -295,8 +295,7 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                 )
             }
             Spacer(modifier = Modifier.height(14.dp))
-            val intent =
-                remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://wa.me/6282266095743")) }
+            val intent = remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://wa.me/6282266095743")) }
             ClickableText(text = AnnotatedString("Hubungi Admin Untuk Mereset Password"),
                 style = TextStyle(
                     fontSize = 12.sp,

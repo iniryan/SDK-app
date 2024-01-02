@@ -37,9 +37,9 @@ import com.example.projectuasmobile.frontend.booth.EditMenu
 import com.example.projectuasmobile.frontend.booth.EditProfile
 import com.example.projectuasmobile.frontend.booth.MenuList
 import com.example.projectuasmobile.frontend.booth.TransactionPage
-import com.example.projectuasmobile.frontend.customer.CustomerTransaction
 import com.example.projectuasmobile.frontend.customer.BoothDetail
 import com.example.projectuasmobile.frontend.customer.CheckOutPage
+import com.example.projectuasmobile.frontend.customer.CustomerTransaction
 import com.example.projectuasmobile.frontend.customer.HomePage
 import com.example.projectuasmobile.frontend.customer.PaymentPage
 import com.example.projectuasmobile.ui.theme.ProjectUASMobileTheme
@@ -87,13 +87,14 @@ class MainActivity : ComponentActivity() {
                                 backStackEntry.arguments?.getString("boothDescription"),
                             )
                         }
-                        composable("editMenu/{foodID}/{foodName}/{foodDescription}/{foodPrice}") { backStackEntry ->
+                        composable("editMenu/{foodID}/{foodName}/{foodDescription}/{foodPrice}/{newUrl}") { backStackEntry ->
                             EditMenu(
                                 navController,
                                 backStackEntry.arguments?.getString("foodID"),
                                 backStackEntry.arguments?.getString("foodName"),
                                 backStackEntry.arguments?.getString("foodDescription"),
                                 backStackEntry.arguments?.getString("foodPrice"),
+                                backStackEntry.arguments?.getString("newUrl"),
                             )
                         }
                         composable("boothHome") {
@@ -114,13 +115,14 @@ class MainActivity : ComponentActivity() {
                         composable("boothprofile") {
                             BoothProfile(navController)
                         }
-                        composable("editProfile/{boothID}/{boothName}/{boothDesc}/{open}") { backStackEntry ->
+                        composable("editProfile/{boothID}/{boothName}/{boothDesc}/{open}/{newUrl}") { backStackEntry ->
                             EditProfile(
                                 navController,
                                 backStackEntry.arguments?.getString("boothID"),
                                 backStackEntry.arguments?.getString("boothName"),
                                 backStackEntry.arguments?.getString("boothDesc"),
                                 backStackEntry.arguments?.getString("open"),
+                                backStackEntry.arguments?.getString("newUrl"),
                             )
                         }
                         composable("checkout/{orderList}") {

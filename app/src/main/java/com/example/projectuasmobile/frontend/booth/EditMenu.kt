@@ -2,6 +2,8 @@ package com.example.projectuasmobile.frontend.booth
 
 import android.content.Context
 import android.net.Uri
+import android.provider.OpenableColumns
+import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -23,7 +25,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.ButtonDefaults
@@ -41,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -50,6 +52,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.example.projectuasmobile.PreferencesManager
@@ -58,12 +61,23 @@ import com.example.projectuasmobile.data.FoodData
 import com.example.projectuasmobile.data.FoodDataWrapper
 import com.example.projectuasmobile.response.FoodResponse
 import com.example.projectuasmobile.service.FoodService
+import com.example.projectuasmobile.service.ImgService
+import com.example.projectuasmobile.service.UploadResponseList
 import com.google.gson.Gson
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 
 @Composable
 fun EditMenu(
@@ -72,21 +86,51 @@ fun EditMenu(
     foodName: String?,
     foodDescription: String?,
     foodPrice: String?,
+    newUrl: String?,
     context: Context = LocalContext.current
 ) {
     val foodNameField = remember { mutableStateOf(foodName ?: "") }
+    val foodId = remember { mutableStateOf(foodID ?: "") }
     val foodDescriptionField = remember { mutableStateOf(foodDescription ?: "") }
     val foodPriceField = remember { mutableStateOf(foodPrice ?: "") }
     val baseUrl = "http://10.0.2.2:1337/api/"
 
+    val currentValue = newUrl ?: ""
+    val editUrl = currentValue.replace("::uploads::", "/uploads/")
     val preferencesManager = remember { PreferencesManager(context = context) }
     val boothId = preferencesManager.getData("boothID")
     val primaryColorOrg = Color(0xFFFF5F00)
 
+    var selectedImageFile by remember { mutableStateOf<File?>(null) }
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
-    val pickImageLauncher =
-        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent(),
-            onResult = { uri: Uri? -> uri?.let { selectedImageUri = it } })
+    val resolver = context.contentResolver
+    val pickImageLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri: Uri? ->
+            uri?.let {
+                selectedImageUri = it
+                resolver.openInputStream(selectedImageUri!!)?.let { inputStream ->
+                    val originalFileName = context.contentResolver.query(
+                        selectedImageUri!!, null, null, null, null
+                    )?.use { cursor ->
+                        if (cursor.moveToFirst()) {
+                            val displayNameIndex =
+                                cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                            if (displayNameIndex != -1) {
+                                cursor.getString(displayNameIndex)
+                            } else {
+                                null
+                            }
+                        } else {
+                            null
+                        }
+                    }
+                    val file = File(context.cacheDir, originalFileName ?: "temp_img.jpg")
+                    Files.copy(inputStream, file.toPath(), StandardCopyOption.REPLACE_EXISTING)
+                    selectedImageFile = file
+                }
+            }
+        })
 
     Box(modifier = Modifier.fillMaxSize()) {
 
@@ -234,10 +278,14 @@ fun EditMenu(
                                 .clip(shape = RoundedCornerShape(8.dp))
                         )
                     } else {
-                        Icon(
-                            imageVector = Icons.Default.AddCircle,
-                            contentDescription = "Add Photo",
-                            tint = primaryColorOrg
+                        Image(
+                            modifier = Modifier
+                                .width(100.dp)
+                                .height(100.dp)
+                                .clip(RoundedCornerShape(8.dp)),
+                            contentScale = ContentScale.Crop,
+                            painter = rememberAsyncImagePainter("http://10.0.2.2:1337$editUrl"),
+                            contentDescription = "image description"
                         )
                     }
                 }
@@ -282,7 +330,64 @@ fun EditMenu(
                             call: Call<FoodResponse>, response: Response<FoodResponse>
                         ) {
                             if (response.isSuccessful) {
-                                navController.navigate("menu")
+                                val file = selectedImageFile
+                                val mimeType =
+                                    MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                                        file!!.extension
+                                    )
+                                val refRequestBody =
+                                    "api::food.food".toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                                val refIdRequestBody = foodId.value
+                                    .toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                                val fieldRequestBody =
+                                    "foodImg".toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                                val fileRequestBody = MultipartBody.Part.createFormData(
+                                    "files",
+                                    file.name,
+                                    file.asRequestBody(mimeType?.toMediaTypeOrNull())
+                                )
+
+                                val retrofit2 = Retrofit.Builder().baseUrl(baseUrl)
+                                    .addConverterFactory(GsonConverterFactory.create()).client(
+                                        OkHttpClient.Builder().addInterceptor(
+                                            HttpLoggingInterceptor().setLevel(
+                                                HttpLoggingInterceptor.Level.BODY
+                                            )
+                                        ).build()
+                                    )
+                                    .build().create(ImgService::class.java)
+                                val call2 = retrofit2.uploadImage(
+                                    refRequestBody,
+                                    refIdRequestBody,
+                                    fieldRequestBody,
+                                    fileRequestBody
+                                )
+                                call2.enqueue(object : Callback<UploadResponseList> {
+                                    override fun onResponse(
+                                        call12: Call<UploadResponseList>,
+                                        response12: Response<UploadResponseList>
+                                    ) {
+                                        if (response12.isSuccessful) {
+                                            navController.navigate("menu")
+                                        } else {
+                                            Toast.makeText(
+                                                context,
+                                                "Error: ${response.code()} - ${response.message()}",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    }
+
+                                    override fun onFailure(
+                                        call12: Call<UploadResponseList>, t: Throwable
+                                    ) {
+                                        Toast.makeText(
+                                            context,
+                                            "Error: ${response.code()} - ${response.message()}",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                })
                             } else {
                                 Toast.makeText(
                                     context, "Error: ${response.code()}", Toast.LENGTH_SHORT
