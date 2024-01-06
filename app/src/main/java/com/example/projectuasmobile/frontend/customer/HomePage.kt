@@ -77,6 +77,8 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
 
     val listBooth = remember { mutableStateListOf<BoothResponse>() }
     val baseUrl = "http://10.0.2.2:1337/api/"
+//    val baseUrl = "https://api2.tnadam.me/api/"
+
     val retrofit =
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
             .build().create(BoothService::class.java)
@@ -214,6 +216,7 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                             ) {
                                 Image(
                                     painter = rememberAsyncImagePainter("http://10.0.2.2:1337"+booth.attributes.boothImg?.data?.attributes!!.url),
+//                                    painter = rememberAsyncImagePainter("https://api2.tnadam.me"+booth.attributes.boothImg?.data?.attributes!!.url),
                                     contentDescription = "image description",
                                     contentScale = ContentScale.FillBounds,
                                     modifier = Modifier

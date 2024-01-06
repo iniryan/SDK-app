@@ -73,6 +73,7 @@ fun CheckOutPage(
     context: Context = LocalContext.current
 ) {
     val baseUrl = "http://10.0.2.2:1337/api/"
+//    val baseUrl = "https://api2.tnadam.me/api/"
 
     var total = 0
     val convertedTotal = remember { mutableStateOf("") }

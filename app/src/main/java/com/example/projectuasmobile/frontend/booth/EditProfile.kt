@@ -91,6 +91,7 @@ fun EditProfile(
 ) {
     val preferencesManager = remember { PreferencesManager(context = context) }
     val baseUrl = "http://10.0.2.2:1337/api/"
+//    val baseUrl = "https://api2.tnadam.me/api/"
 
     val boothId = remember { mutableStateOf(boothID ?: "") }
     val boothNameField = remember { mutableStateOf(boothName ?: "") }
@@ -275,6 +276,7 @@ fun EditProfile(
                                 .clip(RoundedCornerShape(8.dp)),
                             contentScale = ContentScale.Crop,
                             painter = rememberAsyncImagePainter("http://10.0.2.2:1337$editUrl"),
+//                            painter = rememberAsyncImagePainter("https://api2.tnadam.me/$editUrl"),
                             contentDescription = "image description"
                         )
                     }

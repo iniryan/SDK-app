@@ -72,6 +72,7 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
     val passwordField = remember { mutableStateOf(TextFieldValue("")) }
     val passwordVisible = remember { mutableStateOf(false) }
 
+//    val baseUrl = "https://api2.tnadam.me/api/"
     val baseUrl = "http://10.0.2.2:1337/api/"
     //KALAU TIDAK DI EMULATOR
     //val baseUrl = "http://10.217.17.11:1337/api/"

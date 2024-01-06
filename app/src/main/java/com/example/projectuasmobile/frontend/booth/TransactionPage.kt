@@ -50,6 +50,7 @@ fun TransactionPage(navController: NavController, context: Context = LocalContex
     val preferencesManager = remember { PreferencesManager(context = context) }
     val userID = preferencesManager.getData("userID")
 
+//    val baseUrl = "https://api2.tnadam.me/api/"
     val baseUrl = "http://10.0.2.2:1337/api/"
     val retrofit =
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())

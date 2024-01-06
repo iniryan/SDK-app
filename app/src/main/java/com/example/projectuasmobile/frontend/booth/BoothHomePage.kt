@@ -51,6 +51,7 @@ fun BoothHomePage(navController: NavController, context: Context = LocalContext.
     val userID = preferencesManager.getData("userID")
     val listOrder = remember { mutableStateListOf<OrderResponse>() }
 
+//    val baseUrl = "https://api2.tnadam.me/api/"
     val baseUrl = "http://10.0.2.2:1337/api/"
     val retrofit =
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())

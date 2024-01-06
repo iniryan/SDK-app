@@ -60,6 +60,7 @@ fun MenuList(navController: NavController, context: Context = LocalContext.curre
     val preferencesManager = remember { PreferencesManager(context = context) }
     val listMenu = remember { mutableStateListOf<FoodResponse>() }
     val boothId = preferencesManager.getData("boothID")
+//    val baseUrl = "https://api2.tnadam.me/api/"
     val baseUrl = "http://10.0.2.2:1337/api/"
     val retrofit =
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
@@ -139,6 +140,7 @@ fun MenuList(navController: NavController, context: Context = LocalContext.curre
                                         .clip(RoundedCornerShape(8.dp)),
                                     contentScale = ContentScale.Crop,
                                     painter = rememberAsyncImagePainter("http://10.0.2.2:1337" + imgurl),
+//                                    painter = rememberAsyncImagePainter("https://api2.tnadam.me" + imgurl),
                                     contentDescription = "image description"
                                 )
                                 Column(

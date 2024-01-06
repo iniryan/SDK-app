@@ -71,7 +71,9 @@ fun BoothDetail(
     val boothID = remember { mutableStateOf(boothID ?: "") }
 
     val listMenu = remember { mutableStateListOf<FoodResponse>() }
-    val baseUrl = "http://10.0.2.2:1337/api/"
+//    val baseUrl = "http://10.0.2.2:1337/api/"
+    val baseUrl = "https://api2.tnadam.me/api/"
+
     val retrofit =
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
             .build().create(FoodService::class.java)
@@ -362,7 +364,7 @@ fun BoothDetail(
                                                         .height(100.dp)
                                                         .clip(RoundedCornerShape(8.dp)),
                                                     contentScale = ContentScale.Crop,
-                                                    painter = rememberAsyncImagePainter("http://10.0.2.2:1337" + imgurl),
+                                                    painter = rememberAsyncImagePainter("https://api2.tnadam.me" + imgurl),
                                                     contentDescription = "image description"
                                                 )
 

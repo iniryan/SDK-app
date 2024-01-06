@@ -87,6 +87,7 @@ fun RegisterBooth(navController: NavController, context: Context = LocalContext.
     val boothName = remember { mutableStateOf(TextFieldValue("")) }
     val boothDescription = remember { mutableStateOf(TextFieldValue("")) }
 
+//    val baseUrl = "https://api2.tnadam.me/api/"
     val baseUrl = "http://10.0.2.2:1337/api/"
     var jwt by remember { mutableStateOf("") }
     jwt = preferencesManager.getData("jwt")

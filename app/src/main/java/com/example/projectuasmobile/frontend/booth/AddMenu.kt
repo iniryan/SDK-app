@@ -84,6 +84,7 @@ import java.nio.file.StandardCopyOption
 fun AddMenu(navController: NavController, context: Context = LocalContext.current) {
     val preferencesManager = remember { PreferencesManager(context = context) }
     val baseUrl = "http://10.0.2.2:1337/api/"
+//    val baseUrl = "https://api2.tnadam.me/api/"
 
     val foodNameField = remember { mutableStateOf(TextFieldValue("")) }
     val foodDescriptionField = remember { mutableStateOf(TextFieldValue("")) }
