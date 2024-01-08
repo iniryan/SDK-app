@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.projectuasmobile.PreferencesManager
 import com.example.projectuasmobile.R
 import com.example.projectuasmobile.data.OrderData
 import com.example.projectuasmobile.data.OrderDataWrapper
@@ -72,6 +73,8 @@ fun CheckOutPage(
     navController: NavController,
     context: Context = LocalContext.current
 ) {
+    val preferencesManager = remember { PreferencesManager(context = context) }
+
     val baseUrl = "http://10.0.2.2:1337/api/"
 //    val baseUrl = "https://api2.tnadam.me/api/"
 
@@ -303,8 +306,7 @@ fun CheckOutPage(
                                         }
                                     }
                                 }
-                                val imgurl =
-                                    menuResponse.orderDetailsData.foods.attributes.foodImg?.data?.attributes!!.url
+                                val imgurl = menuResponse.orderDetailsData.foods.attributes.foodImg?.data?.attributes!!.url
                                 Image(
                                     modifier = Modifier
                                         .width(100.dp)
@@ -372,8 +374,9 @@ fun CheckOutPage(
                 .align(Alignment.Start)
                 .fillMaxWidth()
                 .padding(2.dp)
-                .height(48.dp), colors = ButtonDefaults.buttonColors(
+                .height(64.dp), colors = ButtonDefaults.buttonColors(
                 contentColor = Color.White,
+                containerColor = Color(0xFFFF5F00)
             ), shape = RoundedCornerShape(8.dp), onClick = {
                 if (nameField.value.text.isEmpty() || tableField.value.text.isEmpty()) {
                     Toast.makeText(
@@ -391,7 +394,8 @@ fun CheckOutPage(
                                 tableNumber = tableField.value.text,
                                 notes = notesField.value.text,
                                 total = total,
-                                status = "pending"
+                                status = "pending",
+                                booth = preferencesManager.getData("boothOrderID").toInt()
                             )
                         )
                     )

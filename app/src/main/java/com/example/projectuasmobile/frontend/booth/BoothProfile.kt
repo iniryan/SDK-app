@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -145,8 +146,6 @@ fun BoothProfile(navController: NavController, context: Context = LocalContext.c
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            println(urlImg.value)
-            println("HAHAHHAHHAHHA")
             Image(
                 modifier = Modifier
                     .width(114.dp)
@@ -244,13 +243,19 @@ fun BoothProfile(navController: NavController, context: Context = LocalContext.c
 
 
         }
-        Button(
-            onClick = {
-                preferencesManager.clearData()
-                navController.navigate("rolepick")
-            }, modifier = Modifier.padding(start = 320.dp, top = 12.dp)
+
+        Row(
+            modifier = Modifier.fillMaxSize().padding(top = 12.dp, end = 16.dp),
+            horizontalArrangement = Arrangement.End
         ) {
-            Text(text = "Logout")
+            Button(
+                onClick = {
+                    preferencesManager.clearData()
+                    navController.navigate("rolepick")
+                }
+            ) {
+                Text(text = "Logout")
+            }
         }
     }
 }

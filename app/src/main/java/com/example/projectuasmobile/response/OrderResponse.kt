@@ -19,6 +19,8 @@ class OrderAttributes {
     val total: Int = 0
     @SerializedName("status")
     val status: String = ""
+    @SerializedName("booth")
+    val booth: ApiResponse<BoothResponse>? = null
 }
 enum class StatusPesanan {
     Order, Process, Done

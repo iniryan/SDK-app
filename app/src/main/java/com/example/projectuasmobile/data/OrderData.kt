@@ -15,6 +15,8 @@ data class OrderData(
     val total: Int,
     @SerializedName("status")
     val status: String,
+    @SerializedName("booth")
+    val booth: Int
 //    @SerializedName("order_details")
 //    val order_details:
 )

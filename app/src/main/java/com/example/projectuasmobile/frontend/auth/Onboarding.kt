@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -32,9 +33,7 @@ import com.example.projectuasmobile.R
 fun OnboardingScreen(navController: NavController) {
     val primaryColorOrg = Color(0xFFFF5F00)
     Box(
-        modifier = Modifier
-            .width(430.dp)
-            .height(932.dp)
+        modifier = Modifier.fillMaxSize()
             .background(color = primaryColorOrg)
     ) {
         Row(
@@ -69,7 +68,6 @@ fun OnboardingScreen(navController: NavController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             Image(
                 painter = painterResource(id = R.drawable.splashtext),
                 contentDescription = "image description",
@@ -79,7 +77,7 @@ fun OnboardingScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 60.dp),
+                .padding(bottom = 60.dp, start = 16.dp, end = 16.dp),
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -87,15 +85,15 @@ fun OnboardingScreen(navController: NavController) {
                 onClick = {
                     navController.navigate("rolepick")
                 }, Modifier
-                    .width(327.dp)
-                    .height(72.dp)
-                    .padding(start = 10.dp, top = 12.dp, end = 10.dp, bottom = 12.dp),
+                    .fillMaxWidth()
+                    .height(84.dp)
+                    .padding(start = 18.dp, top = 12.dp, end = 18.dp, bottom = 12.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White)
             ) {
                 Text(
                     text = "Mulai Gunakan Aplikasi",
                     style = TextStyle(
-                        fontSize = 12.sp,
+                        fontSize = 16.sp,
                         fontFamily = FontFamily(Font(R.font.poppins_semibold)),
                         fontWeight = FontWeight(600),
                         color = primaryColorOrg,

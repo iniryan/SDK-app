@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -44,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.projectuasmobile.PreferencesManager
 import com.example.projectuasmobile.R
 import com.example.projectuasmobile.data.OrderDetailsData
 import com.example.projectuasmobile.data.OrderDetailsDataWrapper
@@ -66,13 +68,14 @@ fun BoothDetail(
     boothDescription: String?,
     context: Context = LocalContext.current
 ) {
+    val preferencesManager = remember { PreferencesManager(context = context) }
     val title = remember { mutableStateOf(boothName ?: "") }
     val desc = remember { mutableStateOf(boothDescription ?: "") }
     val boothID = remember { mutableStateOf(boothID ?: "") }
 
     val listMenu = remember { mutableStateListOf<FoodResponse>() }
-//    val baseUrl = "http://10.0.2.2:1337/api/"
-    val baseUrl = "https://api2.tnadam.me/api/"
+    val baseUrl = "http://10.0.2.2:1337/api/"
+//    val baseUrl = "https://api2.tnadam.me/api/"
 
     val retrofit =
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
@@ -118,9 +121,7 @@ fun BoothDetail(
                 contentScale = ContentScale.FillBounds
             )
             Column(
-                modifier = Modifier
-                    .padding(0.dp)
-                    .fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -134,16 +135,16 @@ fun BoothDetail(
                     ) {
                         Text(
                             text = title.value, style = TextStyle(
-                                fontSize = 24.sp,
+                                fontSize = 30.sp,
                                 lineHeight = 36.sp,
-                                fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+                                fontFamily = FontFamily(Font(R.font.poppins_bold)),
                                 color = Color(0xFF333333),
                             )
                         )
                         Text(
                             text = desc.value,
                             style = TextStyle(
-                                fontSize = 14.sp,
+                                fontSize = 16.sp,
                                 lineHeight = 18.sp,
                                 fontFamily = FontFamily(Font(R.font.poppins_regular)),
                                 color = Color(0xFF9F9F9F),
@@ -183,28 +184,25 @@ fun BoothDetail(
                             ) {
                                 Text(
                                     text = "Daftar Menu", style = TextStyle(
-                                        fontSize = 18.sp,
+                                        fontSize = 20.sp,
                                         lineHeight = 26.sp,
                                         fontFamily = FontFamily(Font(R.font.poppins_semibold)),
                                         color = Color(0xFF333333),
                                     )
                                 )
                             }
-                            val orderItems =
-                                remember { mutableStateListOf<OrderDetailsDataWrapper>() }
+                            val orderItems = remember { mutableStateListOf<OrderDetailsDataWrapper>() }
                             LazyColumn {
                                 listMenu.forEach { menuResponse ->
                                     item {
                                         Divider(
                                             modifier = Modifier
-                                                .width(390.dp)
+                                                .fillMaxWidth()
                                                 .height(1.dp)
                                                 .background(color = Color(0xFFEEEEEE))
                                         )
                                         Column(
-                                            modifier = Modifier
-                                                .width(390.dp)
-                                                .height(157.5.dp)
+                                            modifier = Modifier.fillMaxWidth()
                                                 .background(color = Color(0xFFFFFFFF))
                                                 .padding(start = 16.dp, top = 14.dp, end = 16.dp),
                                             verticalArrangement = Arrangement.spacedBy(
@@ -213,37 +211,31 @@ fun BoothDetail(
                                             horizontalAlignment = Alignment.CenterHorizontally,
                                         ) {
                                             Row(
-                                                modifier = Modifier
-                                                    .width(358.dp)
-                                                    .height(127.dp),
+                                                modifier = Modifier.fillMaxWidth(),
                                                 horizontalArrangement = Arrangement.SpaceBetween,
-                                                verticalAlignment = Alignment.Top,
+                                                verticalAlignment = Alignment.CenterVertically,
                                             ) {
                                                 Column(
                                                     modifier = Modifier
-                                                        .width(218.dp)
-                                                        .height(127.dp),
-                                                    verticalArrangement = Arrangement.spacedBy(
-                                                        4.dp, Alignment.Top
-                                                    ),
+                                                        .width(240.dp),
+                                                    verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
                                                     horizontalAlignment = Alignment.Start,
                                                 ) {
                                                     Text(
                                                         text = menuResponse.attributes.foodName,
-
                                                         style = TextStyle(
-                                                            fontSize = 15.sp,
-                                                            lineHeight = 19.sp,
-                                                            fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+                                                            fontSize = 18.sp,
+                                                            letterSpacing = 1.sp,
+                                                            lineHeight = 24.sp,
+                                                            fontFamily = FontFamily(Font(R.font.poppins_bold)),
                                                             color = Color(0xFF333333),
                                                         )
                                                     )
                                                     Text(
                                                         text = menuResponse.attributes.foodDescription,
-
                                                         style = TextStyle(
-                                                            fontSize = 13.sp,
-                                                            lineHeight = 18.sp,
+                                                            fontSize = 14.sp,
+                                                            lineHeight = 16.sp,
                                                             fontFamily = FontFamily(Font(R.font.poppins_medium)),
                                                             color = Color(0xFF757575),
                                                         )
@@ -251,8 +243,8 @@ fun BoothDetail(
                                                     Text(
                                                         text = "Rp" + menuResponse.attributes.foodPrice.toString(),
                                                         style = TextStyle(
-                                                            fontSize = 12.sp,
-                                                            lineHeight = 20.sp,
+                                                            fontSize = 16.sp,
+                                                            lineHeight = 16.sp,
                                                             fontFamily = FontFamily(Font(R.font.poppins_medium)),
                                                             color = Color(0xFF333333),
                                                         )
@@ -309,7 +301,7 @@ fun BoothDetail(
                                                                 text = "$quantity",
 
                                                                 style = TextStyle(
-                                                                    fontSize = 14.sp,
+                                                                    fontSize = 16.sp,
                                                                     lineHeight = 14.sp,
                                                                     fontFamily = FontFamily(Font(R.font.poppins_semibold)),
                                                                     color = Color(0xFF333333),
@@ -356,15 +348,16 @@ fun BoothDetail(
                                                         }
                                                     }
                                                 }
-                                                val imgurl =
-                                                    menuResponse.attributes.foodImg?.data?.attributes!!.url
+                                                Spacer(modifier = Modifier.padding(horizontal = 8.dp))
+                                                val imgurl = menuResponse.attributes.foodImg?.data?.attributes!!.url
                                                 Image(
                                                     modifier = Modifier
-                                                        .width(100.dp)
-                                                        .height(100.dp)
+                                                        .width(120.dp)
+                                                        .height(120.dp)
                                                         .clip(RoundedCornerShape(8.dp)),
                                                     contentScale = ContentScale.Crop,
-                                                    painter = rememberAsyncImagePainter("https://api2.tnadam.me" + imgurl),
+//                                                    painter = rememberAsyncImagePainter("https://api2.tnadam.me" + imgurl),
+                                                    painter = rememberAsyncImagePainter("http://10.0.2.2:1337" + imgurl),
                                                     contentDescription = "image description"
                                                 )
 
@@ -384,9 +377,10 @@ fun BoothDetail(
                                     .align(Alignment.Start)
                                     .fillMaxWidth()
                                     .padding(vertical = 2.dp, horizontal = 16.dp)
-                                    .height(48.dp),
+                                    .height(64.dp),
                                 colors = ButtonDefaults.buttonColors(
                                     contentColor = Color.White,
+                                    containerColor = Color(0xFFFF5F00)
                                 ),
                                 shape = RoundedCornerShape(8.dp),
                                 onClick = {
@@ -400,6 +394,7 @@ fun BoothDetail(
                                             "/uploads/",
                                             "::uploads::"
                                         )
+                                        preferencesManager.saveData("boothOrderID", boothID.value)
                                         navController.navigate("checkout/" + listReplace)
                                     }
                                 }

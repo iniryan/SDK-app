@@ -45,6 +45,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -82,7 +83,7 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
     val retrofit =
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
             .build().create(BoothService::class.java)
-    val call = retrofit.getAllBooth(searchField.value.text, true,"*")
+    val call = retrofit.getAllBooth(searchField.value.text, true, "*")
     call.enqueue(object : Callback<ApiResponse<List<BoothResponse>>> {
         override fun onResponse(
             call: Call<ApiResponse<List<BoothResponse>>>,
@@ -151,12 +152,7 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                         singleLine = true,
                         modifier = Modifier
                             .weight(1f)
-                            .padding(top = 12.dp)
-                            .border(
-                                width = 1.5.dp,
-                                color = Color(0xFFFF5F00),
-                                shape = RoundedCornerShape(8.dp)
-                            ),
+                            .padding(top = 12.dp),
                         leadingIcon = {
                             Icon(
                                 Icons.Default.Search,
@@ -166,6 +162,44 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                         },
                         placeholder = { Text(text = "Pencarian", color = primaryColorOrg) }
                     )
+                }
+                Spacer(modifier = Modifier.padding(top = 14.dp, bottom = 14.dp))
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            color = primaryColorOrg,
+                            shape = RoundedCornerShape(size = 12.dp)
+                        )
+                        .padding(start = 24.dp, top = 24.dp, end = 24.dp, bottom = 24.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
+                    horizontalAlignment = Alignment.Start,
+                ) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
+                        horizontalAlignment = Alignment.Start,
+                    ) {
+                        Text(
+                            text = "Rasa Lezat di Ujung Jari! Pesan Sekarang dan Sajikan Kelezatan dalam Sekejap.",
+                            style = TextStyle(
+                                fontSize = 22.sp,
+                                lineHeight = 28.8.sp,
+                                fontFamily = FontFamily(Font(R.font.poppins_bold)),
+                                color = Color.White,
+                                letterSpacing = 0.18.sp,
+                            )
+                        )
+                        Text(
+                            text = "#SDKApp",
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                lineHeight = 18.2.sp,
+                                fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                                color = Color.White,
+                                letterSpacing = 0.25.sp,
+                            )
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.padding(top = 14.dp, bottom = 14.dp))
                 Text(
@@ -185,14 +219,15 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                             contentDescription = "image description",
                             contentScale = ContentScale.FillBounds,
                             modifier = Modifier
-                                .width(100.dp)
-                                .height(100.dp)
+                                .width(140.dp)
+                                .height(140.dp)
                                 .padding(all = 12.dp)
                         )
                     }
                 }
+                Spacer(modifier = Modifier.padding(top = 10.dp, bottom = 10.dp))
                 Text(
-                    text = "Booth Tersedia", style = TextStyle(
+                    text = "Daftar Booth Tersedia", style = TextStyle(
                         fontSize = 18.sp,
                         lineHeight = 14.sp,
                         fontFamily = FontFamily(Font(R.font.poppins_semibold)),
@@ -208,42 +243,48 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                                     12.dp,
                                     Alignment.Start
                                 ),
-                                verticalAlignment = Alignment.Top,
+                                verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(top = 14.dp)
+                                    .background(
+                                        color = Color(0xFFF4F8FB),
+                                        shape = RoundedCornerShape(size = 10.dp)
+                                    )
                                     .clickable { navController.navigate("detailBooth/" + booth.id + "/" + booth.attributes.boothName + "/" + booth.attributes.boothDescription) }
                             ) {
                                 Image(
-                                    painter = rememberAsyncImagePainter("http://10.0.2.2:1337"+booth.attributes.boothImg?.data?.attributes!!.url),
+                                    painter = rememberAsyncImagePainter("http://10.0.2.2:1337" + booth.attributes.boothImg?.data?.attributes!!.url),
 //                                    painter = rememberAsyncImagePainter("https://api2.tnadam.me"+booth.attributes.boothImg?.data?.attributes!!.url),
                                     contentDescription = "image description",
                                     contentScale = ContentScale.FillBounds,
                                     modifier = Modifier
-                                        .width(80.dp)
-                                        .height(84.dp)
+                                        .width(100.dp)
+                                        .height(100.dp)
                                         .clip(RoundedCornerShape(8.dp)),
                                 )
                                 Column(
                                     verticalArrangement = Arrangement.spacedBy(1.dp, Alignment.Top),
                                     horizontalAlignment = Alignment.Start,
-                                    modifier = Modifier.fillMaxWidth()
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(14.dp)
                                 ) {
                                     Text(
                                         text = booth.attributes.boothName, style = TextStyle(
-                                            fontSize = 16.sp,
+                                            fontSize = 18.sp,
                                             lineHeight = 17.64.sp,
-                                            fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                                            color = Color(0xFF1E1E1E),
+                                            fontFamily = FontFamily(Font(R.font.poppins_bold)),
+                                            color = Color(0xFF0B1527),
                                         )
                                     )
                                     Text(
                                         text = "Status Kios: " + if (booth.attributes.open) "Buka" else "Tutup",
                                         style = TextStyle(
-                                            fontSize = 12.sp,
+                                            fontSize = 14.sp,
                                             lineHeight = 17.64.sp,
                                             fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                                            color = Color(0x801E1E1E),
+                                            color = Color(0xFF0B1527),
                                         )
                                     )
                                     Spacer(modifier = Modifier.padding(top = 2.dp))
@@ -256,11 +297,13 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                                     Spacer(modifier = Modifier.padding(top = 2.dp))
                                     Text(
                                         text = booth.attributes.boothDescription,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis,
                                         style = TextStyle(
-                                            fontSize = 12.sp,
+                                            fontSize = 14.sp,
                                             lineHeight = 17.64.sp,
                                             fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                                            color = Color(0x801E1E1E),
+                                            color = Color(0xFF0B1527),
                                         )
                                     )
                                 }

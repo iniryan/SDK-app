@@ -1,6 +1,7 @@
 package com.example.projectuasmobile.frontend.auth
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,14 +10,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -42,9 +42,8 @@ fun RolePick(navController: NavController) {
             Text(
                 text = "SENTRA",
                 style = TextStyle(
-                    fontSize = 16.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                    fontWeight = FontWeight(600),
+                    fontSize = 24.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins_bold)),
                     color = Color(0xCCFF5F00),
                     textAlign = TextAlign.Center,
 
@@ -53,9 +52,8 @@ fun RolePick(navController: NavController) {
             Text(
                 text = "DIGITAL",
                 style = TextStyle(
-                    fontSize = 36.sp,
+                    fontSize = 48.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                    fontWeight = FontWeight(600),
                     color = Color(0xFFFF5F00),
                     textAlign = TextAlign.Center,
                 )
@@ -63,16 +61,45 @@ fun RolePick(navController: NavController) {
             Text(
                 text = "KULINER",
                 style = TextStyle(
-                    fontSize = 16.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                    fontWeight = FontWeight(600),
+                    fontSize = 24.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins_bold)),
                     color = Color(0xCCFF5F00),
                     textAlign = TextAlign.Center,
                 )
             )
-            Spacer(modifier = Modifier.padding(top = 32.dp))
+            Spacer(modifier = Modifier.padding(vertical = 20.dp))
             Text(
                 text = "Sebagai Apa Kamu ?",
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                    color = Color(0xFF1E1E1E),
+                    textAlign = TextAlign.Center,
+                )
+            )
+            Spacer(modifier = Modifier.padding(vertical = 20.dp))
+            IconButton(
+                onClick = { navController.navigate("homepage") },
+                modifier = Modifier.fillMaxWidth().height(240.dp).border(1.dp, Color(0xFFFF5F00), RoundedCornerShape(8.dp))
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.pembeli),
+                    contentDescription = "image description",
+                )
+            }
+            Spacer(modifier = Modifier.padding(vertical = 20.dp))
+            IconButton(
+                onClick = { navController.navigate("login") },
+                modifier = Modifier.fillMaxWidth().height(240.dp).border(1.dp, Color(0xFFFF5F00), RoundedCornerShape(8.dp))
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.penjual),
+                    contentDescription = "image description",
+                )
+            }
+            Spacer(modifier = Modifier.padding(vertical = 24.dp))
+            Text(
+                text = "Ayo pilih role kamu sebelum menggunakan aplikasi. Pilih Pembeli jika kamu ingin memesan makanan. Pilih Penjual jika kamu adalah pemilik booth.",
                 style = TextStyle(
                     fontSize = 14.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_regular)),
@@ -81,73 +108,6 @@ fun RolePick(navController: NavController) {
                     textAlign = TextAlign.Center,
                 )
             )
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(2.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(vertical = 160.dp)
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    IconButton(
-                        onClick = { navController.navigate("homepage") },
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxWidth()
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.pembeli),
-                            contentDescription = "image description",
-                            contentScale = ContentScale.FillBounds,
-                            modifier = Modifier
-                                .width(320.dp)
-                                .height(200.dp)
-                        )
-                    }
-                    IconButton(
-                        onClick = { navController.navigate("login") },
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxWidth()
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.penjual),
-                            contentDescription = "image description",
-                            contentScale = ContentScale.Fit,
-                            modifier = Modifier
-                                .width(320.dp)
-                                .height(200.dp)
-                        )
-                    }
-                }
-            }
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(bottom = 72.dp, start = 60.dp, end = 60.dp),
-            verticalArrangement = Arrangement.Bottom,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "Ayo pilih role kamu sebelum menggunakan aplikasi. Pilih Pembeli jika kamu ingin memesan makanan. Pilih Penjual jika kamu adalah pemilik booth.",
-                style = TextStyle(
-                    fontSize = 12.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFF1E1E1E),
-                    textAlign = TextAlign.Center,
-                )
-            )
-
         }
     }
 }
