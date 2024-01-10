@@ -5,6 +5,7 @@ import com.example.projectuasmobile.data.OrderDetailsDataWrapper
 import com.example.projectuasmobile.data.RefuseOrderWrapper
 import com.example.projectuasmobile.data.UpdateStatusWrapper
 import com.example.projectuasmobile.response.ApiResponse
+import com.example.projectuasmobile.response.OrderDetailsResponse
 import com.example.projectuasmobile.response.OrderResponse
 import retrofit2.Call
 import retrofit2.http.Body
