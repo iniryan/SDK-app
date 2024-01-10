@@ -72,8 +72,9 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
     val passwordField = remember { mutableStateOf(TextFieldValue("")) }
     val passwordVisible = remember { mutableStateOf(false) }
 
-//    val baseUrl = "https://api2.tnadam.me/api/"
-    val baseUrl = "http://10.0.2.2:1337/api/"
+    val baseUrl = "https://api2.tnadam.me/api/"
+    //LOKAL STRAPI
+    //val baseUrl = "http://10.0.2.2:1337/api/"
     //KALAU TIDAK DI EMULATOR
     //val baseUrl = "http://10.217.17.11:1337/api/"
 
@@ -101,7 +102,7 @@ fun Login(navController: NavController, context: Context = LocalContext.current)
                         color = Color(0xFFFF5F00),
                         shape = RoundedCornerShape(100.dp)
                     ),
-                onClick = { navController.navigateUp() }
+                onClick = { navController.navigate("rolepick") }
             ) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,

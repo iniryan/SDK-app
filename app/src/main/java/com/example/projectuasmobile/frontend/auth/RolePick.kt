@@ -80,7 +80,7 @@ fun RolePick(navController: NavController) {
             Spacer(modifier = Modifier.padding(vertical = 20.dp))
             IconButton(
                 onClick = { navController.navigate("homepage") },
-                modifier = Modifier.fillMaxWidth().height(240.dp).border(1.dp, Color(0xFFFF5F00), RoundedCornerShape(8.dp))
+                modifier = Modifier.fillMaxWidth().height(200.dp).border(1.dp, Color(0xFFFF5F00), RoundedCornerShape(8.dp))
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.pembeli),
@@ -90,7 +90,7 @@ fun RolePick(navController: NavController) {
             Spacer(modifier = Modifier.padding(vertical = 20.dp))
             IconButton(
                 onClick = { navController.navigate("login") },
-                modifier = Modifier.fillMaxWidth().height(240.dp).border(1.dp, Color(0xFFFF5F00), RoundedCornerShape(8.dp))
+                modifier = Modifier.fillMaxWidth().height(200.dp).border(1.dp, Color(0xFFFF5F00), RoundedCornerShape(8.dp))
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.penjual),

@@ -13,18 +13,10 @@ class UploadResponse {
     var id: Int = 0
     @SerializedName("name")
     var name: String = ""
-    @SerializedName("url")
-    var url: String = ""
 }
 
 class UploadResponseList : ArrayList<UploadResponse>()
 
-data class UploadRequestBody(
-    @Part("ref") val ref: RequestBody,
-    @Part("refId") val refId: RequestBody,
-    @Part("field") val field: RequestBody,
-    @Part("files") var file: MultipartBody.Part
-)
 internal interface ImgService {
     @Multipart
     @POST("upload")

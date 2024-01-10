@@ -1,10 +1,8 @@
 package com.example.projectuasmobile.frontend.customer
 
 import android.content.Context
-import android.net.Uri
+import android.os.Handler
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -21,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ButtonDefaults
@@ -31,20 +30,19 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -61,6 +59,7 @@ import com.example.projectuasmobile.response.OrderDetailsResponse
 import com.example.projectuasmobile.response.OrderResponse
 import com.example.projectuasmobile.service.OrderDetailsService
 import com.example.projectuasmobile.service.OrderService
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -75,407 +74,506 @@ fun CheckOutPage(
 ) {
     val preferencesManager = remember { PreferencesManager(context = context) }
 
-    val baseUrl = "http://10.0.2.2:1337/api/"
-//    val baseUrl = "https://api2.tnadam.me/api/"
+    //LOKAL STRAPI
+    //val baseUrl = "http://10.0.2.2:1337/api/"
+    val baseUrl = "https://api2.tnadam.me/api/"
 
     var total = 0
     val convertedTotal = remember { mutableStateOf("") }
     val nameField = remember { mutableStateOf(TextFieldValue("")) }
     val notesField = remember { mutableStateOf(TextFieldValue("")) }
     val tableField = remember { mutableStateOf(TextFieldValue("")) }
+    val numberField = remember { mutableStateOf(TextFieldValue("")) }
     val primaryColorOrg = Color(0xFFFF5F00)
-    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
-    val pickImageLauncher =
-        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent(),
-            onResult = { uri: Uri? -> uri?.let { selectedImageUri = it } })
+
+    orderItems?.forEach {
+        total += it.orderDetailsData.foods.attributes.foodPrice * it.orderDetailsData.qty
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
-
         Column(
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.Start,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(14.dp)
+                .background(color = Color(0xFFFFFFFF))
         ) {
-            IconButton(
+            Column(
                 modifier = Modifier
-                    .padding(top = 12.dp, end = 12.dp)
-                    .background(
-                        color = Color(0xFFFF5F00),
-                        shape = RoundedCornerShape(100.dp)
-                    ),
-                onClick = { navController.navigateUp() }
+                    .fillMaxWidth()
+                    .padding(top = 70.dp),
             ) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Kembali",
-                    modifier = Modifier.size(25.dp),
-                    tint = Color.White
-                )
-            }
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 24.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text(
-                text = "Lengkapi Datamu", style = TextStyle(
-                    fontSize = 20.sp,
-                    lineHeight = 17.64.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                    fontWeight = FontWeight(500),
-                    color = Color(0xFF000000),
-                )
-            )
-            Text(
-                text = "Nama", style = TextStyle(
-                    fontSize = 14.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                    color = Color(0xFF1E1E1E),
-                    textAlign = TextAlign.Center,
-                ), modifier = Modifier
-                    .align(Alignment.Start)
-                    .padding(top = 14.dp)
-            )
-            OutlinedTextField(value = nameField.value,
-                onValueChange = {
-                    nameField.value = it
-                },
-                singleLine = true,
-                modifier = Modifier
-                    .align(Alignment.Start)
-                    .fillMaxWidth()
-                    .padding(2.dp)
-                    .border(
-                        width = 1.5.dp, color = primaryColorOrg, shape = RoundedCornerShape(8.dp)
-                    ),
-                placeholder = { Text(text = "Isikan namamu disini") })
-            Text(
-                text = "Catatan", style = TextStyle(
-                    fontSize = 14.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                    color = Color(0xFF1E1E1E),
-                    textAlign = TextAlign.Center,
-                ), modifier = Modifier
-                    .align(Alignment.Start)
-                    .padding(top = 14.dp)
-            )
-            OutlinedTextField(value = notesField.value,
-                onValueChange = {
-                    notesField.value = it
-                },
-                singleLine = false,
-                modifier = Modifier
-                    .align(Alignment.Start)
-                    .fillMaxWidth()
-                    .padding(2.dp)
-                    .border(
-                        width = 1.5.dp, color = primaryColorOrg, shape = RoundedCornerShape(8.dp)
-                    ),
-                placeholder = { Text(text = "Tulis catatan untuk penjual jika ada") })
-            Text(
-                text = "Nomor Meja", style = TextStyle(
-                    fontSize = 14.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                    color = Color(0xFF1E1E1E),
-                    textAlign = TextAlign.Center,
-                ), modifier = Modifier
-                    .align(Alignment.Start)
-                    .padding(top = 14.dp)
-            )
-            OutlinedTextField(value = tableField.value,
-                onValueChange = {
-                    tableField.value = it
-                },
-                singleLine = true,
-                modifier = Modifier
-                    .align(Alignment.Start)
-                    .fillMaxWidth()
-                    .padding(2.dp)
-                    .border(
-                        width = 1.5.dp, color = primaryColorOrg, shape = RoundedCornerShape(8.dp)
-                    ),
-                placeholder = { Text(text = "Isi nomor meja atau dibungkus") })
-            Spacer(modifier = Modifier.padding(10.dp))
-
-            LazyColumn {
-                orderItems?.forEach { menuResponse ->
-                    item {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(9.dp, Alignment.Top),
+                    horizontalAlignment = Alignment.Start,
+                ) {
+                    Column(
+                        modifier = Modifier.padding(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
+                        horizontalAlignment = Alignment.Start,
+                    ) {
+                        Text(
+                            text = "Nama Kamu", style = TextStyle(
+                                fontSize = 14.sp,
+                                fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                                color = Color(0xFF1E1E1E),
+                                textAlign = TextAlign.Center,
+                            ), modifier = Modifier
+                                .align(Alignment.Start)
+                                .padding(top = 14.dp)
+                        )
+                        OutlinedTextField(value = nameField.value,
+                            onValueChange = {
+                                nameField.value = it
+                            },
+                            singleLine = true,
+                            modifier = Modifier
+                                .align(Alignment.Start)
+                                .fillMaxWidth()
+                                .padding(2.dp)
+                                .border(
+                                    width = 1.5.dp,
+                                    color = primaryColorOrg,
+                                    shape = RoundedCornerShape(8.dp)
+                                ),
+                            placeholder = { Text(text = "Isikan namamu disini") })
+                        Text(
+                            text = "Nomor Telepon", style = TextStyle(
+                                fontSize = 14.sp,
+                                fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                                color = Color(0xFF1E1E1E),
+                                textAlign = TextAlign.Center,
+                            ), modifier = Modifier
+                                .align(Alignment.Start)
+                                .padding(top = 14.dp)
+                        )
+                        OutlinedTextField(value = numberField.value,
+                            onValueChange = {
+                                numberField.value = it
+                            },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            singleLine = true,
+                            modifier = Modifier
+                                .align(Alignment.Start)
+                                .fillMaxWidth()
+                                .padding(2.dp)
+                                .border(
+                                    width = 1.5.dp,
+                                    color = primaryColorOrg,
+                                    shape = RoundedCornerShape(8.dp)
+                                ),
+                            placeholder = { Text(text = "Isi nomor telepon kamu") })
+                        Text(
+                            text = "Nomor Meja", style = TextStyle(
+                                fontSize = 14.sp,
+                                fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                                color = Color(0xFF1E1E1E),
+                                textAlign = TextAlign.Center,
+                            ), modifier = Modifier
+                                .align(Alignment.Start)
+                                .padding(top = 14.dp)
+                        )
+                        OutlinedTextField(value = tableField.value,
+                            onValueChange = {
+                                tableField.value = it
+                            },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            singleLine = true,
+                            modifier = Modifier
+                                .align(Alignment.Start)
+                                .fillMaxWidth()
+                                .padding(2.dp)
+                                .border(
+                                    width = 1.5.dp,
+                                    color = primaryColorOrg,
+                                    shape = RoundedCornerShape(8.dp)
+                                ),
+                            placeholder = { Text(text = "Isi nomor meja atau dibungkus") })
+                        Text(
+                            text = "Catatan", style = TextStyle(
+                                fontSize = 14.sp,
+                                fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                                color = Color(0xFF1E1E1E),
+                                textAlign = TextAlign.Center,
+                            ), modifier = Modifier
+                                .align(Alignment.Start)
+                                .padding(top = 14.dp)
+                        )
+                        OutlinedTextField(value = notesField.value,
+                            onValueChange = {
+                                notesField.value = it
+                            },
+                            singleLine = false,
+                            modifier = Modifier
+                                .align(Alignment.Start)
+                                .fillMaxWidth()
+                                .padding(2.dp)
+                                .border(
+                                    width = 1.5.dp,
+                                    color = primaryColorOrg,
+                                    shape = RoundedCornerShape(8.dp)
+                                ),
+                            placeholder = { Text(text = "Tulis catatan untuk penjual jika ada") })
+                    }
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(color = Color(0xFFFFFFFF))
+                            .padding(bottom = 10.dp),
+                        verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
+                        horizontalAlignment = Alignment.Start,
+                    ) {
                         Divider(
                             modifier = Modifier
-                                .width(390.dp)
-                                .height(1.dp)
+                                .border(width = 1.dp, color = Color(0xFFECECEC))
+                                .padding(1.dp)
+                                .height(2.dp)
                                 .background(color = Color(0xFFEEEEEE))
                         )
                         Column(
-                            modifier = Modifier
-                                .width(390.dp)
-                                .height(157.5.dp)
-                                .background(color = Color(0xFFFFFFFF))
-                                .padding(start = 16.dp, top = 14.dp, end = 16.dp),
-                            verticalArrangement = Arrangement.spacedBy(
-                                16.dp, Alignment.CenterVertically
-                            ),
-                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
+                            horizontalAlignment = Alignment.Start,
                         ) {
                             Row(
                                 modifier = Modifier
-                                    .width(358.dp)
-                                    .height(127.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.Top,
-                            ) {
-                                Column(
-                                    modifier = Modifier
-                                        .width(218.dp)
-                                        .height(127.dp),
-                                    verticalArrangement = Arrangement.spacedBy(
-                                        4.dp, Alignment.Top
+                                    .width(390.dp)
+                                    .height(62.dp)
+                                    .padding(
+                                        start = 16.dp, top = 18.dp, end = 10.dp, bottom = 18.dp
                                     ),
-                                    horizontalAlignment = Alignment.Start,
-                                ) {
-                                    Text(
-                                        text = menuResponse.orderDetailsData.foods.attributes.foodName,
-
-                                        style = TextStyle(
-                                            fontSize = 15.sp,
-                                            lineHeight = 19.sp,
-                                            fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                                            color = Color(0xFF333333),
-                                        )
+                                horizontalArrangement = Arrangement.spacedBy(
+                                    10.dp, Alignment.Start
+                                ),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Text(
+                                    text = "Daftar Pesanan", style = TextStyle(
+                                        fontSize = 20.sp,
+                                        lineHeight = 26.sp,
+                                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+                                        color = Color(0xFF333333),
                                     )
-                                    Text(
-                                        text = menuResponse.orderDetailsData.foods.attributes.foodDescription,
-
-                                        style = TextStyle(
-                                            fontSize = 13.sp,
-                                            lineHeight = 18.sp,
-                                            fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                                            color = Color(0xFF757575),
+                                )
+                            }
+                            LazyColumn {
+                                orderItems?.forEach { menuResponse ->
+                                    item {
+                                        Divider(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(1.dp)
+                                                .background(color = Color(0xFFEEEEEE))
                                         )
-                                    )
-                                    Text(
-                                        text = "Rp" + menuResponse.orderDetailsData.foods.attributes.foodPrice.toString(),
-                                        style = TextStyle(
-                                            fontSize = 12.sp,
-                                            lineHeight = 20.sp,
-                                            fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                                            color = Color(0xFF333333),
-                                        )
-                                    )
-                                    Row(
-                                        modifier = Modifier
-                                            .padding(top = 8.dp)
-                                            .width(218.dp)
-                                            .height(28.dp),
-                                        horizontalArrangement = Arrangement.spacedBy(
-                                            16.dp, Alignment.Start
-                                        ),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                    ) {
-                                        total += (menuResponse.orderDetailsData.foods.attributes.foodPrice * menuResponse.orderDetailsData.qty)
-                                        convertedTotal.value = total.toString()
-                                        Row(
-                                            horizontalArrangement = Arrangement.spacedBy(
-                                                8.dp, Alignment.CenterHorizontally
+                                        Column(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .background(color = Color(0xFFFFFFFF))
+                                                .padding(start = 16.dp, top = 14.dp, end = 16.dp),
+                                            verticalArrangement = Arrangement.spacedBy(
+                                                16.dp, Alignment.CenterVertically
                                             ),
-                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalAlignment = Alignment.CenterHorizontally,
                                         ) {
-                                            Text(
-                                                text = "Jumlah Pesanan:", style = TextStyle(
-                                                    fontSize = 16.sp,
-                                                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                                                    color = Color(0xFF1E1E1E),
-                                                )
-                                            )
-                                            Spacer(modifier = Modifier.padding(top = 20.dp))
-                                            Text(
-                                                text = menuResponse.orderDetailsData.qty.toString() + " porsi",
+                                            Row(
+                                                modifier = Modifier.fillMaxWidth(),
+                                                horizontalArrangement = Arrangement.SpaceBetween,
+                                                verticalAlignment = Alignment.CenterVertically,
+                                            ) {
+                                                Column(
+                                                    modifier = Modifier
+                                                        .width(240.dp),
+                                                    verticalArrangement = Arrangement.spacedBy(
+                                                        4.dp,
+                                                        Alignment.Top
+                                                    ),
+                                                    horizontalAlignment = Alignment.Start,
+                                                ) {
+                                                    Text(
+                                                        text = menuResponse.orderDetailsData.foods.attributes.foodName,
+                                                        style = TextStyle(
+                                                            fontSize = 18.sp,
+                                                            letterSpacing = 1.sp,
+                                                            lineHeight = 24.sp,
+                                                            fontFamily = FontFamily(Font(R.font.poppins_bold)),
+                                                            color = Color(0xFF333333),
+                                                        )
+                                                    )
+                                                    Text(
+                                                        text = menuResponse.orderDetailsData.foods.attributes.foodDescription,
+                                                        style = TextStyle(
+                                                            fontSize = 14.sp,
+                                                            lineHeight = 16.sp,
+                                                            fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                                                            color = Color(0xFF757575),
+                                                        )
+                                                    )
+                                                    Text(
+                                                        text = "Rp" + menuResponse.orderDetailsData.foods.attributes.foodPrice.toString(),
+                                                        style = TextStyle(
+                                                            fontSize = 16.sp,
+                                                            lineHeight = 16.sp,
+                                                            fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                                                            color = Color(0xFF333333),
+                                                        )
+                                                    )
+                                                    Row(
+                                                        modifier = Modifier
+                                                            .padding(top = 8.dp)
+                                                            .width(218.dp)
+                                                            .height(28.dp),
+                                                        horizontalArrangement = Arrangement.spacedBy(
+                                                            16.dp, Alignment.Start
+                                                        ),
+                                                        verticalAlignment = Alignment.CenterVertically,
+                                                    ) {
+                                                        convertedTotal.value = total.toString()
+                                                        Row(
+                                                            horizontalArrangement = Arrangement.spacedBy(
+                                                                8.dp, Alignment.CenterHorizontally
+                                                            ),
+                                                            verticalAlignment = Alignment.CenterVertically,
+                                                        ) {
+                                                            Text(
+                                                                text = "Jumlah Pesanan:",
+                                                                style = TextStyle(
+                                                                    fontSize = 16.sp,
+                                                                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                                                                    color = Color(0xFF1E1E1E),
+                                                                )
+                                                            )
+                                                            Spacer(modifier = Modifier.padding(top = 20.dp))
+                                                            Text(
+                                                                text = menuResponse.orderDetailsData.qty.toString() + " porsi",
 
-                                                style = TextStyle(
-                                                    fontSize = 14.sp,
-                                                    lineHeight = 14.sp,
-                                                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                                                    color = Color(0xFF333333),
+                                                                style = TextStyle(
+                                                                    fontSize = 14.sp,
+                                                                    lineHeight = 14.sp,
+                                                                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+                                                                    color = Color(0xFF333333),
+                                                                )
+                                                            )
+                                                        }
+                                                    }
+                                                }
+                                                Spacer(modifier = Modifier.padding(horizontal = 8.dp))
+                                                val imgurl =
+                                                    menuResponse.orderDetailsData.foods.attributes.foodImg?.data?.attributes!!.url
+                                                Image(
+                                                    modifier = Modifier
+                                                        .width(100.dp)
+                                                        .height(100.dp)
+                                                        .clip(RoundedCornerShape(8.dp)),
+                                                    contentScale = ContentScale.Crop,
+                                                    painter = rememberAsyncImagePainter("https://api2.tnadam.me$imgurl"),
+//                                                  painter = rememberAsyncImagePainter("http://10.0.2.2:1337" + imgurl),
+                                                    contentDescription = "image description"
                                                 )
+
+                                            }
+                                            Divider(
+                                                modifier = Modifier
+                                                    .width(358.dp)
+                                                    .height(0.5.dp)
+                                                    .background(color = Color(0xFFEEEEEE))
                                             )
                                         }
                                     }
                                 }
-                                val imgurl = menuResponse.orderDetailsData.foods.attributes.foodImg?.data?.attributes!!.url
-                                Image(
-                                    modifier = Modifier
-                                        .width(100.dp)
-                                        .height(100.dp)
-                                        .clip(RoundedCornerShape(8.dp)),
-                                    contentScale = ContentScale.Crop,
-                                    painter = rememberAsyncImagePainter("http://10.0.2.2:1337" + imgurl),
-                                    contentDescription = "image description"
-                                )
-//                                Image(
-//                                    modifier = Modifier
-//                                        .width(100.dp)
-//                                        .height(100.dp),
-//                                    painter = painterResource(id = R.drawable.imgplaceholder),
-//                                    contentDescription = "image description",
-//                                    contentScale = ContentScale.Crop
-//                                )
-                            }
-                            Divider(
-                                modifier = Modifier
-                                    .width(358.dp)
-                                    .height(0.5.dp)
-                                    .background(color = Color(0xFFEEEEEE))
-                            )
-                        }
+                                item {
+                                    Spacer(modifier = Modifier.padding(10.dp))
 
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(start = 16.dp),
+                                        horizontalArrangement = Arrangement.Start
+                                    ) {
+                                        Text(
+                                            text = "Total harga : ", style = TextStyle(
+                                                fontSize = 16.sp,
+                                                lineHeight = 14.sp,
+                                                fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                                                textAlign = TextAlign.Center,
+                                                color = Color.Black
+                                            )
+                                        )
+                                        Text(
+                                            text = "Rp" + convertedTotal.value, style = TextStyle(
+                                                fontSize = 16.sp,
+                                                lineHeight = 14.sp,
+                                                fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                                                textAlign = TextAlign.Center,
+                                                color = Color.Black
+                                            )
+                                        )
+                                    }
+
+                                    Spacer(modifier = Modifier.padding(10.dp))
+                                    ElevatedButton(modifier = Modifier
+                                        .align(Alignment.Start)
+                                        .fillMaxWidth()
+                                        .padding(2.dp)
+                                        .height(64.dp), colors = ButtonDefaults.buttonColors(
+                                        contentColor = Color.White,
+                                        containerColor = Color(0xFFFF5F00)
+                                    ), shape = RoundedCornerShape(8.dp), onClick = {
+                                        if (nameField.value.text.isEmpty() || tableField.value.text.isEmpty() || numberField.value.text.isEmpty()) {
+                                            Toast.makeText(
+                                                context,
+                                                "Field tidak boleh kosong",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            return@ElevatedButton
+                                        } else {
+                                            val retrofit = Retrofit.Builder().baseUrl(baseUrl)
+                                                .addConverterFactory(GsonConverterFactory.create())
+                                                .build()
+                                                .create(OrderService::class.java)
+                                            val call = retrofit.addOrder(
+                                                OrderDataWrapper(
+                                                    OrderData(
+                                                        customerName = nameField.value.text,
+                                                        tableNumber = tableField.value.text,
+                                                        customerNumber = numberField.value.text,
+                                                        notes = notesField.value.text,
+                                                        total = total,
+                                                        status = "pending",
+                                                        booth = preferencesManager.getData("boothOrderID")
+                                                            .toInt()
+                                                    )
+                                                )
+                                            )
+                                            call.enqueue(object :
+                                                Callback<ApiResponse<OrderResponse>> {
+                                                override fun onResponse(
+                                                    call: Call<ApiResponse<OrderResponse>>,
+                                                    response: Response<ApiResponse<OrderResponse>>
+                                                ) {
+                                                    if (response.isSuccessful) {
+                                                        preferencesManager.saveData("orderID", response.body()?.data?.id.toString())
+                                                        preferencesManager.saveData("booth", preferencesManager.getData("boothOrderID"))
+
+                                                        val objectArrayParameterString =
+                                                            Gson().toJson(orderItems)
+                                                        val listReplace =
+                                                            objectArrayParameterString.replace(
+                                                                "/uploads/",
+                                                                "::uploads::"
+                                                            )
+                                                        preferencesManager.saveData("listOrder", listReplace)
+                                                        val retrofit2 =
+                                                            Retrofit.Builder().baseUrl(baseUrl)
+                                                                .addConverterFactory(
+                                                                    GsonConverterFactory.create()
+                                                                ).build()
+                                                                .create(OrderDetailsService::class.java)
+                                                        orderItems?.forEach {
+                                                            it.orderDetailsData.orderID =
+                                                                response.body()?.data?.id.toString()
+                                                            val call2 =
+                                                                retrofit2.addOrderDetails(it)
+                                                            call2.enqueue(object :
+                                                                Callback<ApiResponse<OrderDetailsResponse>> {
+                                                                override fun onResponse(
+                                                                    call: Call<ApiResponse<OrderDetailsResponse>>,
+                                                                    response: Response<ApiResponse<OrderDetailsResponse>>
+                                                                ) {
+                                                                    if (response.isSuccessful) {
+                                                                        Toast.makeText(
+                                                                            context,
+                                                                            "Berhasil menambahkan pesanan",
+                                                                            Toast.LENGTH_SHORT
+                                                                        ).show()
+                                                                        Handler().postDelayed({
+                                                                            navController.navigate(
+                                                                                "customerTransaction"
+                                                                            )
+                                                                        }, 5000)
+                                                                    } else {
+                                                                        Toast.makeText(
+                                                                            context,
+                                                                            "Error: ${response.code()} - ${response.message()}",
+                                                                            Toast.LENGTH_SHORT
+                                                                        ).show()
+                                                                    }
+                                                                }
+
+                                                                override fun onFailure(
+                                                                    call: Call<ApiResponse<OrderDetailsResponse>>,
+                                                                    t: Throwable
+                                                                ) {
+                                                                    print(t.message)
+                                                                }
+
+                                                            })
+                                                        }
+                                                    } else {
+                                                        Toast.makeText(
+                                                            context,
+                                                            "Error: ${response.code()} - ${response.message()}",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                    }
+                                                }
+
+                                                override fun onFailure(
+                                                    call: Call<ApiResponse<OrderResponse>>,
+                                                    t: Throwable
+                                                ) {
+                                                    print(t.message)
+                                                }
+
+                                            })
+                                        }
+                                    })
+                                    {
+                                        Text(
+                                            text = "Pesan Menu", style = TextStyle(
+                                                fontSize = 16.sp,
+                                                fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+                                                color = Color.White,
+                                                textAlign = TextAlign.Center,
+                                            )
+                                        )
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
-            Spacer(modifier = Modifier.padding(10.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(start = 16.dp),
-                horizontalArrangement = Arrangement.Start
-            ) {
-                Text(
-                    text = "Total harga : ", style = TextStyle(
-                        fontSize = 16.sp,
-                        lineHeight = 14.sp,
-                        fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                        textAlign = TextAlign.Center,
-                        color = Color.Black
-                    )
-                )
-//                orderItems?.forEach {
-//                    it.orderDetailsData.foods.attributes.foodPrice.let { it1 ->
-//                        it.orderDetailsData.qty.let { it2 ->
-//                            total += (it1 * it2)
-//                        }
-//                    }
-//                }
-                Text(
-                    text = "Rp" + convertedTotal.value, style = TextStyle(
-                        fontSize = 16.sp,
-                        lineHeight = 14.sp,
-                        fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                        textAlign = TextAlign.Center,
-                        color = Color.Black
-                    )
-                )
-            }
-
-            Spacer(modifier = Modifier.padding(10.dp))
-            ElevatedButton(modifier = Modifier
-                .align(Alignment.Start)
-                .fillMaxWidth()
-                .padding(2.dp)
-                .height(64.dp), colors = ButtonDefaults.buttonColors(
-                contentColor = Color.White,
-                containerColor = Color(0xFFFF5F00)
-            ), shape = RoundedCornerShape(8.dp), onClick = {
-                if (nameField.value.text.isEmpty() || tableField.value.text.isEmpty()) {
-                    Toast.makeText(
-                        context, "Field tidak boleh kosong", Toast.LENGTH_SHORT
-                    ).show()
-                    return@ElevatedButton
-                } else {
-                    val retrofit = Retrofit.Builder().baseUrl(baseUrl)
-                        .addConverterFactory(GsonConverterFactory.create()).build()
-                        .create(OrderService::class.java)
-                    val call = retrofit.addOrder(
-                        OrderDataWrapper(
-                            OrderData(
-                                customerName = nameField.value.text,
-                                tableNumber = tableField.value.text,
-                                notes = notesField.value.text,
-                                total = total,
-                                status = "pending",
-                                booth = preferencesManager.getData("boothOrderID").toInt()
-                            )
-                        )
-                    )
-                    call.enqueue(object : Callback<ApiResponse<OrderResponse>> {
-                        override fun onResponse(
-                            call: Call<ApiResponse<OrderResponse>>,
-                            response: Response<ApiResponse<OrderResponse>>
-                        ) {
-                            if (response.isSuccessful) {
-                                val retrofit2 = Retrofit.Builder().baseUrl(baseUrl)
-                                    .addConverterFactory(GsonConverterFactory.create()).build()
-                                    .create(OrderDetailsService::class.java)
-                                orderItems?.forEach {
-                                    it.orderDetailsData.orderID =
-                                        response.body()?.data?.id.toString()
-                                    val call2 = retrofit2.addOrderDetails(it)
-                                    call2.enqueue(object :
-                                        Callback<ApiResponse<OrderDetailsResponse>> {
-                                        override fun onResponse(
-                                            call: Call<ApiResponse<OrderDetailsResponse>>,
-                                            response: Response<ApiResponse<OrderDetailsResponse>>
-                                        ) {
-                                            if (response.isSuccessful) {
-                                                Toast.makeText(
-                                                    context,
-                                                    "Berhasil menambahkan pesanan",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-//                                                    navController.navigate("homepage") {
-//                                                        popUpTo("homepage") {
-//                                                            inclusive = true
-//                                                        }
-//                                                    }
-                                            } else {
-                                                Toast.makeText(
-                                                    context,
-                                                    "Error: ${response.code()} - ${response.message()}",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                            }
-                                        }
-
-                                        override fun onFailure(
-                                            call: Call<ApiResponse<OrderDetailsResponse>>,
-                                            t: Throwable
-                                        ) {
-                                            print(t.message)
-                                        }
-
-                                    })
-                                }
-                            } else {
-                                Toast.makeText(
-                                    context,
-                                    "Error: ${response.code()} - ${response.message()}",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-
-                        override fun onFailure(
-                            call: Call<ApiResponse<OrderResponse>>, t: Throwable
-                        ) {
-                            print(t.message)
-                        }
-
-                    })
-                }
-            })
-
-            {
-                Text(
-                    text = "Pesan Menu", style = TextStyle(
-                        fontSize = 16.sp,
-                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                        color = Color.White,
-                        textAlign = TextAlign.Center,
-                    )
-                )
-            }
         }
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 14.dp, vertical = 14.dp),
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.Top
+    ) {
+        IconButton(
+            modifier = Modifier
+                .padding(top = 12.dp, end = 12.dp)
+                .shadow(10.dp, RoundedCornerShape(100.dp))
+                .background(
+                    color = Color(0xFFFF5F00)
+                ),
+            onClick = { navController.navigateUp() }
+        ) {
+            Icon(
+                imageVector = Icons.Filled.ArrowBack,
+                contentDescription = "Kembali",
+                modifier = Modifier.size(25.dp),
+                tint = Color.White
+            )
+        }
+        Text(
+            text = "Lengkapi Datamu", style = TextStyle(
+                fontSize = 30.sp,
+                lineHeight = 36.sp,
+                fontFamily = FontFamily(Font(R.font.poppins_bold)),
+                color = Color(0xFF333333),
+            ),
+            modifier = Modifier.padding(top = 12.dp, end = 12.dp)
+        )
     }
 }

@@ -2,6 +2,7 @@ package com.example.projectuasmobile.frontend.booth
 
 import android.content.Context
 import android.net.Uri
+import android.os.Handler
 import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
 import android.widget.Toast
@@ -83,8 +84,9 @@ import java.nio.file.StandardCopyOption
 @Composable
 fun AddMenu(navController: NavController, context: Context = LocalContext.current) {
     val preferencesManager = remember { PreferencesManager(context = context) }
-    val baseUrl = "http://10.0.2.2:1337/api/"
-//    val baseUrl = "https://api2.tnadam.me/api/"
+    //LOKAL STRAPI
+    //val baseUrl = "http://10.0.2.2:1337/api/"
+    val baseUrl = "https://api2.tnadam.me/api/"
 
     val foodNameField = remember { mutableStateOf(TextFieldValue("")) }
     val foodDescriptionField = remember { mutableStateOf(TextFieldValue("")) }
@@ -137,7 +139,7 @@ fun AddMenu(navController: NavController, context: Context = LocalContext.curren
                 .padding(top = 12.dp, end = 12.dp)
                 .background(
                     color = Color(0xFFFF5F00), shape = RoundedCornerShape(100.dp)
-                ), onClick = { navController.navigateUp() }) {
+                ), onClick = { navController.navigate("menu") }) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
                     contentDescription = "Kembali",
@@ -362,12 +364,14 @@ fun AddMenu(navController: NavController, context: Context = LocalContext.curren
                                             response12: Response<UploadResponseList>
                                         ) {
                                             if (response12.isSuccessful) {
-//                                            navController.navigate("menu")
                                                 Toast.makeText(
                                                     context,
                                                     "Berhasil menambahkan menu",
                                                     Toast.LENGTH_SHORT
                                                 ).show()
+                                                Handler().postDelayed({
+                                                    navController.navigate("menu")
+                                                }, 5000)
                                             } else {
                                                 Toast.makeText(
                                                     context,

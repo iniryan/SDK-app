@@ -9,6 +9,8 @@ data class OrderData(
     val customerName: String,
     @SerializedName("tableNumber")
     val tableNumber: String,
+    @SerializedName("customerNumber")
+    val customerNumber: String,
     @SerializedName("notes")
     val notes: String,
     @SerializedName("total")
@@ -28,4 +30,19 @@ data class OrderDetailsData(
     var foods: FoodResponse,
     @SerializedName("qty")
     var qty: Int
+)
+
+data class UpdateStatusWrapper(@SerializedName("data") val orderData: UpdateStatusOrder)
+data class UpdateStatusOrder(
+    @SerializedName("status")
+    val status: String
+)
+
+data class RefuseOrderWrapper(@SerializedName("data") val orderData: RefuseOrder)
+
+data class RefuseOrder(
+    @SerializedName("status")
+    val status: String,
+    @SerializedName("alasanTolak")
+    val alasanTolak: String
 )

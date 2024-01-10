@@ -90,8 +90,9 @@ fun EditProfile(
     context: Context = LocalContext.current
 ) {
     val preferencesManager = remember { PreferencesManager(context = context) }
-    val baseUrl = "http://10.0.2.2:1337/api/"
-//    val baseUrl = "https://api2.tnadam.me/api/"
+    //LOKAL STRAPI
+    //val baseUrl = "http://10.0.2.2:1337/api/"
+    val baseUrl = "https://api2.tnadam.me/api/"
 
     val boothId = remember { mutableStateOf(boothID ?: "") }
     val boothNameField = remember { mutableStateOf(boothName ?: "") }
@@ -275,8 +276,8 @@ fun EditProfile(
                                 .height(100.dp)
                                 .clip(RoundedCornerShape(8.dp)),
                             contentScale = ContentScale.Crop,
-                            painter = rememberAsyncImagePainter("http://10.0.2.2:1337$editUrl"),
-//                            painter = rememberAsyncImagePainter("https://api2.tnadam.me/$editUrl"),
+//                            painter = rememberAsyncImagePainter("http://10.0.2.2:1337$editUrl"),
+                            painter = rememberAsyncImagePainter("https://api2.tnadam.me$editUrl"),
                             contentDescription = "image description"
                         )
                     }
@@ -301,10 +302,11 @@ fun EditProfile(
                 .height(48.dp), colors = ButtonDefaults.buttonColors(
                 contentColor = Color.White,
             ), shape = RoundedCornerShape(8.dp), onClick = {
-                if (selectedImageFile == null) {
-                    Toast.makeText(context, "Error: Image is required", Toast.LENGTH_SHORT).show()
-                    return@ElevatedButton
-                } else if (boothNameField.value.isEmpty() || boothDescriptionField.value.isEmpty()) {
+//                if (selectedImageFile == null) {
+//                    Toast.makeText(context, "Error: Image is required", Toast.LENGTH_SHORT).show()
+//                    return@ElevatedButton
+//                } else
+                    if (boothNameField.value.isEmpty() || boothDescriptionField.value.isEmpty()) {
                     Toast.makeText(context, "Error: Field is required", Toast.LENGTH_SHORT)
                         .show()
                     return@ElevatedButton
@@ -329,68 +331,73 @@ fun EditProfile(
                         call: Call<BoothResponse>, response: Response<BoothResponse>
                     ) {
                         if (response.isSuccessful) {
-                            val file = selectedImageFile
-                            val mimeType =
-                                MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-                                    file!!.extension
+                            if(selectedImageFile != null) {
+                                val file = selectedImageFile
+                                val mimeType =
+                                    MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                                        file!!.extension
+                                    )
+                                val refRequestBody =
+                                    "api::booth.booth".toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                                val refIdRequestBody = boothId.value
+                                    .toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                                val fieldRequestBody =
+                                    "boothImg".toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                                val fileRequestBody = MultipartBody.Part.createFormData(
+                                    "files",
+                                    file.name,
+                                    file.asRequestBody(mimeType?.toMediaTypeOrNull())
                                 )
-                            val refRequestBody =
-                                "api::booth.booth".toRequestBody("multipart/form-data".toMediaTypeOrNull())
-                            val refIdRequestBody = boothId.value
-                                .toRequestBody("multipart/form-data".toMediaTypeOrNull())
-                            val fieldRequestBody =
-                                "boothImg".toRequestBody("multipart/form-data".toMediaTypeOrNull())
-                            val fileRequestBody = MultipartBody.Part.createFormData(
-                                "files",
-                                file.name,
-                                file.asRequestBody(mimeType?.toMediaTypeOrNull())
-                            )
 
-                            val retrofit2 = Retrofit.Builder().baseUrl(baseUrl)
-                                .addConverterFactory(GsonConverterFactory.create()).client(
-                                    OkHttpClient.Builder().addInterceptor(
-                                        HttpLoggingInterceptor().setLevel(
-                                            HttpLoggingInterceptor.Level.BODY
-                                        )
-                                    ).build()
+                                val retrofit2 = Retrofit.Builder().baseUrl(baseUrl)
+                                    .addConverterFactory(GsonConverterFactory.create()).client(
+                                        OkHttpClient.Builder().addInterceptor(
+                                            HttpLoggingInterceptor().setLevel(
+                                                HttpLoggingInterceptor.Level.BODY
+                                            )
+                                        ).build()
+                                    )
+                                    .build().create(ImgService::class.java)
+                                val call2 = retrofit2.uploadImage(
+                                    refRequestBody,
+                                    refIdRequestBody,
+                                    fieldRequestBody,
+                                    fileRequestBody
                                 )
-                                .build().create(ImgService::class.java)
-                            val call2 = retrofit2.uploadImage(
-                                refRequestBody,
-                                refIdRequestBody,
-                                fieldRequestBody,
-                                fileRequestBody
-                            )
-                            call2.enqueue(object : Callback<UploadResponseList> {
-                                override fun onResponse(
-                                    call12: Call<UploadResponseList>,
-                                    response12: Response<UploadResponseList>
-                                ) {
-                                    if (response12.isSuccessful) {
-                                        navController.navigate("boothprofile")
-                                    } else {
+                                call2.enqueue(object : Callback<UploadResponseList> {
+                                    override fun onResponse(
+                                        call12: Call<UploadResponseList>,
+                                        response12: Response<UploadResponseList>
+                                    ) {
+                                        if (response12.isSuccessful) {
+                                            navController.navigate("boothprofile")
+                                        } else {
+                                            Toast.makeText(
+                                                context,
+                                                "Error: ${response.code()} - ${response.message()}",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    }
+
+                                    override fun onFailure(
+                                        call12: Call<UploadResponseList>, t: Throwable
+                                    ) {
                                         Toast.makeText(
                                             context,
                                             "Error: ${response.code()} - ${response.message()}",
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     }
-                                }
-
-                                override fun onFailure(
-                                    call12: Call<UploadResponseList>, t: Throwable
-                                ) {
-                                    Toast.makeText(
-                                        context,
-                                        "Error: ${response.code()} - ${response.message()}",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            })
+                                })
+                            }
+                            else {
+                                navController.navigate("boothprofile")
+                            }
                         } else {
                             Toast.makeText(
                                 context,
-                                "Error: ${response.code()} hahahaha",
+                                "Error: ${response.code()}",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }

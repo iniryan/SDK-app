@@ -68,8 +68,9 @@ fun BoothProfile(navController: NavController, context: Context = LocalContext.c
     val boothID = remember { mutableIntStateOf(0) }
     val urlImg = remember { mutableStateOf("") }
 
-//    val baseUrl = "https://api2.tnadam.me/api/"
-    val baseUrl = "http://10.0.2.2:1337/api/"
+    val baseUrl = "https://api2.tnadam.me/api/"
+    //LOKAL STRAPI
+    //val baseUrl = "http://10.0.2.2:1337/api/"
     val retrofit =
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
             .build().create(BoothService::class.java)
@@ -151,8 +152,8 @@ fun BoothProfile(navController: NavController, context: Context = LocalContext.c
                     .width(114.dp)
                     .height(114.dp)
                     .clip(RoundedCornerShape(100.dp)),
-                painter = rememberAsyncImagePainter("http://10.0.2.2:1337"+urlImg.value),
-//                painter = rememberAsyncImagePainter("https://api2.tnadam.me"+urlImg.value),
+//                painter = rememberAsyncImagePainter("http://10.0.2.2:1337"+urlImg.value),
+                painter = rememberAsyncImagePainter("https://api2.tnadam.me"+urlImg.value),
                 contentDescription = "image description",
                 contentScale = ContentScale.FillBounds
             )

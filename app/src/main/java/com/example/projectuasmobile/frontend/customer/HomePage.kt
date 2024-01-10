@@ -77,8 +77,9 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
     )
 
     val listBooth = remember { mutableStateListOf<BoothResponse>() }
-    val baseUrl = "http://10.0.2.2:1337/api/"
-//    val baseUrl = "https://api2.tnadam.me/api/"
+    //LOKAL STRAPI
+    //val baseUrl = "http://10.0.2.2:1337/api/"
+    val baseUrl = "https://api2.tnadam.me/api/"
 
     val retrofit =
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
@@ -135,7 +136,9 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                                 color = Color(0xFFFF5F00),
                                 shape = RoundedCornerShape(100.dp)
                             ),
-                        onClick = { navController.navigateUp() }
+                        onClick = {
+                            navController.navigate("rolepick")
+                        }
                     ) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
@@ -182,7 +185,7 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                         Text(
                             text = "Rasa Lezat di Ujung Jari! Pesan Sekarang dan Sajikan Kelezatan dalam Sekejap.",
                             style = TextStyle(
-                                fontSize = 22.sp,
+                                fontSize = 20.sp,
                                 lineHeight = 28.8.sp,
                                 fontFamily = FontFamily(Font(R.font.poppins_bold)),
                                 color = Color.White,
@@ -219,8 +222,8 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                             contentDescription = "image description",
                             contentScale = ContentScale.FillBounds,
                             modifier = Modifier
-                                .width(140.dp)
-                                .height(140.dp)
+                                .width(120.dp)
+                                .height(120.dp)
                                 .padding(all = 12.dp)
                         )
                     }
@@ -236,74 +239,104 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                     ), modifier = Modifier.align(Alignment.Start)
                 )
                 LazyColumn {
-                    listBooth.forEach { booth ->
-                        item {
-                            Row(
-                                horizontalArrangement = Arrangement.spacedBy(
-                                    12.dp,
-                                    Alignment.Start
-                                ),
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 14.dp)
-                                    .background(
-                                        color = Color(0xFFF4F8FB),
-                                        shape = RoundedCornerShape(size = 10.dp)
-                                    )
-                                    .clickable { navController.navigate("detailBooth/" + booth.id + "/" + booth.attributes.boothName + "/" + booth.attributes.boothDescription) }
-                            ) {
-                                Image(
-                                    painter = rememberAsyncImagePainter("http://10.0.2.2:1337" + booth.attributes.boothImg?.data?.attributes!!.url),
-//                                    painter = rememberAsyncImagePainter("https://api2.tnadam.me"+booth.attributes.boothImg?.data?.attributes!!.url),
-                                    contentDescription = "image description",
-                                    contentScale = ContentScale.FillBounds,
-                                    modifier = Modifier
-                                        .width(100.dp)
-                                        .height(100.dp)
-                                        .clip(RoundedCornerShape(8.dp)),
-                                )
-                                Column(
-                                    verticalArrangement = Arrangement.spacedBy(1.dp, Alignment.Top),
-                                    horizontalAlignment = Alignment.Start,
+                    if(listBooth.isNotEmpty()) {
+                        listBooth.forEach { booth ->
+                            item {
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(
+                                        12.dp,
+                                        Alignment.Start
+                                    ),
+                                    verticalAlignment = Alignment.CenterVertically,
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(14.dp)
+                                        .padding(top = 14.dp)
+                                        .background(
+                                            color = Color(0xFFF4F8FB),
+                                            shape = RoundedCornerShape(size = 10.dp)
+                                        )
+                                        .clickable { navController.navigate("detailBooth/" + booth.id + "/" + booth.attributes.boothName + "/" + booth.attributes.boothDescription) }
+                                ) {
+                                    Image(
+//                                    painter = rememberAsyncImagePainter("http://10.0.2.2:1337" + booth.attributes.boothImg?.data?.attributes!!.url),
+                                        painter = rememberAsyncImagePainter("https://api2.tnadam.me" + booth.attributes.boothImg?.data?.attributes!!.url),
+                                        contentDescription = "image description",
+                                        contentScale = ContentScale.FillBounds,
+                                        modifier = Modifier
+                                            .width(100.dp)
+                                            .height(100.dp)
+                                            .clip(RoundedCornerShape(8.dp)),
+                                    )
+                                    Column(
+                                        verticalArrangement = Arrangement.spacedBy(
+                                            1.dp,
+                                            Alignment.Top
+                                        ),
+                                        horizontalAlignment = Alignment.Start,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(14.dp)
+                                    ) {
+                                        Text(
+                                            text = booth.attributes.boothName, style = TextStyle(
+                                                fontSize = 18.sp,
+                                                lineHeight = 17.64.sp,
+                                                fontFamily = FontFamily(Font(R.font.poppins_bold)),
+                                                color = Color(0xFF0B1527),
+                                            )
+                                        )
+                                        Text(
+                                            text = "Status Kios: " + if (booth.attributes.open) "Buka" else "Tutup",
+                                            style = TextStyle(
+                                                fontSize = 14.sp,
+                                                lineHeight = 17.64.sp,
+                                                fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                                                color = Color(0xFF0B1527),
+                                            )
+                                        )
+                                        Spacer(modifier = Modifier.padding(top = 2.dp))
+                                        Divider(
+                                            modifier = Modifier
+                                                .border(width = 1.dp, color = Color(0xFFE0E0E0))
+                                                .fillMaxSize()
+                                                .height(1.dp)
+                                        )
+                                        Spacer(modifier = Modifier.padding(top = 2.dp))
+                                        Text(
+                                            text = booth.attributes.boothDescription,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis,
+                                            style = TextStyle(
+                                                fontSize = 14.sp,
+                                                lineHeight = 17.64.sp,
+                                                fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                                                color = Color(0xFF0B1527),
+                                            )
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        item {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center,
+                            ) {
+                                Column(
+                                    modifier = Modifier.padding(50.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center,
                                 ) {
                                     Text(
-                                        text = booth.attributes.boothName, style = TextStyle(
-                                            fontSize = 18.sp,
-                                            lineHeight = 17.64.sp,
-                                            fontFamily = FontFamily(Font(R.font.poppins_bold)),
-                                            color = Color(0xFF0B1527),
-                                        )
-                                    )
-                                    Text(
-                                        text = "Status Kios: " + if (booth.attributes.open) "Buka" else "Tutup",
+                                        text = "Tidak ada Booth/Kios yang sedang buka",
                                         style = TextStyle(
                                             fontSize = 14.sp,
-                                            lineHeight = 17.64.sp,
-                                            fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                                            color = Color(0xFF0B1527),
-                                        )
-                                    )
-                                    Spacer(modifier = Modifier.padding(top = 2.dp))
-                                    Divider(
-                                        modifier = Modifier
-                                            .border(width = 1.dp, color = Color(0xFFE0E0E0))
-                                            .fillMaxSize()
-                                            .height(1.dp)
-                                    )
-                                    Spacer(modifier = Modifier.padding(top = 2.dp))
-                                    Text(
-                                        text = booth.attributes.boothDescription,
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis,
-                                        style = TextStyle(
-                                            fontSize = 14.sp,
-                                            lineHeight = 17.64.sp,
                                             fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                                            color = Color(0xFF0B1527),
+                                            color = Color(0xFF495057),
+                                            textAlign = TextAlign.Center,
                                         )
                                     )
                                 }

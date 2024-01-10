@@ -36,12 +36,15 @@ import com.example.projectuasmobile.frontend.booth.DetailTransaction
 import com.example.projectuasmobile.frontend.booth.EditMenu
 import com.example.projectuasmobile.frontend.booth.EditProfile
 import com.example.projectuasmobile.frontend.booth.MenuList
+import com.example.projectuasmobile.frontend.booth.RefuseOrder
 import com.example.projectuasmobile.frontend.booth.TransactionPage
 import com.example.projectuasmobile.frontend.customer.BoothDetail
 import com.example.projectuasmobile.frontend.customer.CheckOutPage
 import com.example.projectuasmobile.frontend.customer.CustomerTransaction
 import com.example.projectuasmobile.frontend.customer.HomePage
 import com.example.projectuasmobile.frontend.customer.PaymentPage
+import com.example.projectuasmobile.frontend.customer.Receipt
+import com.example.projectuasmobile.frontend.customer.SuccessPage
 import com.example.projectuasmobile.ui.theme.ProjectUASMobileTheme
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -139,14 +142,23 @@ class MainActivity : ComponentActivity() {
                         composable("payment") {
                             PaymentPage(navController)
                         }
-                        composable("detailTransaction") {
-                            DetailTransaction(navController)
+                        composable("detailTransaction/{id}") {backStackEntry ->
+                            DetailTransaction(navController, backStackEntry.arguments?.getString("id"))
                         }
                         composable("customerTransaction") {
                             CustomerTransaction(navController)
                         }
                         composable("transaction") {
                             TransactionPage(navController)
+                        }
+                        composable("refuseOrder/{id}") { backStackEntry ->
+                            RefuseOrder(navController, backStackEntry.arguments?.getString("id"))
+                        }
+                        composable("receipt") {
+                            Receipt(navController)
+                        }
+                        composable("success") {
+                            SuccessPage(navController)
                         }
                     }
                 }

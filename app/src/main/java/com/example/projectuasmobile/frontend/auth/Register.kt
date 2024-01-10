@@ -72,8 +72,9 @@ fun Register(navController: NavController, context: Context = LocalContext.curre
     val passwordField = remember { mutableStateOf(TextFieldValue("")) }
     val passwordVisible = remember { mutableStateOf(false) }
 
-//    val baseUrl = "https://api2.tnadam.me/api/"
-    val baseUrl = "http://10.0.2.2:1337/api/"
+    val baseUrl = "https://api2.tnadam.me/api/"
+    //LOKAL STRAPI
+    //val baseUrl = "http://10.0.2.2:1337/api/"
     var jwt by remember { mutableStateOf("") }
     jwt = preferencesManager.getData("jwt")
 

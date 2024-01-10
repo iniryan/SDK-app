@@ -13,6 +13,8 @@ class OrderAttributes {
     val customerName: String = ""
     @SerializedName("tableNumber")
     val tableNumber: String = ""
+    @SerializedName("customerNumber")
+    val customerNumber: String = ""
     @SerializedName("notes")
     val notes: String = ""
     @SerializedName("total")
@@ -21,7 +23,8 @@ class OrderAttributes {
     val status: String = ""
     @SerializedName("booth")
     val booth: ApiResponse<BoothResponse>? = null
-}
-enum class StatusPesanan {
-    Order, Process, Done
+    @SerializedName("createdAt")
+    val createdAt: String = ""
+    @SerializedName("alasanTolak")
+    val alasanTolak: String = ""
 }

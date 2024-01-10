@@ -14,9 +14,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
@@ -33,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -71,16 +75,18 @@ fun BoothDetail(
     val preferencesManager = remember { PreferencesManager(context = context) }
     val title = remember { mutableStateOf(boothName ?: "") }
     val desc = remember { mutableStateOf(boothDescription ?: "") }
-    val boothID = remember { mutableStateOf(boothID ?: "") }
+    val boothId = remember { mutableStateOf(boothID ?: "") }
 
     val listMenu = remember { mutableStateListOf<FoodResponse>() }
-    val baseUrl = "http://10.0.2.2:1337/api/"
-//    val baseUrl = "https://api2.tnadam.me/api/"
+
+    //LOKAL STRAPI
+    //val baseUrl = "http://10.0.2.2:1337/api/"
+    val baseUrl = "https://api2.tnadam.me/api/"
 
     val retrofit =
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
             .build().create(FoodService::class.java)
-    val call = retrofit.getAllFood(boothID.value, "*")
+    val call = retrofit.getAllFood(boothId.value, "*")
     call.enqueue(object : Callback<ApiResponse<List<FoodResponse>>> {
         override fun onResponse(
             call: Call<ApiResponse<List<FoodResponse>>>,
@@ -202,7 +208,8 @@ fun BoothDetail(
                                                 .background(color = Color(0xFFEEEEEE))
                                         )
                                         Column(
-                                            modifier = Modifier.fillMaxWidth()
+                                            modifier = Modifier
+                                                .fillMaxWidth()
                                                 .background(color = Color(0xFFFFFFFF))
                                                 .padding(start = 16.dp, top = 14.dp, end = 16.dp),
                                             verticalArrangement = Arrangement.spacedBy(
@@ -218,7 +225,10 @@ fun BoothDetail(
                                                 Column(
                                                     modifier = Modifier
                                                         .width(240.dp),
-                                                    verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
+                                                    verticalArrangement = Arrangement.spacedBy(
+                                                        4.dp,
+                                                        Alignment.Top
+                                                    ),
                                                     horizontalAlignment = Alignment.Start,
                                                 ) {
                                                     Text(
@@ -266,16 +276,15 @@ fun BoothDetail(
                                                             ),
                                                             verticalAlignment = Alignment.CenterVertically,
                                                         ) {
+
+                                                            var orderItem : OrderDetailsDataWrapper? = null
+
                                                             var quantity by remember {
                                                                 mutableIntStateOf(
-                                                                    0
+                                                                    orderItem?.orderDetailsData?.qty ?: 0
                                                                 )
                                                             }
-                                                            var orderItem by remember {
-                                                                mutableStateOf<OrderDetailsDataWrapper?>(
-                                                                    null
-                                                                )
-                                                            }
+
                                                             val existingItemIndex =
                                                                 orderItems.indexOf(orderItem)
 
@@ -349,15 +358,16 @@ fun BoothDetail(
                                                     }
                                                 }
                                                 Spacer(modifier = Modifier.padding(horizontal = 8.dp))
-                                                val imgurl = menuResponse.attributes.foodImg?.data?.attributes!!.url
+                                                val imgurl =
+                                                    menuResponse.attributes.foodImg?.data?.attributes!!.url
                                                 Image(
                                                     modifier = Modifier
                                                         .width(120.dp)
                                                         .height(120.dp)
                                                         .clip(RoundedCornerShape(8.dp)),
                                                     contentScale = ContentScale.Crop,
-//                                                    painter = rememberAsyncImagePainter("https://api2.tnadam.me" + imgurl),
-                                                    painter = rememberAsyncImagePainter("http://10.0.2.2:1337" + imgurl),
+                                                    painter = rememberAsyncImagePainter("https://api2.tnadam.me$imgurl"),
+//                                                    painter = rememberAsyncImagePainter("http://10.0.2.2:1337" + imgurl),
                                                     contentDescription = "image description"
                                                 )
 
@@ -371,50 +381,83 @@ fun BoothDetail(
                                         }
                                     }
                                 }
-                            }
-                            ElevatedButton(
-                                modifier = Modifier
-                                    .align(Alignment.Start)
-                                    .fillMaxWidth()
-                                    .padding(vertical = 2.dp, horizontal = 16.dp)
-                                    .height(64.dp),
-                                colors = ButtonDefaults.buttonColors(
-                                    contentColor = Color.White,
-                                    containerColor = Color(0xFFFF5F00)
-                                ),
-                                shape = RoundedCornerShape(8.dp),
-                                onClick = {
-                                    if (orderItems.isEmpty()) {
-                                            Toast.makeText(context, "Error: No item added", Toast.LENGTH_SHORT)
-                                                .show()
-                                            return@ElevatedButton
-                                    } else {
-                                        val objectArrayParameterString = Gson().toJson(orderItems)
-                                        val listReplace = objectArrayParameterString.replace(
-                                            "/uploads/",
-                                            "::uploads::"
+                                item {
+                                    ElevatedButton(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(vertical = 2.dp, horizontal = 16.dp)
+                                            .height(64.dp),
+                                        colors = ButtonDefaults.buttonColors(
+                                            contentColor = Color.White,
+                                            containerColor = Color(0xFFFF5F00)
+                                        ),
+                                        shape = RoundedCornerShape(8.dp),
+                                        onClick = {
+                                            if (orderItems.isEmpty()) {
+                                                Toast.makeText(
+                                                    context,
+                                                    "Error: No item added",
+                                                    Toast.LENGTH_SHORT
+                                                )
+                                                    .show()
+                                                return@ElevatedButton
+                                            } else {
+                                                val objectArrayParameterString =
+                                                    Gson().toJson(orderItems)
+                                                val listReplace =
+                                                    objectArrayParameterString.replace(
+                                                        "/uploads/",
+                                                        "::uploads::"
+                                                    )
+                                                preferencesManager.saveData(
+                                                    "boothOrderID",
+                                                    boothId.value
+                                                )
+                                                navController.navigate("checkout/$listReplace")
+                                            }
+                                        }
+                                    )
+                                    {
+                                        Text(
+                                            text = "Tambah Pesanan",
+                                            style = TextStyle(
+                                                fontSize = 16.sp,
+                                                fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+                                                color = Color.White,
+                                                textAlign = TextAlign.Center,
+                                            )
                                         )
-                                        preferencesManager.saveData("boothOrderID", boothID.value)
-                                        navController.navigate("checkout/" + listReplace)
                                     }
                                 }
-                            )
-
-                            {
-                                Text(
-                                    text = "Tambah Pesanan",
-                                    style = TextStyle(
-                                        fontSize = 16.sp,
-                                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                                        color = Color.White,
-                                        textAlign = TextAlign.Center,
-                                    )
-                                )
                             }
                         }
                     }
                 }
             }
+        }
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 14.dp, vertical = 14.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.Top
+    ) {
+        IconButton(
+            modifier = Modifier
+                .padding(top = 12.dp, end = 12.dp)
+                .shadow(10.dp, RoundedCornerShape(100.dp))
+                .background(
+                    color = Color(0xFFFF5F00)
+                ),
+            onClick = { navController.navigate("homepage") }
+        ) {
+            Icon(
+                imageVector = Icons.Filled.ArrowBack,
+                contentDescription = "Kembali",
+                modifier = Modifier.size(25.dp),
+                tint = Color.White
+            )
         }
     }
 }

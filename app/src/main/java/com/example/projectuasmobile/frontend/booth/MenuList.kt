@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -38,6 +39,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -60,8 +62,9 @@ fun MenuList(navController: NavController, context: Context = LocalContext.curre
     val preferencesManager = remember { PreferencesManager(context = context) }
     val listMenu = remember { mutableStateListOf<FoodResponse>() }
     val boothId = preferencesManager.getData("boothID")
-//    val baseUrl = "https://api2.tnadam.me/api/"
-    val baseUrl = "http://10.0.2.2:1337/api/"
+    //LOKAL STRAPI
+    //val baseUrl = "http://10.0.2.2:1337/api/"
+    val baseUrl = "https://api2.tnadam.me/api/"
     val retrofit =
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
             .build().create(FoodService::class.java)
@@ -120,74 +123,109 @@ fun MenuList(navController: NavController, context: Context = LocalContext.curre
                     ), modifier = Modifier.align(Alignment.Start)
                 )
                 LazyColumn {
-                    listMenu.forEach { menu ->
-                        item {
-                            val currentValue = menu.attributes.foodImg?.data?.attributes!!.url
-                            val newUrl = currentValue.replace("/uploads/", "::uploads::")
-                            Row(horizontalArrangement = Arrangement.spacedBy(
-                                12.dp, Alignment.Start
-                            ),
-                                verticalAlignment = Alignment.Top,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 14.dp)
-                                    .clickable { navController.navigate("editMenu/" + menu.id + "/" + menu.attributes.foodName + "/" + menu.attributes.foodDescription + "/" + menu.attributes.foodPrice + "/" + newUrl) }) {
-                                val imgurl = menu.attributes.foodImg?.data?.attributes!!.url
-                                Image(
+                    if(listMenu.isNotEmpty()) {
+                        listMenu.forEach { menu ->
+                            item {
+                                val currentValue = menu.attributes.foodImg?.data?.attributes!!.url
+                                val newUrl = currentValue.replace("/uploads/", "::uploads::")
+                                Row(horizontalArrangement = Arrangement.spacedBy(
+                                    12.dp, Alignment.Start
+                                ),
+                                    verticalAlignment = Alignment.Top,
                                     modifier = Modifier
-                                        .width(100.dp)
-                                        .height(100.dp)
-                                        .clip(RoundedCornerShape(8.dp)),
-                                    contentScale = ContentScale.Crop,
-                                    painter = rememberAsyncImagePainter("http://10.0.2.2:1337" + imgurl),
-//                                    painter = rememberAsyncImagePainter("https://api2.tnadam.me" + imgurl),
-                                    contentDescription = "image description"
-                                )
+                                        .fillMaxWidth()
+                                        .padding(top = 14.dp)
+                                        .background(
+                                            color = Color(0xFFF4F8FB),
+                                            shape = RoundedCornerShape(size = 10.dp)
+                                        )
+                                        .clickable { navController.navigate("editMenu/" + menu.id + "/" + menu.attributes.foodName + "/" + menu.attributes.foodDescription + "/" + menu.attributes.foodPrice + "/" + newUrl) }) {
+                                    val imgurl = menu.attributes.foodImg?.data?.attributes!!.url
+                                    Image(
+                                        modifier = Modifier
+                                            .width(100.dp)
+                                            .height(100.dp)
+                                            .clip(RoundedCornerShape(8.dp)),
+                                        contentScale = ContentScale.Crop,
+//                                    painter = rememberAsyncImagePainter("http://10.0.2.2:1337" + imgurl),
+                                        painter = rememberAsyncImagePainter("https://api2.tnadam.me$imgurl"),
+                                        contentDescription = "image description"
+                                    )
+                                    Column(
+                                        verticalArrangement = Arrangement.spacedBy(
+                                            1.dp,
+                                            Alignment.Top
+                                        ),
+                                        horizontalAlignment = Alignment.Start,
+                                        modifier = Modifier.fillMaxWidth().padding(14.dp)
+                                    ) {
+                                        Text(
+                                            text = menu.attributes.foodName, style = TextStyle(
+                                                fontSize = 18.sp,
+                                                lineHeight = 17.64.sp,
+                                                fontFamily = FontFamily(Font(R.font.poppins_bold)),
+                                                color = Color(0xFF0B1527),
+                                            )
+                                        )
+                                        Text(
+                                            text = "Rp" + menu.attributes.foodPrice.toString(),
+                                            style = TextStyle(
+                                                fontSize = 14.sp,
+                                                lineHeight = 17.64.sp,
+                                                fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                                                color = Color(0xFF0B1527)
+                                            )
+                                        )
+                                        Spacer(modifier = Modifier.padding(top = 2.dp))
+                                        Divider(
+                                            modifier = Modifier
+                                                .border(
+                                                    width = 1.dp, color = Color(0xFFE0E0E0)
+                                                )
+                                                .fillMaxSize()
+                                                .height(1.dp)
+                                        )
+                                        Spacer(modifier = Modifier.padding(top = 2.dp))
+                                        Text(
+                                            text = menu.attributes.foodDescription,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis, style = TextStyle(
+                                                fontSize = 14.sp,
+                                                lineHeight = 17.64.sp,
+                                                fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                                                color = Color(0x801E1E1E),
+                                            )
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        item {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center,
+                            ) {
                                 Column(
-                                    verticalArrangement = Arrangement.spacedBy(1.dp, Alignment.Top),
-                                    horizontalAlignment = Alignment.Start,
-                                    modifier = Modifier.fillMaxWidth()
+                                    modifier = Modifier.padding(50.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center,
                                 ) {
                                     Text(
-                                        text = menu.attributes.foodName, style = TextStyle(
-                                            fontSize = 16.sp,
-                                            lineHeight = 17.64.sp,
-                                            fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                                            color = Color(0xFF1E1E1E),
-                                        )
-                                    )
-                                    Text(
-                                        text = "Rp" + menu.attributes.foodPrice.toString(),
+                                        text = "Tidak ada menu tersedia",
                                         style = TextStyle(
-                                            fontSize = 12.sp,
-                                            lineHeight = 17.64.sp,
-                                            fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                                            color = Color(0x801E1E1E),
-                                        )
-                                    )
-                                    Spacer(modifier = Modifier.padding(top = 2.dp))
-                                    Divider(
-                                        modifier = Modifier
-                                            .border(
-                                                width = 1.dp, color = Color(0xFFE0E0E0)
-                                            )
-                                            .fillMaxSize()
-                                            .height(0.2.dp)
-                                    )
-                                    Spacer(modifier = Modifier.padding(top = 2.dp))
-                                    Text(
-                                        text = menu.attributes.foodDescription, style = TextStyle(
-                                            fontSize = 12.sp,
-                                            lineHeight = 17.64.sp,
+                                            fontSize = 14.sp,
                                             fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                                            color = Color(0x801E1E1E),
+                                            color = Color(0xFF495057),
+                                            textAlign = TextAlign.Center,
                                         )
                                     )
                                 }
                             }
                         }
                     }
-
                 }
 
             }
