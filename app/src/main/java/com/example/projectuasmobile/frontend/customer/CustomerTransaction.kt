@@ -656,6 +656,35 @@ fun CustomerTransaction(navController: NavController, context: Context = LocalCo
                                         )
                                     )
                                 }
+                            } else if (status.value == "tolak"){
+                                ElevatedButton(
+                                    modifier = Modifier
+                                        .align(Alignment.Start)
+                                        .fillMaxWidth()
+                                        .padding(vertical = 16.dp)
+                                        .height(64.dp),
+                                    colors = ButtonDefaults.buttonColors(
+                                        contentColor = Color.White
+                                    ),
+                                    shape = RoundedCornerShape(8.dp),
+                                    onClick = {
+                                        preferencesManager.clearData()
+                                        navController.navigate("homepage")
+                                    }
+
+                                )
+
+                                {
+                                    Text(
+                                        text = "Kembali Ke Beranda",
+                                        style = TextStyle(
+                                            fontSize = 16.sp,
+                                            fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+                                            color = Color.White,
+                                            textAlign = TextAlign.Center,
+                                        )
+                                    )
+                                }
                             }
                             Spacer(modifier = Modifier.padding(vertical = 30.dp))
                         }
