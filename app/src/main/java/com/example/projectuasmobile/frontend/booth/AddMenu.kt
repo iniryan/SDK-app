@@ -305,7 +305,7 @@ fun AddMenu(navController: NavController, context: Context = LocalContext.curren
                     val retrofit = Retrofit.Builder().baseUrl(baseUrl)
                         .addConverterFactory(GsonConverterFactory.create()).build()
                         .create(FoodService::class.java)
-                    try {
+//                    try {
                         val price = foodPriceField.value.text.toInt()
                         val foodData = FoodDataWrapper(
                             FoodData(
@@ -406,14 +406,14 @@ fun AddMenu(navController: NavController, context: Context = LocalContext.curren
                             }
 
                         })
-                    } catch (e: NumberFormatException) {
-                        Toast.makeText(
-                            context,
-                            "Error: Invalid price format",
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
-                    }
+//                    } catch (e: NumberFormatException) {
+//                        Toast.makeText(
+//                            context,
+//                            "Error: Invalid price format",
+//                            Toast.LENGTH_SHORT
+//                        )
+//                            .show()
+//                    }
                 }
             })
 

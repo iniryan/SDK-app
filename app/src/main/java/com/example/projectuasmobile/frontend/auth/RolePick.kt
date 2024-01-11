@@ -17,7 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.text
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -80,21 +85,31 @@ fun RolePick(navController: NavController) {
             Spacer(modifier = Modifier.padding(vertical = 20.dp))
             IconButton(
                 onClick = { navController.navigate("homepage") },
-                modifier = Modifier.fillMaxWidth().height(200.dp).border(1.dp, Color(0xFFFF5F00), RoundedCornerShape(8.dp))
+                modifier = Modifier
+                    .semantics { text = AnnotatedString("pembeli") }
+                    .testTag("pembeli_tag")
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .border(1.dp, Color(0xFFFF5F00), RoundedCornerShape(8.dp))
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.pembeli),
-                    contentDescription = "image description",
+                    contentDescription = "image role pembeli",
                 )
             }
             Spacer(modifier = Modifier.padding(vertical = 20.dp))
             IconButton(
                 onClick = { navController.navigate("login") },
-                modifier = Modifier.fillMaxWidth().height(200.dp).border(1.dp, Color(0xFFFF5F00), RoundedCornerShape(8.dp))
+                modifier = Modifier
+                    .semantics { text = AnnotatedString("penjual") }
+                    .testTag("penjual_tag")
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .border(1.dp, Color(0xFFFF5F00), RoundedCornerShape(8.dp))
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.penjual),
-                    contentDescription = "image description",
+                    contentDescription = "image role penjual",
                 )
             }
             Spacer(modifier = Modifier.padding(vertical = 24.dp))

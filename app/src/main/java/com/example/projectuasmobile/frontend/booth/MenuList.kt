@@ -62,6 +62,7 @@ fun MenuList(navController: NavController, context: Context = LocalContext.curre
     val preferencesManager = remember { PreferencesManager(context = context) }
     val listMenu = remember { mutableStateListOf<FoodResponse>() }
     val boothId = preferencesManager.getData("boothID")
+
     //LOKAL STRAPI
     //val baseUrl = "http://10.0.2.2:1337/api/"
     val baseUrl = "https://api2.tnadam.me/api/"
@@ -199,6 +200,9 @@ fun MenuList(navController: NavController, context: Context = LocalContext.curre
                                     }
                                 }
                             }
+                        }
+                        item {
+                            Spacer(modifier = Modifier.padding(vertical = 60.dp))
                         }
                     } else {
                         item {

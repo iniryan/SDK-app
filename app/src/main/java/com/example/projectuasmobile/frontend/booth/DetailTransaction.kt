@@ -10,24 +10,30 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -40,11 +46,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import com.example.projectuasmobile.R
 import com.example.projectuasmobile.data.UpdateStatusOrder
 import com.example.projectuasmobile.data.UpdateStatusWrapper
 import com.example.projectuasmobile.response.ApiResponse
+import com.example.projectuasmobile.response.FoodResponse
+import com.example.projectuasmobile.response.OrderDetailsResponse
 import com.example.projectuasmobile.response.OrderResponse
+import com.example.projectuasmobile.service.OrderDetailsService
 import com.example.projectuasmobile.service.OrderService
 import retrofit2.Call
 import retrofit2.Callback
@@ -69,36 +79,81 @@ fun DetailTransaction(
     val status = remember { mutableStateOf("") }
     val alasanTolak = remember { mutableStateOf("") }
     val transactionTime = remember { mutableStateOf("") }
+    val checkStatus = remember {
+        mutableStateOf(true)
+    }
+
+    val orderItems = remember { mutableStateListOf<OrderDetailsResponse>() }
 
     val baseUrl = "https://api2.tnadam.me/api/"
     //LOKAL STRAPI
     //val baseUrl = "http://10.0.2.2:1337/api/"
-    val retrofit =
-        Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
-            .build().create(OrderService::class.java)
-    val call = retrofit.getOrderById(transactionID.value, "*")
-    call.enqueue(object : Callback<ApiResponse<List<OrderResponse>>> {
+
+    Handler().postDelayed({
+        checkStatus.value = true
+    }, 5000)
+    if(checkStatus.value && (transactionID.value != null || transactionID.value != "")) {
+        val retrofit =
+            Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
+                .build().create(OrderService::class.java)
+        val call = retrofit.getOrderById(transactionID.value, "*")
+        call.enqueue(object : Callback<ApiResponse<List<OrderResponse>>> {
+            override fun onResponse(
+                call: Call<ApiResponse<List<OrderResponse>>>,
+                response: Response<ApiResponse<List<OrderResponse>>>
+            ) {
+                if (response.isSuccessful) {
+                    val resp = response.body()?.data
+                    resp?.let { dataList ->
+                        if (dataList.isNotEmpty()) {
+                            val data = dataList[0]
+                            transactionID.value = data.id.toString()
+                            customerName.value = data.attributes.customerName
+                            customerNumber.value = data.attributes.customerNumber
+                            tableNumber.value = data.attributes.tableNumber
+                            notes.value = data.attributes.notes
+                            total.value = data.attributes.total.toString()
+                            status.value = data.attributes.status
+                            alasanTolak.value = data.attributes.alasanTolak
+                            transactionTime.value = data.attributes.createdAt
+                        }
+                    }
+                    checkStatus.value = false
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Error: ${response.code()} - ${response.message()}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ApiResponse<List<OrderResponse>>>, t: Throwable) {
+                print(t.message)
+            }
+        })
+    }
+    val retrofitItems = Retrofit.Builder().baseUrl(baseUrl)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build().create(OrderDetailsService::class.java)
+    val callItems = retrofitItems.getAllOrderDetails(transactionID.value, "*")
+    callItems.enqueue(object : Callback<ApiResponse<List<OrderDetailsResponse>>> {
         override fun onResponse(
-            call: Call<ApiResponse<List<OrderResponse>>>,
-            response: Response<ApiResponse<List<OrderResponse>>>
+            call: Call<ApiResponse<List<OrderDetailsResponse>>>,
+            response: Response<ApiResponse<List<OrderDetailsResponse>>>
         ) {
             if (response.isSuccessful) {
                 val resp = response.body()?.data
+                orderItems.clear()
                 resp?.let { dataList ->
-                    if (dataList.isNotEmpty()) {
-                        val data = dataList[0]
-                        transactionID.value = data.id.toString()
-                        customerName.value = data.attributes.customerName
-                        customerNumber.value = data.attributes.customerNumber
-                        tableNumber.value = data.attributes.tableNumber
-                        notes.value = data.attributes.notes
-                        total.value = data.attributes.total.toString()
-                        status.value = data.attributes.status
-                        alasanTolak.value = data.attributes.alasanTolak
-                        transactionTime.value = data.attributes.createdAt
+                    dataList.forEach { data ->
+                        orderItems.add(data)
                     }
                 }
-
+//                orderItems.clear()
+//                response.body()?.data!!.forEach { menuResponse ->
+//                    orderItems.add(menuResponse)
+//                }
             } else {
                 Toast.makeText(
                     context,
@@ -108,7 +163,7 @@ fun DetailTransaction(
             }
         }
 
-        override fun onFailure(call: Call<ApiResponse<List<OrderResponse>>>, t: Throwable) {
+        override fun onFailure(call: Call<ApiResponse<List<OrderDetailsResponse>>>, t: Throwable) {
             print(t.message)
         }
     })
@@ -165,6 +220,7 @@ fun DetailTransaction(
                             )
                         }
                     }
+
                     "proses" -> {
                         Image(
                             painter = painterResource(id = R.drawable.time),
@@ -193,6 +249,7 @@ fun DetailTransaction(
                             )
                         }
                     }
+
                     "bayar" -> {
                         Image(
                             painter = painterResource(id = R.drawable.time),
@@ -221,6 +278,7 @@ fun DetailTransaction(
                             )
                         }
                     }
+
                     "tolak" -> {
                         Image(
                             painter = painterResource(id = R.drawable.info),
@@ -238,7 +296,7 @@ fun DetailTransaction(
                                 )
                             )
                             Text(
-                                text = "Pesanan customer ditolak karena " + if(alasanTolak.value == null) "'tidak ada alasan'" else alasanTolak.value,
+                                text = "Pesanan customer ditolak karena " + if (alasanTolak.value == null) "'tidak ada alasan'" else alasanTolak.value,
                                 style = TextStyle(
                                     fontSize = 16.sp,
                                     fontFamily = FontFamily(Font(R.font.poppins_regular)),
@@ -249,6 +307,7 @@ fun DetailTransaction(
                             )
                         }
                     }
+
                     else -> {
                         Image(
                             painter = painterResource(id = R.drawable.check),
@@ -280,7 +339,7 @@ fun DetailTransaction(
                 }
             }
             Text(
-                text = "Tanggal Transaksi: "+ transactionTime.value,
+                text = "Tanggal Transaksi: " + transactionTime.value,
                 style = TextStyle(
                     fontSize = 16.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_semibold)),
@@ -357,211 +416,398 @@ fun DetailTransaction(
                 ),
                 modifier = Modifier.padding(vertical = 12.dp)
             )
-//                Lazycolumn
-            Text(
-                text = "Order Summary",
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                    fontWeight = FontWeight(500),
-                    color = Color(0xFF212529),
-                ),
-                modifier = Modifier.padding(vertical = 12.dp)
-            )
-            Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Top),
-                horizontalAlignment = Alignment.Start,
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Top,
-                ) {
-                    Text(
-                        text = "Total",
-                        style = TextStyle(
-                            fontSize = 18.sp,
-                            fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                            fontWeight = FontWeight(400),
-                            color = Color(0xFF212529),
-                        )
-                    )
-                    Text(
-                        text = "Rp" + total.value,
-                        style = TextStyle(
-                            fontSize = 18.sp,
-                            fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                            fontWeight = FontWeight(600),
-                            color = Color(0xFF212529),
-                            textAlign = TextAlign.Right,
-                            letterSpacing = 0.3.sp,
-                        )
-                    )
-                }
-            }
-            when (status.value) {
-                "pending" -> {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(24.dp, Alignment.Start),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        ElevatedButton(
+            LazyColumn {
+                orderItems.forEach { menuResponse ->
+                    item {
+                        Divider(
                             modifier = Modifier
-                                .padding(vertical = 16.dp)
-                                .height(64.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                contentColor = Color.White,
-                                containerColor = primaryColorOrg
+                                .fillMaxWidth()
+                                .height(1.dp)
+                                .background(color = Color(0xFFEEEEEE))
+                        )
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(color = Color(0xFFFFFFFF))
+                                .padding(start = 16.dp, top = 14.dp, end = 16.dp),
+                            verticalArrangement = Arrangement.spacedBy(
+                                16.dp, Alignment.CenterVertically
                             ),
-                            shape = RoundedCornerShape(8.dp),
-                            onClick = {
-                                val retrofitUpdate = Retrofit.Builder().baseUrl(baseUrl)
-                                    .addConverterFactory(GsonConverterFactory.create())
-                                    .build().create(OrderService::class.java)
-                                val callUpdate = retrofitUpdate.updateStatusOrder(transactionID.value, UpdateStatusWrapper(UpdateStatusOrder("proses")))
-                                callUpdate.enqueue(object : Callback<ApiResponse<OrderResponse>> {
-                                    override fun onResponse(
-                                        callUpdate: Call<ApiResponse<OrderResponse>>,
-                                        responseUpdate: Response<ApiResponse<OrderResponse>>
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Column(
+                                    modifier = Modifier
+                                        .width(240.dp),
+                                    verticalArrangement = Arrangement.spacedBy(
+                                        4.dp,
+                                        Alignment.Top
+                                    ),
+                                    horizontalAlignment = Alignment.Start,
+                                ) {
+                                    Text(
+                                        text = menuResponse.attributes.foods?.data?.get(0)!!.attributes.foodName,
+                                        style = TextStyle(
+                                            fontSize = 18.sp,
+                                            letterSpacing = 1.sp,
+                                            lineHeight = 24.sp,
+                                            fontFamily = FontFamily(Font(R.font.poppins_bold)),
+                                            color = Color(0xFF333333),
+                                        )
+                                    )
+                                    Text(
+                                        text = menuResponse.attributes.foods?.data?.get(0)!!.attributes.foodDescription,
+                                        style = TextStyle(
+                                            fontSize = 14.sp,
+                                            lineHeight = 16.sp,
+                                            fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                                            color = Color(0xFF757575),
+                                        )
+                                    )
+                                    Text(
+                                        text = "Rp" + menuResponse.attributes.foods?.data?.get(0)!!.attributes.foodPrice.toString(),
+                                        style = TextStyle(
+                                            fontSize = 16.sp,
+                                            lineHeight = 16.sp,
+                                            fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                                            color = Color(0xFF333333),
+                                        )
+                                    )
+                                    Row(
+                                        modifier = Modifier
+                                            .padding(top = 8.dp)
+                                            .width(218.dp)
+                                            .height(28.dp),
+                                        horizontalArrangement = Arrangement.spacedBy(
+                                            16.dp, Alignment.Start
+                                        ),
+                                        verticalAlignment = Alignment.CenterVertically,
                                     ) {
-                                        if (responseUpdate.isSuccessful) {
-                                            Toast.makeText(
-                                                context,
-                                                "Berhasil ubah status pesanan",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                            Handler().postDelayed({
-                                                navController.navigate("boothHome")
-                                            }, 5000)
+                                        Row(
+                                            horizontalArrangement = Arrangement.spacedBy(
+                                                8.dp, Alignment.CenterHorizontally
+                                            ),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                        ) {
+                                            Text(
+                                                text = "Jumlah Pesanan:",
+                                                style = TextStyle(
+                                                    fontSize = 16.sp,
+                                                    fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                                                    color = Color(0xFF1E1E1E),
+                                                )
+                                            )
+                                            Spacer(modifier = Modifier.padding(top = 20.dp))
+                                            Text(
+                                                text = menuResponse.attributes.qty.toString() + " porsi",
+
+                                                style = TextStyle(
+                                                    fontSize = 14.sp,
+                                                    lineHeight = 14.sp,
+                                                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+                                                    color = Color(0xFF333333),
+                                                )
+                                            )
+                                        }
+                                    }
+                                }
+                                Spacer(modifier = Modifier.padding(horizontal = 8.dp))
+                                val imgurl = remember { mutableStateOf("") }
+
+                                val retrofitImg = Retrofit.Builder().baseUrl(baseUrl)
+                                    .addConverterFactory(GsonConverterFactory.create())
+                                    .build().create(OrderDetailsService::class.java)
+                                val callImg = retrofitImg.getFoodImg(
+                                    menuResponse.attributes.foods?.data?.get(0)!!.id.toString(), "*"
+                                )
+                                callImg.enqueue(object : Callback<ApiResponse<List<FoodResponse>>> {
+                                    override fun onResponse(
+                                        call: Call<ApiResponse<List<FoodResponse>>>,
+                                        response: Response<ApiResponse<List<FoodResponse>>>
+                                    ) {
+                                        if (response.isSuccessful) {
+                                            val resp = response.body()?.data
+                                            resp?.let { dataList ->
+                                                if (dataList.isNotEmpty()) {
+                                                    val data = dataList[0]
+                                                    imgurl.value =
+                                                        data.attributes.foodImg?.data!!.attributes.url
+                                                }
+                                            }
                                         } else {
                                             Toast.makeText(
                                                 context,
-                                                "Error",
+                                                "Error: ${response.code()} - ${response.message()}",
                                                 Toast.LENGTH_SHORT
                                             ).show()
                                         }
                                     }
 
-                                    override fun onFailure(callUpdate: Call<ApiResponse<OrderResponse>>, t: Throwable) {
+                                    override fun onFailure(
+                                        call: Call<ApiResponse<List<FoodResponse>>>,
+                                        t: Throwable
+                                    ) {
                                         print(t.message)
                                     }
-
                                 })
-                            }
-                        )
-                        {
-                            Text(
-                                text = "Terima Pesanan",
-                                style = TextStyle(
-                                    fontSize = 16.sp,
-                                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                                    color = Color.White,
-                                    textAlign = TextAlign.Center,
+                                Image(
+                                    modifier = Modifier
+                                        .width(100.dp)
+                                        .height(100.dp)
+                                        .clip(RoundedCornerShape(8.dp)),
+                                    contentScale = ContentScale.Crop,
+                                    painter = rememberAsyncImagePainter("https://api2.tnadam.me${imgurl.value}"),
+//                                                  painter = rememberAsyncImagePainter("http://10.0.2.2:1337" + imgurl),
+                                    contentDescription = "image description"
                                 )
-                            )
-                        }
-                        ElevatedButton(
-                            modifier = Modifier
-                                .padding(vertical = 16.dp)
-                                .height(64.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                contentColor = Color.White,
-                            ),
-                            shape = RoundedCornerShape(8.dp),
-                            onClick = {
-                                navController.navigate("refuseOrder/"+transactionID.value)
+
                             }
-                        )
-                        {
-                            Text(
-                                text = "Tolak Pesanan",
-                                style = TextStyle(
-                                    fontSize = 16.sp,
-                                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                                    color = Color.White,
-                                    textAlign = TextAlign.Center,
-                                )
+                            Divider(
+                                modifier = Modifier
+                                    .width(358.dp)
+                                    .height(0.5.dp)
+                                    .background(color = Color(0xFFEEEEEE))
                             )
                         }
                     }
                 }
-                "bayar" -> (
+                item {
+                    Text(
+                        text = "Order Summary",
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+                            fontWeight = FontWeight(500),
+                            color = Color(0xFF212529),
+                        ),
+                        modifier = Modifier.padding(vertical = 12.dp)
+                    )
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Top),
+                        horizontalAlignment = Alignment.Start,
+                    ) {
                         Row(
-                            horizontalArrangement = Arrangement.spacedBy(24.dp, Alignment.Start),
-                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.Top,
                         ) {
-                            ElevatedButton(
+                            Text(
+                                text = "Total",
+                                style = TextStyle(
+                                    fontSize = 18.sp,
+                                    fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                                    fontWeight = FontWeight(400),
+                                    color = Color(0xFF212529),
+                                )
+                            )
+                            Text(
+                                text = "Rp" + total.value,
+                                style = TextStyle(
+                                    fontSize = 18.sp,
+                                    fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                                    fontWeight = FontWeight(600),
+                                    color = Color(0xFF212529),
+                                    textAlign = TextAlign.Right,
+                                    letterSpacing = 0.3.sp,
+                                )
+                            )
+                        }
+                    }
+                    when (status.value) {
+                        "pending" -> {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(
+                                    24.dp,
+                                    Alignment.Start
+                                ),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                ElevatedButton(
+                                    modifier = Modifier
+                                        .padding(vertical = 16.dp)
+                                        .height(64.dp),
+                                    colors = ButtonDefaults.buttonColors(
+                                        contentColor = Color.White,
+                                        containerColor = primaryColorOrg
+                                    ),
+                                    shape = RoundedCornerShape(8.dp),
+                                    onClick = {
+                                        val retrofitUpdate = Retrofit.Builder().baseUrl(baseUrl)
+                                            .addConverterFactory(GsonConverterFactory.create())
+                                            .build().create(OrderService::class.java)
+                                        val callUpdate = retrofitUpdate.updateStatusOrder(
+                                            transactionID.value,
+                                            UpdateStatusWrapper(UpdateStatusOrder("proses"))
+                                        )
+                                        callUpdate.enqueue(object :
+                                            Callback<ApiResponse<OrderResponse>> {
+                                            override fun onResponse(
+                                                callUpdate: Call<ApiResponse<OrderResponse>>,
+                                                responseUpdate: Response<ApiResponse<OrderResponse>>
+                                            ) {
+                                                if (responseUpdate.isSuccessful) {
+                                                    Toast.makeText(
+                                                        context,
+                                                        "Berhasil ubah status pesanan",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                    Handler().postDelayed({
+                                                        navController.navigate("detailTransaction/" + transactionID.value)
+                                                    }, 5000)
+                                                } else {
+                                                    Toast.makeText(
+                                                        context,
+                                                        "Error",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                }
+                                            }
+
+                                            override fun onFailure(
+                                                callUpdate: Call<ApiResponse<OrderResponse>>,
+                                                t: Throwable
+                                            ) {
+                                                print(t.message)
+                                            }
+
+                                        })
+                                    }
+                                )
+                                {
+                                    Text(
+                                        text = "Terima Pesanan",
+                                        style = TextStyle(
+                                            fontSize = 16.sp,
+                                            fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+                                            color = Color.White,
+                                            textAlign = TextAlign.Center,
+                                        )
+                                    )
+                                }
+                                ElevatedButton(
+                                    modifier = Modifier
+                                        .padding(vertical = 16.dp)
+                                        .height(64.dp),
+                                    colors = ButtonDefaults.buttonColors(
+                                        contentColor = Color.White,
+                                    ),
+                                    shape = RoundedCornerShape(8.dp),
+                                    onClick = {
+                                        navController.navigate("refuseOrder/" + transactionID.value)
+                                    }
+                                )
+                                {
+                                    Text(
+                                        text = "Tolak Pesanan",
+                                        style = TextStyle(
+                                            fontSize = 16.sp,
+                                            fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+                                            color = Color.White,
+                                            textAlign = TextAlign.Center,
+                                        )
+                                    )
+                                }
+                            }
+                        }
+
+                        "bayar" -> (
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(
+                                        24.dp,
+                                        Alignment.Start
+                                    ),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    ElevatedButton(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(vertical = 16.dp)
+                                            .height(64.dp),
+                                        colors = ButtonDefaults.buttonColors(
+                                            contentColor = Color.White,
+                                            containerColor = primaryColorOrg
+                                        ),
+                                        shape = RoundedCornerShape(8.dp),
+                                        onClick = {
+                                            val retrofitUpdateProses =
+                                                Retrofit.Builder().baseUrl(baseUrl)
+                                                    .addConverterFactory(GsonConverterFactory.create())
+                                                    .build().create(OrderService::class.java)
+                                            val callUpdateProses =
+                                                retrofitUpdateProses.updateStatusOrder(
+                                                    transactionID.value,
+                                                    UpdateStatusWrapper(UpdateStatusOrder("selesai"))
+                                                )
+                                            callUpdateProses.enqueue(object :
+                                                Callback<ApiResponse<OrderResponse>> {
+                                                override fun onResponse(
+                                                    callUpdateProses: Call<ApiResponse<OrderResponse>>,
+                                                    retrofitUpdateProses: Response<ApiResponse<OrderResponse>>
+                                                ) {
+                                                    if (retrofitUpdateProses.isSuccessful) {
+                                                        Toast.makeText(
+                                                            context,
+                                                            "Berhasil ubah status pesanan",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        Handler().postDelayed({
+                                                            navController.navigate("detailTransaction/" + transactionID.value)
+                                                        }, 5000)
+                                                    } else {
+                                                        Toast.makeText(
+                                                            context,
+                                                            "Error",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                    }
+                                                }
+
+                                                override fun onFailure(
+                                                    callUpdateProses: Call<ApiResponse<OrderResponse>>,
+                                                    t: Throwable
+                                                ) {
+                                                    print(t.message)
+                                                }
+
+                                            })
+                                        }
+                                    )
+                                    {
+                                        Text(
+                                            text = "Pesanan Selesai, Konfirmasi",
+                                            style = TextStyle(
+                                                fontSize = 16.sp,
+                                                fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+                                                color = Color.White,
+                                                textAlign = TextAlign.Center,
+                                            )
+                                        )
+                                    }
+                                }
+                                )
+
+                        "proses" -> {
+                            Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(vertical = 16.dp)
-                                    .height(64.dp),
-                                colors = ButtonDefaults.buttonColors(
-                                    contentColor = Color.White,
-                                    containerColor = primaryColorOrg
-                                ),
-                                shape = RoundedCornerShape(8.dp),
-                                onClick = {
-                                    val retrofitUpdateProses = Retrofit.Builder().baseUrl(baseUrl)
-                                        .addConverterFactory(GsonConverterFactory.create())
-                                        .build().create(OrderService::class.java)
-                                    val callUpdateProses = retrofitUpdateProses.updateStatusOrder(transactionID.value, UpdateStatusWrapper(UpdateStatusOrder("selesai")))
-                                    callUpdateProses.enqueue(object : Callback<ApiResponse<OrderResponse>> {
-                                        override fun onResponse(
-                                            callUpdateProses: Call<ApiResponse<OrderResponse>>,
-                                            retrofitUpdateProses: Response<ApiResponse<OrderResponse>>
-                                        ) {
-                                            if (retrofitUpdateProses.isSuccessful) {
-                                                Toast.makeText(
-                                                    context,
-                                                    "Berhasil ubah status pesanan",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                                Handler().postDelayed({
-                                                    navController.navigate("boothHome")
-                                                }, 5000)
-                                            } else {
-                                                Toast.makeText(
-                                                    context,
-                                                    "Error",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                            }
-                                        }
-
-                                        override fun onFailure(callUpdateProses: Call<ApiResponse<OrderResponse>>, t: Throwable) {
-                                            print(t.message)
-                                        }
-
-                                    })
-                                }
-                            )
-                            {
+                                    .padding(vertical = 60.dp),
+                                horizontalArrangement = Arrangement.Center,
+                            ) {
                                 Text(
-                                    text = "Pesanan Selesai, Konfirmasi",
+                                    text = "Sedang diproses....",
                                     style = TextStyle(
-                                        fontSize = 16.sp,
-                                        fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                                        color = Color.White,
+                                        fontSize = 14.sp,
+                                        fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                                        color = Color(0xFF495057),
                                         textAlign = TextAlign.Center,
                                     )
                                 )
                             }
                         }
-                        )
-                "proses" -> {
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 60.dp),
-                        horizontalArrangement = Arrangement.Center,
-                    ) {
-                        Text(
-                            text = "Sedang diproses....",
-                            style = TextStyle(
-                                fontSize = 14.sp,
-                                fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                                color = Color(0xFF495057),
-                                textAlign = TextAlign.Center,
-                            )
-                        )
                     }
                 }
             }

@@ -22,6 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,6 +53,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.Locale
+import android.os.Handler
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -91,35 +93,43 @@ fun BoothHomePage(navController: NavController, context: Context = LocalContext.
 
     })
 
-    val retrofit22 =
-        Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
-            .build().create(OrderService::class.java)
+    val checkStatus = remember {
+        mutableStateOf(true)
+    }
+    Handler().postDelayed({
+        checkStatus.value = true
+    }, 5000)
+    if (checkStatus.value && (preferencesManager.getData("boothID") != null || preferencesManager.getData("boothID") != "")) {
+        val retrofit22 =
+            Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
+                .build().create(OrderService::class.java)
 
-    val call22 = retrofit22.getAllOrder("*")
-    call22.enqueue(object : Callback<ApiResponse<List<OrderResponse>>> {
-        override fun onResponse(
-            call22: Call<ApiResponse<List<OrderResponse>>>,
-            response22: Response<ApiResponse<List<OrderResponse>>>
-        ) {
-            if (response22.isSuccessful) {
-                listOrder.clear()
-                response22.body()?.data!!.forEach { orderResponse ->
-                    listOrder.add(orderResponse)
+        val call22 = retrofit22.getAllOrder(preferencesManager.getData("boothID"), "*", "id:desc")
+        call22.enqueue(object : Callback<ApiResponse<List<OrderResponse>>> {
+            override fun onResponse(
+                call22: Call<ApiResponse<List<OrderResponse>>>,
+                response22: Response<ApiResponse<List<OrderResponse>>>
+            ) {
+                if (response22.isSuccessful) {
+                    listOrder.clear()
+                    response22.body()?.data!!.forEach { orderResponse ->
+                        listOrder.add(orderResponse)
+                    }
+                    checkStatus.value = false
+                } else {
+                    Toast.makeText(
+                        context, "Error: ${response22.code()} - ${response22.message()}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
-            } else {
-                Toast.makeText(
-                    context, "Error: ${response22.code()} - ${response22.message()}",
-                    Toast.LENGTH_SHORT
-                ).show()
             }
-        }
 
-        override fun onFailure(call22: Call<ApiResponse<List<OrderResponse>>>, t: Throwable) {
-            print(t.message)
-        }
+            override fun onFailure(call22: Call<ApiResponse<List<OrderResponse>>>, t: Throwable) {
+                print(t.message)
+            }
 
-    })
-
+        })
+    }
     val primaryColorOrg = Color(0xFFFF5F00)
     Scaffold(
         bottomBar = {
@@ -269,7 +279,7 @@ fun BoothHomePage(navController: NavController, context: Context = LocalContext.
                                                             contentScale = ContentScale.None,
                                                         )
                                                         Text(
-                                                            text = "Menunggu Pembayaran",
+                                                            text = "Pembayaran",
                                                             style = TextStyle(
                                                                 fontSize = 14.sp,
                                                                 lineHeight = 16.sp,
@@ -358,6 +368,9 @@ fun BoothHomePage(navController: NavController, context: Context = LocalContext.
                                 }
                                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
                             }
+                        }
+                        item {
+                            Spacer(modifier = Modifier.padding(vertical = 60.dp))
                         }
                     } else {
                         item {

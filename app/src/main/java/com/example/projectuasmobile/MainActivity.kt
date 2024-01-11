@@ -154,8 +154,14 @@ class MainActivity : ComponentActivity() {
                         composable("refuseOrder/{id}") { backStackEntry ->
                             RefuseOrder(navController, backStackEntry.arguments?.getString("id"))
                         }
-                        composable("receipt") {
-                            Receipt(navController)
+                        composable("receipt/{total}/{customerName}/{customerNumber}/{transactionTime}/{boothName}") { backStackEntry ->
+                            Receipt(navController,
+                                backStackEntry.arguments?.getString("total"),
+                                backStackEntry.arguments?.getString("customerName"),
+                                backStackEntry.arguments?.getString("customerNumber"),
+                                backStackEntry.arguments?.getString("transactionTime"),
+                                backStackEntry.arguments?.getString("boothName"),
+                            )
                         }
                         composable("success") {
                             SuccessPage(navController)

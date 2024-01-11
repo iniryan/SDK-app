@@ -5,6 +5,7 @@ import com.example.projectuasmobile.data.OrderDetailsDataWrapper
 import com.example.projectuasmobile.data.RefuseOrderWrapper
 import com.example.projectuasmobile.data.UpdateStatusWrapper
 import com.example.projectuasmobile.response.ApiResponse
+import com.example.projectuasmobile.response.FoodResponse
 import com.example.projectuasmobile.response.OrderDetailsResponse
 import com.example.projectuasmobile.response.OrderResponse
 import retrofit2.Call
@@ -40,8 +41,9 @@ interface OrderService {
     @GET("orders")
     fun getAllOrder(
 //        @Query("filters[createdAt][\$contains]") after: String,
-//        @Query("filters[booth]") booth: String?,
-        @Query("populate") populate: String?
+        @Query("filters[booth]") booth: String?,
+        @Query("populate") populate: String?,
+        @Query("sort[0]") sort: String?
     ): Call<ApiResponse<List<OrderResponse>>>
 
 }
@@ -52,7 +54,10 @@ interface OrderDetailsService {
 
     @GET("order-details")
     fun getAllOrderDetails(
-        @Query("filters[booth]") booth: String?,
+        @Query("filters[orderID]") orderID: String?,
         @Query("populate") populate: String?
     ): Call<ApiResponse<List<OrderDetailsResponse>>>
+
+    @GET("foods")
+    fun getFoodImg(@Query("filters[id]") id: String?, @Query("populate") populate: String?): Call<ApiResponse<List<FoodResponse>>>
 }

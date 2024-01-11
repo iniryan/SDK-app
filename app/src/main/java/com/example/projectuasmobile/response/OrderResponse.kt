@@ -27,4 +27,6 @@ class OrderAttributes {
     val createdAt: String = ""
     @SerializedName("alasanTolak")
     val alasanTolak: String = ""
+    @SerializedName("orderDetails")
+    val orderDetails: List<ApiResponse<OrderDetailsResponse>>? = null
 }

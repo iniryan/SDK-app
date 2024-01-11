@@ -236,7 +236,7 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                         fontFamily = FontFamily(Font(R.font.poppins_semibold)),
                         textAlign = TextAlign.Left,
                         color = Color(0xFFFF5F00),
-                    ), modifier = Modifier.align(Alignment.Start)
+                    ), modifier = Modifier.align(Alignment.Start).padding(bottom = 16.dp)
                 )
                 LazyColumn {
                     if(listBooth.isNotEmpty()) {
@@ -316,6 +316,9 @@ fun HomePage(navController: NavController, context: Context = LocalContext.curre
                                     }
                                 }
                             }
+                        }
+                        item {
+                            Spacer(modifier = Modifier.padding(vertical = 60.dp))
                         }
                     } else {
                         item {

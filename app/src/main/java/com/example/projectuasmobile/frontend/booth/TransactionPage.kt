@@ -2,6 +2,7 @@ package com.example.projectuasmobile.frontend.booth
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Handler
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,6 +23,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.projectuasmobile.BottomNavigation
+import com.example.projectuasmobile.PreferencesManager
 import com.example.projectuasmobile.R
 import com.example.projectuasmobile.response.ApiResponse
 import com.example.projectuasmobile.response.OrderResponse
@@ -53,40 +56,51 @@ import java.util.Locale
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun TransactionPage(navController: NavController, context: Context = LocalContext.current) {
+    val preferencesManager = remember { PreferencesManager(context = context) }
+
     val listOrder = remember { mutableStateListOf<OrderResponse>() }
     //val today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
     val baseUrl = "https://api2.tnadam.me/api/"
     //LOKAL STRAPI
     //val baseUrl = "http://10.0.2.2:1337/api/"
-    val retrofit =
-        Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
-            .build().create(OrderService::class.java)
-    val call = retrofit.getAllOrder("*")
-    call.enqueue(object : Callback<ApiResponse<List<OrderResponse>>> {
-        override fun onResponse(
-            call: Call<ApiResponse<List<OrderResponse>>>,
-            response: Response<ApiResponse<List<OrderResponse>>>
-        ) {
-            if (response.isSuccessful) {
-                listOrder.clear()
-                response.body()?.data!!.forEach { orderResponse ->
-                    listOrder.add(orderResponse)
+
+    val checkStatus = remember {
+        mutableStateOf(true)
+    }
+    Handler().postDelayed({
+        checkStatus.value = true
+    }, 5000)
+    if (checkStatus.value && (preferencesManager.getData("boothID") != null || preferencesManager.getData("boothID") != "")) {
+        val retrofit =
+            Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
+                .build().create(OrderService::class.java)
+        val call = retrofit.getAllOrder(preferencesManager.getData("boothID"), "*", "id:desc")
+        call.enqueue(object : Callback<ApiResponse<List<OrderResponse>>> {
+            override fun onResponse(
+                call: Call<ApiResponse<List<OrderResponse>>>,
+                response: Response<ApiResponse<List<OrderResponse>>>
+            ) {
+                if (response.isSuccessful) {
+                    listOrder.clear()
+                    response.body()?.data!!.forEach { orderResponse ->
+                        listOrder.add(orderResponse)
+                    }
+                    checkStatus.value = false
+                } else {
+                    Toast.makeText(
+                        context, "Error: ${response.code()} - ${response.message()}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
-            } else {
-                Toast.makeText(
-                    context, "Error: ${response.code()} - ${response.message()}",
-                    Toast.LENGTH_SHORT
-                ).show()
             }
-        }
 
-        override fun onFailure(call: Call<ApiResponse<List<OrderResponse>>>, t: Throwable) {
-            print(t.message)
-        }
+            override fun onFailure(call: Call<ApiResponse<List<OrderResponse>>>, t: Throwable) {
+                print(t.message)
+            }
 
-    })
-
+        })
+    }
     val primaryColorOrg = Color(0xFFFF5F00)
     Scaffold(
         bottomBar = {
@@ -130,7 +144,7 @@ fun TransactionPage(navController: NavController, context: Context = LocalContex
                                             shape = RoundedCornerShape(size = 10.dp)
                                         )
                                         .padding(18.dp)
-                                        .clickable { navController.navigate("detailTransaction") },
+                                        .clickable { navController.navigate("detailTransaction/" + orderResponse.id) },
                                 ) {
                                     Column(
                                         verticalArrangement = Arrangement.spacedBy(
@@ -236,7 +250,7 @@ fun TransactionPage(navController: NavController, context: Context = LocalContex
                                                             contentScale = ContentScale.None,
                                                         )
                                                         Text(
-                                                            text = "Menunggu Pembayaran",
+                                                            text = "Pembayaran",
                                                             style = TextStyle(
                                                                 fontSize = 14.sp,
                                                                 lineHeight = 16.sp,
@@ -325,6 +339,9 @@ fun TransactionPage(navController: NavController, context: Context = LocalContex
                                 }
                                 Spacer(modifier = Modifier.padding(vertical = 8.dp))
                             }
+                        }
+                        item {
+                            Spacer(modifier = Modifier.padding(vertical = 60.dp))
                         }
                     } else {
                         item {
